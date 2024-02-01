@@ -10,9 +10,10 @@ public class App
         System.out.println( "Hello World!" );
         System.out.println( "new Branch" );
         System.out.println( "Test" );
-        System.out.println("Hallo Dustin");;
-        System.out.println("Hallo Dustin");;
-        System.out.println("Hallo Dustin");;
-        System.out.println("Hallo Dustin");;
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Eric");
     }
 }
