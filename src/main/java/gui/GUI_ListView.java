@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -24,27 +26,13 @@ public class GUI_ListView {
 	private JFrame frame;
 	private JScrollPane scrollPaneSchüler;
 	private JScrollPane scrollPaneUnternehmen;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI_ListView window = new GUI_ListView();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the application.
 	 */
 	public GUI_ListView() {
 		initialize();
+		this.frame.setVisible(true);
 	}
 
 	/**
@@ -62,11 +50,13 @@ public class GUI_ListView {
 		tabbedPane.addTab("Schüler", null, panelSchüler, null);
 
 		JButton btnSchülerhinzufügen = new JButton("Hinzufügen");
-		btnSchülerhinzufügen.addActionListener((e) -> addSchüler());
+		btnSchülerhinzufügen.addActionListener((e) -> btnPressedSchülerhinzufügen());
 
 		JButton btnSchülerImportieren = new JButton("Importieren");
+		btnSchülerImportieren.addActionListener((e) -> btnPressedSchülerImportieren());
 
 		JButton btnSchülerExportieren = new JButton("Exportieren");
+		btnSchülerExportieren.addActionListener((e) -> btnPressedSchülerExportieren());
 
 		scrollPaneSchüler = new JScrollPane();
 		scrollPaneSchüler.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -90,59 +80,96 @@ public class GUI_ListView {
 				.addComponent(scrollPaneSchüler, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE).addGap(19)));
 		panelSchüler.setLayout(gl_panelSchüler);
 
-		
 		JPanel panelUnternehmen = new JPanel();
 		tabbedPane.addTab("Unternehmen", null, panelUnternehmen, null);
-		
+
 		JButton btnUnternehmenhinzufügen = new JButton("Hinzufügen");
-		
+		btnUnternehmenhinzufügen.addActionListener((e) -> btnPressedUnternehmenhinzufügen());
+
 		JButton btnUnternehmenImportieren = new JButton("Importieren");
-		
+		btnUnternehmenImportieren.addActionListener((e) -> btnPressedUnternehmenImportieren());
+
 		JButton btnUnternehmenExportieren = new JButton("Exportieren");
-		
+		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
+
 		scrollPaneUnternehmen = new JScrollPane();
 		scrollPaneUnternehmen.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelUnternehmen = new GroupLayout(panelUnternehmen);
-		gl_panelUnternehmen.setHorizontalGroup(
-			gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelUnternehmen.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panelUnternehmen.createSequentialGroup()
-							.addComponent(btnUnternehmenhinzufügen, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 440, Short.MAX_VALUE)
-							.addComponent(btnUnternehmenImportieren)
-							.addGap(6)
-							.addComponent(btnUnternehmenExportieren))
-						.addComponent(scrollPaneUnternehmen, GroupLayout.PREFERRED_SIZE, 708, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		gl_panelUnternehmen.setVerticalGroup(
-			gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelUnternehmen.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnUnternehmenImportieren)
-						.addComponent(btnUnternehmenExportieren)
-						.addComponent(btnUnternehmenhinzufügen))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(scrollPaneUnternehmen, GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(19, Short.MAX_VALUE))
-		);
+		gl_panelUnternehmen.setHorizontalGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelUnternehmen.createSequentialGroup().addContainerGap()
+						.addGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_panelUnternehmen.createSequentialGroup()
+										.addComponent(btnUnternehmenhinzufügen, GroupLayout.PREFERRED_SIZE, 87,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED, 440, Short.MAX_VALUE)
+										.addComponent(btnUnternehmenImportieren).addGap(6)
+										.addComponent(btnUnternehmenExportieren))
+								.addComponent(scrollPaneUnternehmen, GroupLayout.PREFERRED_SIZE, 708,
+										GroupLayout.PREFERRED_SIZE))
+						.addContainerGap()));
+		gl_panelUnternehmen.setVerticalGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelUnternehmen.createSequentialGroup().addContainerGap()
+						.addGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnUnternehmenImportieren).addComponent(btnUnternehmenExportieren)
+								.addComponent(btnUnternehmenhinzufügen))
+						.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(scrollPaneUnternehmen,
+								GroupLayout.PREFERRED_SIZE, 375, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(19, Short.MAX_VALUE)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
 	}
 
-	private void addSchüler() {
+	private void addScrollPaneSchüler() {
+		JPanel panelSchüler = new JPanel();
+		scrollPaneSchüler.add(panelSchüler);
 
-		JPanel schülerPanel= new JPanel();
-		JTextField schülerVorname =new JTextField();
-		schülerVorname.setText("Peter");
-		JTextField schülerNachname =new JTextField();
-		schülerNachname.setText("Pan");
-		schülerPanel.add(schülerVorname);
-		schülerPanel.add(schülerNachname);
-		
-		scrollPaneSchüler.add(schülerPanel);
-		scrollPaneSchüler.revalidate();
+		JTextField textFieldVorname = new JTextField();
+		panelSchüler.add(textFieldVorname);
+		textFieldVorname.setColumns(10);
+		JTextField textFieldNachName = new JTextField();
+		panelSchüler.add(textFieldNachName);
+		textFieldNachName.setColumns(10);
+		JComboBox comboBoxUn1 = new JComboBox();
+		panelSchüler.add(comboBoxUn1);
+		JComboBox comboBoxUn2 = new JComboBox();
+		panelSchüler.add(comboBoxUn2);
+		JComboBox comboBoxUn3 = new JComboBox();
+		panelSchüler.add(comboBoxUn3);
+		JComboBox comboBoxUn4 = new JComboBox();
+		panelSchüler.add(comboBoxUn4);
+		JComboBox comboBoxUn5 = new JComboBox();
+		panelSchüler.add(comboBoxUn5);
+		JComboBox comboBoxUn6 = new JComboBox();
+		panelSchüler.add(comboBoxUn6);
+	}
+
+	private void addScrollPaneUnternehmen() {
+
+	}
+
+	private Object btnPressedUnternehmenExportieren() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Object btnPressedUnternehmenImportieren() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Object btnPressedUnternehmenhinzufügen() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private void btnPressedSchülerExportieren() {
+
+	}
+
+	private void btnPressedSchülerImportieren() {
+
+	}
+
+	private void btnPressedSchülerhinzufügen() {
+
 	}
 }
