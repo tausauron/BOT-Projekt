@@ -1,17 +1,27 @@
-package de.bwvaachen.botscheduler.testInterface;
+package de.bwvaachen.botscheduler.grassmann.myInterface;
+
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
+import de.bwvaachen.botscheduler.grassmann.gui.TestGUI;
+import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
 
 // Grassmann
 
 public class MyController {
 
+	private GUI_Login loginGUI;
 	private TestGUI myGUI;
+	private TestModal myModal;
 	
 	public MyController() {
-		this.myGUI = new TestGUI(this);
+		this.loginGUI = new GUI_Login(this);
+		this.myModal = new TestModal(this);
 	}
 	
 	public void checkLogin(String username, String pwd) {
-		System.out.println("checkLogin");
+		if (myModal.checkLogin(username, pwd)) {
+			loginGUI.close();
+			myGUI = new TestGUI(this);
+		}
 	}
 	
 	// TODO: get data from backend/DB

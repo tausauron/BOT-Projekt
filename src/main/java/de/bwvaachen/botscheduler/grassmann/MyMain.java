@@ -1,4 +1,6 @@
-package de.bwvaachen.botscheduler.testInterface;
+package de.bwvaachen.botscheduler.grassmann;
+
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 
 public class MyMain {
 

@@ -1,4 +1,4 @@
-package de.bwvaachen.botscheduler.testInterface;
+package de.bwvaachen.botscheduler.grassmann.gui;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -7,6 +7,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
