@@ -32,8 +32,7 @@ public class GUI_Test {
 			public void valueChanged(ListSelectionEvent e) {
 				Schüler selectedPerson = schülerList.getSelectedValue();
 				if (selectedPerson != null) {
-					vornameField.setText(selectedPerson.getVorname());
-					nachnameField.setText(selectedPerson.getNachname());
+					
 				}
 			}
 		});
