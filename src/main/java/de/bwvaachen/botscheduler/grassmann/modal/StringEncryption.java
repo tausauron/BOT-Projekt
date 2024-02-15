@@ -4,6 +4,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
+// Grassmann
+
 public class StringEncryption {
     public static String encrypt(String strToEncrypt, String secret) throws Exception {
         SecretKeySpec secretKey = new SecretKeySpec(secret.getBytes(), "AES");

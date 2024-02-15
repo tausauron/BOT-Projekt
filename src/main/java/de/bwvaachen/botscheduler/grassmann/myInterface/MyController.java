@@ -8,8 +8,8 @@ import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
 
 public class MyController {
 
+	private TestGUI testGUI;
 	private GUI_Login loginGUI;
-	private TestGUI myGUI;
 	private TestModal myModal;
 	
 	public MyController() {
@@ -20,7 +20,9 @@ public class MyController {
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			myGUI = new TestGUI(this);
+			this.testGUI = new TestGUI(this);
+		} else {
+			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
 	}
 	

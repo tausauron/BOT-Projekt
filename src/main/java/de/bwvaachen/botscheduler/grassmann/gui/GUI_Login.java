@@ -1,10 +1,9 @@
 package de.bwvaachen.botscheduler.grassmann.gui;
 
-import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -19,6 +18,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 // Grassmann
 
@@ -26,6 +26,7 @@ public class GUI_Login {
 
 	private JFrame frmLogin;
 	private JPasswordField passwordField;
+	private JLabel lblErrorMessage;
 	private JTextField textFieldUsername;
 	private MyController myController;
 
@@ -48,7 +49,7 @@ public class GUI_Login {
 		frmLogin = new JFrame();
 		frmLogin.setResizable(false);
 		frmLogin.setTitle("Login");
-		frmLogin.setBounds(100, 100, 224, 153);
+		frmLogin.setBounds(100, 100, 224, 161);
 		frmLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JLabel lblUsername = new JLabel("Username:");
@@ -62,9 +63,13 @@ public class GUI_Login {
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				setlblErrorMessage("");
 				myController.checkLogin(textFieldUsername.getText(), passwordField.getText());
 			}
 		});
+		
+		lblErrorMessage = new JLabel("");
+		lblErrorMessage.setForeground(Color.RED);
 		GroupLayout groupLayout = new GroupLayout(frmLogin.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -77,8 +82,9 @@ public class GUI_Login {
 								.addComponent(lblPassword))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-								.addComponent(textFieldUsername, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)))
+								.addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+								.addComponent(textFieldUsername, GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)))
+						.addComponent(lblErrorMessage, GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
 						.addComponent(btnLogin, Alignment.TRAILING))
 					.addContainerGap())
 		);
@@ -93,14 +99,24 @@ public class GUI_Login {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPassword)
 						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblErrorMessage)
+					.addPreferredGap(ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
 					.addComponent(btnLogin)
-					.addContainerGap(42, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		frmLogin.getContentPane().setLayout(groupLayout);
+		frmLogin.getRootPane().setDefaultButton(btnLogin);
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\channels4_profile.jpg\\");    
+		frmLogin.setIconImage(icon);    
 	}
 
 	public void close() {
 		this.frmLogin.setVisible(false);
+	}
+
+	public void setlblErrorMessage(String s) {
+		this.lblErrorMessage.setText(s);
 	}
 }

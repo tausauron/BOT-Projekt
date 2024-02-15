@@ -11,7 +11,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 
 import java.awt.event.ActionListener;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+
+// Grassmann
 
 public class TestGUI {
 
@@ -98,5 +102,8 @@ public class TestGUI {
 					.addContainerGap(245, Short.MAX_VALUE))
 		);
 		frmTestgui.getContentPane().setLayout(groupLayout);
+		
+		Image icon = Toolkit.getDefaultToolkit().getImage("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\channels4_profile.jpg\\");    
+		frmTestgui.setIconImage(icon); 
 	}
 }
