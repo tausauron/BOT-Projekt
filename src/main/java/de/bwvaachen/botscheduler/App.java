@@ -18,5 +18,10 @@ public class App
         System.out.println("Hallo Dustin");
         //Test
 
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Dustin");
+        System.out.println("Hallo Eric");
+        System.out.println("Hallo Eric");
     }
 }
