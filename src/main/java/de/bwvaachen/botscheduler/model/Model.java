@@ -1,4 +1,4 @@
-package de.bwvaachen.botscheduler;
+package de.bwvaachen.botscheduler.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Model implements ModelInterface{
 	@Override
 	public Boolean checkLogin(String username, String password) {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 	
 	public void belegeKurse() {

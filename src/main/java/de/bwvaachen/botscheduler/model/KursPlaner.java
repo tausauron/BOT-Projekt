@@ -1,4 +1,4 @@
-package de.bwvaachen.botscheduler;
+package de.bwvaachen.botscheduler.model;
 
 import java.util.List;
 
