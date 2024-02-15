@@ -1,71 +1,92 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
+import java.awt.*;
+import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.event.*;
 
 public class GUI_Test {
-
 	private JFrame frame;
-	private JTextField textFieldVorname;
-	private JTextField textFieldNachName;
+	private DefaultListModel<Person> schülerListModel;
+	private JList<Person> schülerList;
+	private JTextField vornameField;
+	private JTextField nachnameField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI_Test window = new GUI_Test();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+	public GUI_Test(ArrayList<Person> personen) {
+		frame = new JFrame("Personendaten");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(300, 400);
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+
+		schülerListModel = new DefaultListModel<>();
+		for (Person person : personen) {
+			schülerListModel.addElement(person);
+		}
+
+		schülerList = new JList<>(schülerListModel);
+		schülerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		schülerList.addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Person selectedPerson = schülerList.getSelectedValue();
+				if (selectedPerson != null) {
+					vornameField.setText(selectedPerson.getVorname());
+					nachnameField.setText(selectedPerson.getNachname());
 				}
 			}
 		});
+
+		JScrollPane scrollPane = new JScrollPane(schülerList);
+		panel.add(scrollPane, BorderLayout.CENTER);
+
+		//JPanel detailsPanel = new JPanel();
+		//detailsPanel.setLayout(new GridLayout(3, 2));
+
+		//JLabel vornameLabel = new JLabel("Vorname:");
+		//JLabel nachnameLabel = new JLabel("Nachname:");
+		//vornameField = new JTextField();
+		//nachnameField = new JTextField();
+
+		/*JButton updateButton = new JButton("Aktualisieren");
+		updateButton.addActionListener(e -> {
+			Person selectedPerson = personList.getSelectedValue();
+			if (selectedPerson != null) {
+				selectedPerson.setVorname(vornameField.getText());
+				selectedPerson.setNachname(nachnameField.getText());
+				listModel.setElementAt(selectedPerson, personList.getSelectedIndex());
+			}
+		});*/
+
+		JButton addButton = new JButton("Hinzufügen");
+		addButton.addActionListener(e -> {
+		/*	String vorname = vornameField.getText();
+			String nachname = nachnameField.getText();
+			Person newPerson = new Person(vorname, nachname); */
+			//listModel.addElement(newPerson);
+		});
+
+		/*detailsPanel.add(vornameLabel);
+		detailsPanel.add(vornameField);
+		detailsPanel.add(nachnameLabel);
+		detailsPanel.add(nachnameField);
+		detailsPanel.add(updateButton);
+		detailsPanel.add(addButton);*/
+
+		//panel.add(detailsPanel, BorderLayout.SOUTH);
+
+		frame.add(panel);
+		frame.setVisible(true);
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public GUI_Test() {
-		initialize();
-		
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
+			ArrayList<Person> personen = new ArrayList<>();
+			personen.add(new Person("Max", "Muster"));
+			personen.add(new Person("Anna", "Schmidt"));
+			personen.add(new Person("Test", "123"));
+			new GUI_Test(personen);
+		});
 	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JPanel panelSchüler = new JPanel();
-		frame.getContentPane().add(panelSchüler, BorderLayout.CENTER);
-		textFieldVorname = new JTextField();
-		panelSchüler.add(textFieldVorname);
-		textFieldVorname.setColumns(10);
-		textFieldNachName = new JTextField();
-		panelSchüler.add(textFieldNachName);
-		textFieldNachName.setColumns(10);
-		JComboBox comboBoxUn1 = new JComboBox();
-		panelSchüler.add(comboBoxUn1);
-		JComboBox comboBoxUn2 = new JComboBox();
-		panelSchüler.add(comboBoxUn2);
-		JComboBox comboBoxUn3 = new JComboBox();
-		panelSchüler.add(comboBoxUn3);
-		JComboBox comboBoxUn4 = new JComboBox();
-		panelSchüler.add(comboBoxUn4);
-		JComboBox comboBoxUn5 = new JComboBox();
-		panelSchüler.add(comboBoxUn5);
-		JComboBox comboBoxUn6 = new JComboBox();
-		panelSchüler.add(comboBoxUn6);
-	}
-
 }

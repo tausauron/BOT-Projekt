@@ -1,23 +1,24 @@
 package gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 //Eric
 
@@ -26,11 +27,18 @@ public class GUI_ListView {
 	private JFrame frame;
 	private JScrollPane scrollPaneSchüler;
 	private JScrollPane scrollPaneUnternehmen;
-
+	private JList<Person> schülerList;
+	private DefaultListModel<Person> schülerListModel;
 	/**
 	 * Create the application.
 	 */
-	public GUI_ListView() {
+	
+	public GUI_ListView(ArrayList<Person> personen) {
+		
+		schülerListModel = new DefaultListModel<>();
+		for (Person person : personen) {
+			schülerListModel.addElement(person);
+		}
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -58,7 +66,13 @@ public class GUI_ListView {
 		JButton btnSchülerExportieren = new JButton("Exportieren");
 		btnSchülerExportieren.addActionListener((e) -> btnPressedSchülerExportieren());
 
-		scrollPaneSchüler = new JScrollPane();
+		
+		
+		schülerList = new JList<>(schülerListModel);
+		schülerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		
+		scrollPaneSchüler = new JScrollPane(schülerList);
 		scrollPaneSchüler.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelSchüler = new GroupLayout(panelSchüler);
 		gl_panelSchüler.setHorizontalGroup(gl_panelSchüler.createParallelGroup(Alignment.LEADING)
