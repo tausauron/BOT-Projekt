@@ -36,6 +36,7 @@ public class GUI_Login extends MouseAdapter {
 	private JLabel lblErrorMessage;
 	private JTextField textFieldUsername;
 	private MyController myController;
+	
 
 	/**
 	 * Create the application.
@@ -127,7 +128,7 @@ public class GUI_Login extends MouseAdapter {
         frmLogin.getContentPane().setLayout(groupLayout);
 		frmLogin.getRootPane().setDefaultButton(btnLogin);
 		
-		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/de/bwvaachen/botscheduler/grassmann/img/ui_logo.jpg"));    
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));    
 		frmLogin.setIconImage(ui_Logo);    
 	}
 
@@ -137,13 +138,16 @@ public class GUI_Login extends MouseAdapter {
 
     public void mousePressed(MouseEvent event) {
     	passwordField.setEchoChar('\u0000');
-        Icon ico = new ImageIcon("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\showPWD.jpg\\");
+    	Icon ico = new ImageIcon(getClass().getResource("showPWD.jpg"));
+//        Icon ico = new ImageIcon("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\showPWD.jpg\\");
 		pwdVisibilityIcon.setIcon(ico);
     }
 
     public void mouseReleased(MouseEvent event) {
     	passwordField.setEchoChar('•');
-        Icon ico = new ImageIcon("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\dontShowPWD.jpg\\");
+
+    	Icon ico = new ImageIcon(getClass().getResource("dontShowPWD.jpg"));
+//        Icon ico = new ImageIcon("H:\\BOT-Projekt\\BOT-Projekt\\src\\main\\java\\de\\bwvaachen\\botscheduler\\grassmann\\img\\dontShowPWD.jpg\\");
 		pwdVisibilityIcon.setIcon(ico);
     }
 	
