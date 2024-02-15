@@ -117,7 +117,7 @@ public class GUI_Login extends MouseAdapter {
 		);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		Icon ico = new ImageIcon(getClass().getResource("/de/bwvaachen/botscheduler/grassmann/img/dontShowPWD.jpg"));
+		Icon ico = new ImageIcon(getClass().getResource("dontShowPWD.jpg"));
 		pwdVisibilityIcon = new JLabel(ico);
         pwdVisibilityIcon.setOpaque(true);
         pwdVisibilityIcon.addMouseListener(this);
