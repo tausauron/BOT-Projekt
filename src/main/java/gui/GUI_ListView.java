@@ -3,8 +3,11 @@ package gui;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+
 import java.awt.BorderLayout;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.DefaultListModel;
@@ -15,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JTextField;
@@ -27,18 +31,18 @@ public class GUI_ListView {
 	private JFrame frame;
 	private JScrollPane scrollPaneSchüler;
 	private JScrollPane scrollPaneUnternehmen;
-	private JList<Person> schülerList;
-	private DefaultListModel<Person> schülerListModel;
+	private TableModel schülerListModel;
+	private TableModel unterNehmenListModel;
+	private List<Schüler> schülerList;
+	private List<Schüler> unternehmenList;
 	/**
 	 * Create the application.
 	 */
-	
-	public GUI_ListView(ArrayList<Person> personen) {
-		
-		schülerListModel = new DefaultListModel<>();
-		for (Person person : personen) {
-			schülerListModel.addElement(person);
-		}
+
+	public GUI_ListView(List<Schüler> schüler, List<Schüler> unternehmen) {
+
+		this.schülerList=schüler;
+		this.unternehmenList=unternehmen;
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -48,6 +52,7 @@ public class GUI_ListView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		
 		frame.setBounds(100, 100, 752, 506);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -66,13 +71,11 @@ public class GUI_ListView {
 		JButton btnSchülerExportieren = new JButton("Exportieren");
 		btnSchülerExportieren.addActionListener((e) -> btnPressedSchülerExportieren());
 
-		
-		
-		schülerList = new JList<>(schülerListModel);
-		schülerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		
-		scrollPaneSchüler = new JScrollPane(schülerList);
+		//Model für SchülerGUI wird erstellt
+		TableModel modelSchüler = new StudentTableModel(schülerList);
+        JTable tableSchüler = new JTable(modelSchüler);
+        
+		scrollPaneSchüler = new JScrollPane(tableSchüler);
 		scrollPaneSchüler.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelSchüler = new GroupLayout(panelSchüler);
 		gl_panelSchüler.setHorizontalGroup(gl_panelSchüler.createParallelGroup(Alignment.LEADING)
@@ -106,7 +109,11 @@ public class GUI_ListView {
 		JButton btnUnternehmenExportieren = new JButton("Exportieren");
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
-		scrollPaneUnternehmen = new JScrollPane();
+		//Model für Unternehmen GUI wird erstellt
+		TableModel modelUn = new StudentTableModel(unternehmenList);
+        JTable tableUn = new JTable(modelUn);
+		
+		scrollPaneUnternehmen = new JScrollPane(tableUn);
 		scrollPaneUnternehmen.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelUnternehmen = new GroupLayout(panelUnternehmen);
 		gl_panelUnternehmen.setHorizontalGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
@@ -132,47 +139,21 @@ public class GUI_ListView {
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
 	}
 
-	private void addScrollPaneSchüler() {
-		JPanel panelSchüler = new JPanel();
-		scrollPaneSchüler.add(panelSchüler);
-
-		JTextField textFieldVorname = new JTextField();
-		panelSchüler.add(textFieldVorname);
-		textFieldVorname.setColumns(10);
-		JTextField textFieldNachName = new JTextField();
-		panelSchüler.add(textFieldNachName);
-		textFieldNachName.setColumns(10);
-		JComboBox comboBoxUn1 = new JComboBox();
-		panelSchüler.add(comboBoxUn1);
-		JComboBox comboBoxUn2 = new JComboBox();
-		panelSchüler.add(comboBoxUn2);
-		JComboBox comboBoxUn3 = new JComboBox();
-		panelSchüler.add(comboBoxUn3);
-		JComboBox comboBoxUn4 = new JComboBox();
-		panelSchüler.add(comboBoxUn4);
-		JComboBox comboBoxUn5 = new JComboBox();
-		panelSchüler.add(comboBoxUn5);
-		JComboBox comboBoxUn6 = new JComboBox();
-		panelSchüler.add(comboBoxUn6);
-	}
 
 	private void addScrollPaneUnternehmen() {
 
 	}
 
-	private Object btnPressedUnternehmenExportieren() {
-		// TODO Auto-generated method stub
-		return null;
+	private void btnPressedUnternehmenExportieren() {
+
 	}
 
-	private Object btnPressedUnternehmenImportieren() {
-		// TODO Auto-generated method stub
-		return null;
+	private void btnPressedUnternehmenImportieren() {
+
 	}
 
-	private Object btnPressedUnternehmenhinzufügen() {
-		// TODO Auto-generated method stub
-		return null;
+	private void btnPressedUnternehmenhinzufügen() {
+
 	}
 
 	private void btnPressedSchülerExportieren() {
@@ -184,6 +165,9 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedSchülerhinzufügen() {
-
+		Schüler newSchüler = new Schüler("E", "W","S",null,null);
+		schülerList.add(newSchüler);
+		frame.repaint();
+		scrollPaneSchüler.repaint();
 	}
 }

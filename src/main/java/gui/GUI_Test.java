@@ -7,12 +7,12 @@ import javax.swing.event.*;
 
 public class GUI_Test {
 	private JFrame frame;
-	private DefaultListModel<Person> schülerListModel;
-	private JList<Person> schülerList;
+	private DefaultListModel<Schüler> schülerListModel;
+	private JList<Schüler> schülerList;
 	private JTextField vornameField;
 	private JTextField nachnameField;
 
-	public GUI_Test(ArrayList<Person> personen) {
+	public GUI_Test(ArrayList<Schüler> personen) {
 		frame = new JFrame("Personendaten");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(300, 400);
@@ -21,7 +21,7 @@ public class GUI_Test {
 		panel.setLayout(new BorderLayout());
 
 		schülerListModel = new DefaultListModel<>();
-		for (Person person : personen) {
+		for (Schüler person : personen) {
 			schülerListModel.addElement(person);
 		}
 
@@ -30,7 +30,7 @@ public class GUI_Test {
 		schülerList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				Person selectedPerson = schülerList.getSelectedValue();
+				Schüler selectedPerson = schülerList.getSelectedValue();
 				if (selectedPerson != null) {
 					vornameField.setText(selectedPerson.getVorname());
 					nachnameField.setText(selectedPerson.getNachname());
@@ -82,10 +82,8 @@ public class GUI_Test {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
-			ArrayList<Person> personen = new ArrayList<>();
-			personen.add(new Person("Max", "Muster"));
-			personen.add(new Person("Anna", "Schmidt"));
-			personen.add(new Person("Test", "123"));
+			ArrayList<Schüler> personen = new ArrayList<>();
+			
 			new GUI_Test(personen);
 		});
 	}
