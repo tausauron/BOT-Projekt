@@ -1,16 +1,27 @@
 package klassenObjekte;
 
-import java.util.ArrayList;
+import java.util.List;
+
+//Martin, Eric
 
 public class schueler
 {
 	private int schuelerID;
 	private String vorname, nachname;
-	private ArrayList<String> wuensche;
+	private List<String> wuensche;
 	private String klasse;
 	
+	public schueler(String klasse,String vorname, String nachname,List<String> wuensche) {
+		this.klasse=klasse;
+		this.vorname=vorname;
+		this.nachname=nachname;
+		this.wuensche=wuensche;
+	}
 	
 	
+	
+
+
 	public int getSchuelerID()
 	{
 		return schuelerID;
@@ -35,11 +46,11 @@ public class schueler
 	{
 		this.nachname = nachname;
 	}
-	public ArrayList<String> getWuensche()
+	public String getWuensche(int i)
 	{
-		return wuensche;
+		return wuensche.get(i);
 	}
-	public void setWuensche(ArrayList<String> wuensche)
+	public void setWuensche(List<String> wuensche)
 	{
 		this.wuensche = wuensche;
 	}
