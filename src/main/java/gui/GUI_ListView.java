@@ -1,28 +1,22 @@
 package gui;
 
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JPanel;
-import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import klassenObjekte.schueler;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 //Eric
 
@@ -34,14 +28,14 @@ public class GUI_ListView {
 	private JTabbedPane tabbedPane;
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
-	private List<Schüler> schülerList;
-	private List<Schüler> unternehmenList;
+	private List<schueler> schülerList;
+	private List<schueler> unternehmenList;
 
 	/**
 	 * Create the application.
 	 */
 
-	public GUI_ListView(List<Schüler> schüler, List<Schüler> unternehmen) {
+	public GUI_ListView(List<schueler> schüler, List<schueler> unternehmen) {
 
 		this.schülerList = schüler;
 		this.unternehmenList = unternehmen;
@@ -53,6 +47,11 @@ public class GUI_ListView {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
 		frame = new JFrame();
 
 		frame.setBounds(100, 100, 752, 506);
@@ -74,8 +73,8 @@ public class GUI_ListView {
 		btnSchülerExportieren.addActionListener((e) -> btnPressedSchülerExportieren());
 
 		// Model für Schüler GUI wird erstellt
-		TableModel modelSchüler = new StudentTableModel(schülerList);
-		JTable tableSchüler = new JTable(modelSchüler);
+		schülerListModel = new StudentTableModel(schülerList);
+		JTable tableSchüler = new JTable(schülerListModel);
 
 		scrollPaneSchüler = new JScrollPane(tableSchüler);
 		scrollPaneSchüler.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -114,8 +113,8 @@ public class GUI_ListView {
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
 		// Model für Unternehmen GUI wird erstellt
-		TableModel modelUn = new StudentTableModel(unternehmenList);
-		JTable tableUn = new JTable(modelUn);
+		unterNehmenListModel = new StudentTableModel(unternehmenList);
+		JTable tableUn = new JTable(unterNehmenListModel);
 
 		scrollPaneUnternehmen = new JScrollPane(tableUn);
 		scrollPaneUnternehmen.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -165,11 +164,19 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedSchülerhinzufügen() {
-		Schüler newSchüler = new Schüler("E", "W", "S", null, null);
+		ArrayList<String> x = new ArrayList<String>();
+		x.add("1");
+		x.add("2");
+		x.add("3");
+		x.add("4");
+		x.add("5");
+		x.add("6");
+
+		schueler newSchüler = new schueler("Klasse", "Vor", "Nach", x);
 		addSchülerToList(newSchüler);
 	}
 
-	private void addSchülerToList(Schüler newSchüler) {
+	private void addSchülerToList(schueler newSchüler) {
 		schülerList.add(newSchüler);
 
 		TableModel modelSchüler = new StudentTableModel(schülerList);
