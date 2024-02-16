@@ -12,7 +12,7 @@ import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
  */
 public class Model implements ModelInterface{
 	
-	List<schueler> schueler = new ArrayList<>();
+	private List<schueler> schueler = new ArrayList<>();
 	List<kurse> kurse = new ArrayList<>();
 	List<unternehmen> unternehmen = new ArrayList<>();
 
