@@ -2,9 +2,9 @@
 
 import java.util.List;
 
-import klassenObjekte.kurse;
-import klassenObjekte.schueler;
-import klassenObjekte.unternehmen;
+import klassenObjekte.Kurse;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * Klasse, die die Kurse belegt
@@ -14,7 +14,7 @@ import klassenObjekte.unternehmen;
  */
 public class KursPlaner {
 
-	public List<kurse> belegeKurse(List<schueler> schueler, List<unternehmen> unternehmen){
+	public List<Kurse> belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen){
 		
 		
 		return null;		

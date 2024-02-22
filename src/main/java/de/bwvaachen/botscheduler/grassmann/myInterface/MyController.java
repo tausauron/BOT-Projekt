@@ -1,26 +1,40 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
-import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
-import de.bwvaachen.botscheduler.grassmann.gui.TestGUI;
-import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import java.util.ArrayList;
+import java.util.List;
 
-// Grassmann
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
+import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
+import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import de.bwvaachen.botscheduler.model.Model;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
+
+/**
+ * 
+ * @author Grassmann
+ *
+ */
 
 public class MyController {
 
-	private TestGUI testGUI;
 	private GUI_Login loginGUI;
-	private TestModal myModal;
+	private GUI_ListView mainGUI;
+	private ModelInterface myModal;
 	
 	public MyController() {
 		this.loginGUI = new GUI_Login(this);
-		this.myModal = new TestModal(this);
+		this.myModal = new Model();
 	}
 	
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			this.testGUI = new TestGUI(this);
+			this.mainGUI = new GUI_ListView(this);
 		} else {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
@@ -44,8 +58,12 @@ public class MyController {
 		System.out.println("editStudent");
 	}
 	
-	public void importStudent() {
+	public List<Schueler> importStudent() {
 		System.out.println("importStudent");
+		String path = MyJFileChooser.getPath(mainGUI.getFrame());	
+		
+		
+		return myModal.importStudent(path);
 	}
 	
 	public void exportStudent() {
@@ -78,11 +96,16 @@ public class MyController {
 		System.out.println("editCompany");
 	}
 	
-	public void importCompany() {
+	public List<Unternehmen> importCompany() {
 		System.out.println("importCompany");
+		return null;
 	}
 	
 	public void exportCompany() {
 		System.out.println("exportCompany");
+	}
+	
+	private static void handleEcxeption(Throwable e) {
+		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}
 }
