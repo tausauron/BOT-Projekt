@@ -1,19 +1,19 @@
 package execlLoad;
 
-import klassenObjekte.Schueler;
-import klassenObjekte.unternehmen;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 public class ImportFile {
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class ImportFile {
         //  ExcelImport excelImport = new ExcelImport();
         List<Schueler> schulerListe = getChoices("H:\\SUD\\BOT2_Wahl.xlsx");
         for (Schueler schuler : schulerListe) {
-            System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getWuensche());
+            System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getAllWuensche());
 
         }
 
@@ -101,8 +101,8 @@ public class ImportFile {
     }
 
 
-    public static List<unternehmen> getCompany(String path) {
-        List<unternehmen> companyListe = new ArrayList<>();
+    public static List<Unternehmen> getCompany(String path) {
+        List<Unternehmen> companyListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -125,7 +125,9 @@ public class ImportFile {
                 boolean aktiv = aktivCell.getBooleanCellValue();
                 List<String> zeitslotsListe = Arrays.asList(zeitslots.split(",")); // Wünsche sind durch Kommas getrennt
 
-                companyListe.add(new unternehmen(firmenName, maxTeilnehmer, zeitslotsListe, gewichtung, aktiv));
+//                companyListe.add(new Unternehmen(0, firmenName, maxTeilnehmer, zeitslotsListe, gewichtung, aktiv));
+                companyListe.add(new Unternehmen(0,firmenName, "", maxTeilnehmer, 5, zeitslots));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
