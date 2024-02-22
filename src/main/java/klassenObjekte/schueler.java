@@ -1,16 +1,23 @@
 package klassenObjekte;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class schueler
 {
 	private int schuelerID;
 	private String vorname, nachname;
-	private ArrayList<String> wuensche;
+	private List<String> wuensche;
 	private String klasse;
-	
-	
-	
+
+	public schueler(String klasse, String vorname, String nachname, List<String> wunschListe) {
+	this.klasse=klasse;
+	this.vorname=vorname;
+	this.nachname=nachname;
+	this.wuensche=wunschListe;
+	}
+
+
 	public int getSchuelerID()
 	{
 		return schuelerID;
@@ -35,7 +42,7 @@ public class schueler
 	{
 		this.nachname = nachname;
 	}
-	public ArrayList<String> getWuensche()
+	public List<String> getWuensche()
 	{
 		return wuensche;
 	}

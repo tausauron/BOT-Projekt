@@ -1,6 +1,7 @@
 package klassenObjekte;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class unternehmen
 {
@@ -18,6 +19,10 @@ public class unternehmen
 		setFirmenID(firmenID);
 		setMaxTeilnehmer(maxTeilnehmer);
 	}
+
+	public unternehmen(String firmenName, int maxTeilnehmer, List<String> zeitslotsListe, double gewichtung, boolean aktiv) {
+	}
+
 
 	public String getFirmenName()
 	{
