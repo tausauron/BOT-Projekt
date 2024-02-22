@@ -7,30 +7,20 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-<<<<<<< HEAD
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.TableModel;
 
 import klassenObjekte.*;
 
-=======
-import javax.swing.JFrame;
-import javax.swing.JPanel;
->>>>>>> refs/heads/sprint1
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-<<<<<<< HEAD
-import java.awt.Component;
-=======
-import javax.swing.table.TableModel;
-
 import klassenObjekte.Schueler;
->>>>>>> refs/heads/sprint1
 
 //Eric
 
@@ -44,25 +34,16 @@ public class GUI_ListView {
 	private JTabbedPane tabbedPane;
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
-<<<<<<< HEAD
 	private TableModel raumListModel;
-	private List<schueler> schülerList;
-	private List<unternehmen> unternehmenList;
-	private List<Raum> raumList;
-=======
 	private List<Schueler> schülerList;
-	private List<Schueler> unternehmenList;
->>>>>>> refs/heads/sprint1
+	private List<Unternehmen> unternehmenList;
+	private List<Raum> raumList;
 
 	/**
 	 * Create the application.
 	 */
 
-<<<<<<< HEAD
-	public GUI_ListView(List<schueler> schüler, List<unternehmen> unternehmen, List<Raum> räume) {
-=======
-	public GUI_ListView(List<Schueler> schüler, List<Schueler> unternehmen) {
->>>>>>> refs/heads/sprint1
+	public GUI_ListView(List<Schueler> schüler, List<Unternehmen> unternehmen, List<Raum> räume) {
 
 		this.schülerList = schüler;
 		this.unternehmenList = unternehmen;
@@ -219,16 +200,17 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedUnternehmenImportieren() {
-		ArrayList<unternehmen> unList = new ArrayList<>();
-		unList.add(new unternehmen("Firma", 1, 1));
-		for (unternehmen unternehmen : unList) {
+		ArrayList<Unternehmen> unList = new ArrayList<>();
+		
+		unList.add(new Unternehmen(0, "Firma", "Fach", 1, 1, "A"));
+		for (Unternehmen unternehmen : unList) {
 			addUnternehmenToList(unternehmen);
 		}
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
 
-		addUnternehmenToList(null);
+		addUnternehmenToList(new Unternehmen(0, "Firma", "Fach", 1, 1, "A"));
 
 	}
 
@@ -238,7 +220,7 @@ public class GUI_ListView {
 
 	private void btnPressedSchülerImportieren() {
 
-		for (schueler schueler : schülerList) {
+		for (Schueler schueler : schülerList) {
 
 		}
 	}
@@ -256,12 +238,8 @@ public class GUI_ListView {
 		addSchülerToList(newSchüler);
 	}
 
-<<<<<<< HEAD
-	private void addSchülerToList(schueler newSchüler) {
-
-=======
 	private void addSchülerToList(Schueler newSchüler) {
->>>>>>> refs/heads/sprint1
+
 		schülerList.add(newSchüler);
 
 		TableModel modelSchüler = new StudentTableModel(schülerList);
@@ -270,7 +248,7 @@ public class GUI_ListView {
 		scrollPaneSchüler.setViewportView(tableSchüler);
 	}
 
-	private void addUnternehmenToList(unternehmen newUnternehmen) {
+	private void addUnternehmenToList(Unternehmen newUnternehmen) {
 		unternehmenList.add(newUnternehmen);
 
 		TableModel unTableModel = new UnternehmenTableModel(unternehmenList);

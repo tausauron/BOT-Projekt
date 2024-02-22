@@ -6,10 +6,10 @@ import klassenObjekte.*;
 //Eric
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 public class UnternehmenTableModel extends AbstractTableModel {
-	private static final String[] COLUMN_NAMES = { "Firma", "Firma_ID"};
-	private List<unternehmen> unternehmenListe;
+	private static final String[] COLUMN_NAMES = { "Firma", "Fachrichtung","Max Teilnehmer","Max Veranstaltungen"};
+	private List<Unternehmen> unternehmenListe;
 
-	public UnternehmenTableModel(List<unternehmen> schüler) {
+	public UnternehmenTableModel(List<Unternehmen> schüler) {
 		this.unternehmenListe = schüler;
 	}
 
@@ -30,12 +30,16 @@ public class UnternehmenTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		unternehmen student = unternehmenListe.get(rowIndex);
+		Unternehmen student = unternehmenListe.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
-			return student.getFirmenName();
+			return student.getUnternehmen();
 		case 1:
-			return student.getFirmenID();
+			return student.getFachrichtung();
+		case 2:
+			return student.getMaxTeilnehmer();
+		case 3:
+			return student.getMaxVeranstaltungen();
 		default:
 			throw new IllegalArgumentException("Invalid column index");
 		}
