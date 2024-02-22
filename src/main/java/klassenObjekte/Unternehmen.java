@@ -3,7 +3,15 @@ package klassenObjekte;
 import java.util.ArrayList;
 import java.util.List;
 
-public class unternehmen
+
+/**
+ * 
+ * @author Martin Albertz
+ * 
+ * Diese Klasse beitet das grundgerüst für die Unternehmen. 
+ * Diese Klasse erlaubt es ein Unternehmensobjekt anzulegen
+ */
+public class Unternehmen
 {
 
 	private String firmenName;

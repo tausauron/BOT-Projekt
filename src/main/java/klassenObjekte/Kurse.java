@@ -3,7 +3,12 @@ package klassenObjekte;
 import java.util.ArrayList;
 import java.util.List;
 
-public class kurse
+/**
+ * @author Martin Albertz
+ * Diese Klasse soll bietet das Grundgerüst, um ein Kursobjekt zu erstellen in wlechem relevante informationen zu einem Kurs gespeichert werden.
+ * 
+ */
+public class Kurse
 {
 
 	private int raum;
