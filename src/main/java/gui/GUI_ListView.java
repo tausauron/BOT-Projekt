@@ -15,6 +15,7 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.TableModel;
 
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import klassenObjekte.*;
 
 import javax.swing.ScrollPaneConstants;
@@ -38,6 +39,7 @@ public class GUI_ListView {
 	private List<Schueler> schülerList;
 	private List<Unternehmen> unternehmenList;
 	private List<Raum> raumList;
+	private MyController myController;
 
 	/**
 	 * Create the application.
@@ -48,6 +50,14 @@ public class GUI_ListView {
 		this.schülerList = schüler;
 		this.unternehmenList = unternehmen;
 		this.raumList = räume;
+		initialize();
+		this.frame.setVisible(true);
+	}
+	public GUI_ListView(MyController myController) {
+		this.myController = myController;
+		this.schülerList = new ArrayList<Schueler>();
+		this.unternehmenList = new ArrayList<Unternehmen>();
+		this.raumList= new ArrayList<Raum>();
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -255,5 +265,9 @@ public class GUI_ListView {
 		JTable tableUnternehmen = new JTable(unTableModel);
 
 		scrollPaneUnternehmen.setViewportView(tableUnternehmen);
+	}
+	public JFrame getFrame() {
+		// TODO Auto-generated method stub
+		return this.frame;
 	}
 }

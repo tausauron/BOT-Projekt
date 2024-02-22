@@ -6,12 +6,11 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
-import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
 import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
-import klassenObjekte.Schueler;
-import klassenObjekte.Unternehmen;
+import gui.GUI_ListView;
+import gui.GUI_Login;
+import klassenObjekte.*;
 
 /**
  * 
