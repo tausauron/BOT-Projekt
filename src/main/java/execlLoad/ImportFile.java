@@ -1,6 +1,6 @@
 package execlLoad;
 
-import klassenObjekte.schueler;
+import klassenObjekte.Schueler;
 import klassenObjekte.unternehmen;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -20,8 +20,8 @@ public class ImportFile {
         //    ImportWunschSchuler();
 
         //  ExcelImport excelImport = new ExcelImport();
-        List<schueler> schulerListe = getChoices("H:\\SUD\\BOT2_Wahl.xlsx");
-        for (schueler schuler : schulerListe) {
+        List<Schueler> schulerListe = getChoices("H:\\SUD\\BOT2_Wahl.xlsx");
+        for (Schueler schuler : schulerListe) {
             System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getWuensche());
 
         }
@@ -29,8 +29,8 @@ public class ImportFile {
     }
 
 
-    public static List<schueler> getChoices(String path) {
-        List<schueler> schulerListe = new ArrayList<>();
+    public static List<Schueler> getChoices(String path) {
+        List<Schueler> schulerListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -60,7 +60,7 @@ public class ImportFile {
                     }
                 }
 
-                schulerListe.add(new schueler(klasse, vorname, nachname, wunschliste)); // fügen aller Schueler mit der Wünsche hinzu
+                schulerListe.add(new Schueler(klasse, vorname, nachname, wunschliste)); // fügen aller Schueler mit der Wünsche hinzu
             }
         } catch (Exception e) {
             e.printStackTrace();
