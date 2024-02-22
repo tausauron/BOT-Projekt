@@ -6,7 +6,10 @@ import java.util.List;
 import klassenObjekte.schueler;
 import klassenObjekte.unternehmen;
 
-// Grassmann
+/**
+ * 
+ *@author Grassmann
+ */
 
 public interface ModelInterface {
 	final String key = ":LjY%511('NEuOjN#:ca6f(<(5C}s|*$";
