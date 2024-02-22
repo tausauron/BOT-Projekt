@@ -27,4 +27,72 @@ public class Model implements ModelInterface{
 		kurse = planer.belegeKurse(schueler, unternehmen);
 	}
 
+	@Override
+	public klassenObjekte.schueler getStudent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,
+			String klasse) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editStudent(klassenObjekte.schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteStudent(klassenObjekte.schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<klassenObjekte.schueler> importStudent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportStudent() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots,
+			double gewichtung, boolean aktiv) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editCompany(klassenObjekte.unternehmen unternehmen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteCompany(klassenObjekte.unternehmen unternehmen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<klassenObjekte.unternehmen> importCompany() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportCompany() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

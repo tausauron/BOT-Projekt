@@ -1,15 +1,21 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
 import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
 import de.bwvaachen.botscheduler.grassmann.gui.TestGUI;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import klassenObjekte.schueler;
 
 // Grassmann
 
 public class MyController {
 
-	private TestGUI testGUI;
 	private GUI_Login loginGUI;
+	private GUI_ListView mainGUI;
 	private TestModal myModal;
 	
 	public MyController() {
@@ -20,7 +26,7 @@ public class MyController {
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			this.testGUI = new TestGUI(this);
+			this.mainGUI = new GUI_ListView(this);
 		} else {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
@@ -44,8 +50,29 @@ public class MyController {
 		System.out.println("editStudent");
 	}
 	
-	public void importStudent() {
+	public List<schueler> importStudent() {
 		System.out.println("importStudent");
+		
+		// Modal:
+		ArrayList<String> wahlFacher = new ArrayList<String>();
+		wahlFacher.add("1");
+		wahlFacher.add("2");
+		wahlFacher.add("3");
+		wahlFacher.add("4");
+		wahlFacher.add("5");
+		wahlFacher.add("6");
+
+		schueler newSchüler = new schueler("Klasse", "Vor", "Nach", wahlFacher);
+		
+		ArrayList<schueler> students = new ArrayList<schueler>();
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		
+		
+		return students;
 	}
 	
 	public void exportStudent() {
