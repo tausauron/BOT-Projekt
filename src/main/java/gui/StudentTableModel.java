@@ -40,17 +40,17 @@ public class StudentTableModel extends AbstractTableModel {
 		case 2:
 			return student.getNachname();
 		case 3:
-			return student.getWuensche(0);
+			return student.getWunsch(0);
 		case 4:
-			return student.getWuensche(1);
+			return student.getWunsch(1);
 		case 5:
-			return student.getWuensche(2);
+			return student.getWunsch(2);
 		case 6:
-			return student.getWuensche(3);
+			return student.getWunsch(3);
 		case 7:
-			return student.getWuensche(4);
+			return student.getWunsch(4);
 		case 8:
-			return student.getWuensche(5);
+			return student.getWunsch(5);
 		default:
 			throw new IllegalArgumentException("Invalid column index");
 		}

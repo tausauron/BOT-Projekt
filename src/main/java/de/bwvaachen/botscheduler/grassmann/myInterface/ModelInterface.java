@@ -20,7 +20,7 @@ public interface ModelInterface {
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,String klasse);
 	public void editStudent(schueler schueler);
 	public void deleteStudent(schueler schueler);
-	public List<schueler> importStudent();
+	public List<schueler> importStudent(String absolutePath);
 	public void exportStudent(); // download Excel
 	
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots, double gewichtung, boolean aktiv);

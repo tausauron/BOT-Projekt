@@ -1,16 +1,23 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
 import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
-import de.bwvaachen.botscheduler.grassmann.gui.TestGUI;
+import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
 import klassenObjekte.schueler;
+import klassenObjekte.unternehmen;
 
-// Grassmann
+/**
+ * 
+ * @author Grassmann
+ *
+ */
 
 public class MyController {
 
@@ -52,6 +59,7 @@ public class MyController {
 	
 	public List<schueler> importStudent() {
 		System.out.println("importStudent");
+		System.out.println(MyJFileChooser.getPath(mainGUI.getFrame()));
 		
 		// Modal:
 		ArrayList<String> wahlFacher = new ArrayList<String>();
@@ -105,11 +113,16 @@ public class MyController {
 		System.out.println("editCompany");
 	}
 	
-	public void importCompany() {
+	public List<unternehmen> importCompany() {
 		System.out.println("importCompany");
+		return null;
 	}
 	
 	public void exportCompany() {
 		System.out.println("exportCompany");
+	}
+	
+	private static void handleEcxeption(Throwable e) {
+		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}
 }

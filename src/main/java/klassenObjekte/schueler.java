@@ -16,7 +16,7 @@ public class schueler
 		setKlasse(klasse);
 		setVorname(vorname);
 		setNachname(nachname);
-		setAllWuensche(getAllWuensche());
+		setAllWuensche(wuensche);
 	}
 
 	public int getSchuelerID()

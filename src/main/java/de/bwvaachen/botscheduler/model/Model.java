@@ -95,4 +95,10 @@ public class Model implements ModelInterface{
 		
 	}
 
+	@Override
+	public List<klassenObjekte.schueler> importStudent(String absolutePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

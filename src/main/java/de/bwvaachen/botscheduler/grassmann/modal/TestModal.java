@@ -17,8 +17,8 @@ public class TestModal implements ModelInterface{
 	
 	public Boolean checkLogin(String username, String password) {
 		try {
-			String decryptUsername = StringEncryption.decrypt(this.username, this.key);
-			String decryptPassword = StringEncryption.decrypt(this.password, this.key);
+			String decryptUsername = StringEncryption.decrypt(ModelInterface.username, ModelInterface.key);
+			String decryptPassword = StringEncryption.decrypt(ModelInterface.password, ModelInterface.key);
 			
 			if (decryptUsername.equals(username) && decryptPassword.equals(password)) {
 				return true;
@@ -56,7 +56,6 @@ public class TestModal implements ModelInterface{
 		
 	}
 
-	@Override
 	public List<schueler> importStudent() {
 		// TODO Auto-generated method stub
 		return null;
@@ -97,5 +96,11 @@ public class TestModal implements ModelInterface{
 	public void exportCompany() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<schueler> importStudent(String absolutePath) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

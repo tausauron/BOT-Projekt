@@ -166,7 +166,7 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedSchülerExportieren() {
-
+		
 	}
 
 	private void btnPressedSchülerImportieren() {
@@ -195,5 +195,9 @@ public class GUI_ListView {
 		JTable tableSchüler = new JTable(modelSchüler);
 
 		scrollPaneSchüler.setViewportView(tableSchüler);
+	}
+	
+	public JFrame getFrame() {
+		return this.frame;
 	}
 }
