@@ -3,7 +3,14 @@ package klassenObjekte;
 import java.util.ArrayList;
 import java.util.List;
 
-public class schueler
+/**
+ * @author Martin Albertz
+ * Diese Klasse beitet das grundgerüst für die Schueler. 
+ * Diese Klasse erlaubt es einen Schueler anzulegen.
+ * 
+ * TODO: Die individuellen if zeilen in den setters, durch eine gemeinsame Methode austauschen
+ */
+public class Schueler
 {
 	private int schuelerID;
 	private String vorname, nachname;
@@ -11,7 +18,7 @@ public class schueler
 	private String klasse;
 
 
-	public schueler(String klasse,String vorname, String nachname,List<String> wuensche)
+	public Schueler(String klasse,String vorname, String nachname,List<String> wuensche)
 	{
 		setKlasse(klasse);
 		setVorname(vorname);
