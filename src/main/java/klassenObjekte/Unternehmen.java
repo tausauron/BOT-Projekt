@@ -14,28 +14,23 @@ import java.util.List;
 public class Unternehmen
 {
 
-	private String firmenName;
-	private int firmenID;
-	private int maxTeilnehmer;
-	private List<Integer> zeitslots;
+	private int firmenID; // ist die Firmen Nr
+	private String unternehmen;
+	private String fachrichtung;
+	private int maxTeilnehmer, maxVeranstaltungen;
+	private String fruehsterZeitslot;
 	private double gewichtung;
 	private boolean aktiv;
 	
-	public unternehmen(String name, int firmenID, int maxTeilnehmer)
+	public Unternehmen(int firmenID,String unternehmen, String fachrichtung, 
+						int maxTeilnehmer, int maxVeranstaltungen, String fruehsterZeitslot)
 	{
-		setFirmenName(name);
 		setFirmenID(firmenID);
+		setUnternehmen(unternehmen);
+		setFachrichtung(fachrichtung);
 		setMaxTeilnehmer(maxTeilnehmer);
-	}
-
-	public String getFirmenName()
-	{
-		return firmenName;
-	}
-
-	public void setFirmenName(String firma)
-	{
-		this.firmenName = firma;
+		setMaxVeranstaltungen(maxVeranstaltungen);
+		setFruesterZeitslot(fruehsterZeitslot);
 	}
 
 	public int getFirmenID()
@@ -45,7 +40,29 @@ public class Unternehmen
 
 	public void setFirmenID(int firmenID)
 	{
+		pruefeNullEingabe(firmenID, "Die Firmen nummer");
 		this.firmenID = firmenID;
+	}
+
+	public String getUnternehmen()
+	{
+		return unternehmen;
+	}
+
+	public void setUnternehmen(String firmenName)
+	{
+		pruefeNullEingabe(firmenName, "Das Unternehmen");
+		this.unternehmen = firmenName;
+	}
+
+	public String getFachrichtung()
+	{
+		return fachrichtung;
+	}
+
+	public void setFachrichtung(String fachrichtung)
+	{
+		this.fachrichtung = fachrichtung;
 	}
 
 	public int getMaxTeilnehmer()
@@ -55,17 +72,30 @@ public class Unternehmen
 
 	public void setMaxTeilnehmer(int maxTeilnehmer)
 	{
+		pruefeNullEingabe(maxTeilnehmer, "Die maximalen Teilnehmer");
 		this.maxTeilnehmer = maxTeilnehmer;
 	}
 
-	public List<Integer> getZeitslots()
+	public int getMaxVeranstaltungen()
 	{
-		return zeitslots;
+		return maxVeranstaltungen;
 	}
 
-	public void setZeitslots(ArrayList<Integer> zeitslots)
+	public void setMaxVeranstaltungen(int maxVeranstaltungen)
 	{
-		this.zeitslots = zeitslots;
+		pruefeNullEingabe(maxVeranstaltungen, "Die maximale Veranstaltungen");
+		this.maxVeranstaltungen = maxVeranstaltungen;
+	}
+
+	public String getFruesterZeitslot()
+	{
+		return fruehsterZeitslot;
+	}
+
+	public void setFruesterZeitslot(String fruehsterZeitslot)
+	{
+		pruefeNullEingabe(fruehsterZeitslot, "Der fruehste Zeitslot");
+		this.fruehsterZeitslot = fruehsterZeitslot;
 	}
 
 	public double getGewichtung()
@@ -75,6 +105,7 @@ public class Unternehmen
 
 	public void setGewichtung(double gewichtung)
 	{
+		pruefeNullEingabe(gewichtung, "Gewichtung");
 		this.gewichtung = gewichtung;
 	}
 
@@ -85,14 +116,23 @@ public class Unternehmen
 
 	public void setAktiv(boolean aktiv)
 	{
+		pruefeNullEingabe(aktiv, "Aktiv");
 		this.aktiv = aktiv;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * @author Martin Albertz
+	 * 
+	 * Diese Methode nimmt ein Objekt und ein String an und prüft ob dieses Objekt null ist, ist dies der Fall so wird eine Exception geworfen.
+	 * 
+	 * @param objekt das zu prüfende Objekt.
+	 * @param variable welches Objekt geprüft wurde.
+	 */
+	private void pruefeNullEingabe(Object objekt, String variable)
+	{
+		if(objekt==null)
+		{
+			throw new IllegalArgumentException(variable+ " darf/duerfen nicht leer sein");
+		}
+	}
 }

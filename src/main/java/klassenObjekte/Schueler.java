@@ -18,7 +18,7 @@ public class Schueler
 	private String klasse;
 
 
-	public schueler(String klasse,String vorname, String nachname,List<String> wuensche)
+	public Schueler(String klasse,String vorname, String nachname,List<String> wuensche)
 	{
 		setKlasse(klasse);
 		setVorname(vorname);
