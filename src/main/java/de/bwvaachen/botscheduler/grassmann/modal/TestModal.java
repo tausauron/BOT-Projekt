@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
-import klassenObjekte.schueler;
-import klassenObjekte.unternehmen;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 // Grassmann
 
@@ -32,7 +32,7 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
-	public schueler getStudent() {
+	public Schueler getStudent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -44,19 +44,14 @@ public class TestModal implements ModelInterface{
 		
 	}
 
+
 	@Override
-	public void editStudent(schueler schueler) {
+	public void deleteStudent(Schueler schueler) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
-	public void deleteStudent(schueler schueler) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public List<schueler> importStudent() {
+	public List<Schueler> importStudent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -75,19 +70,19 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
-	public void editCompany(unternehmen unternehmen) {
+	public void editCompany(Unternehmen unternehmen) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deleteCompany(unternehmen unternehmen) {
+	public void deleteCompany(Unternehmen unternehmen) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<unternehmen> importCompany() {
+	public List<Unternehmen> importCompany() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -99,8 +94,15 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
-	public List<schueler> importStudent(String absolutePath) {
+	public List<Schueler> importStudent(String absolutePath) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void editStudent(Schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

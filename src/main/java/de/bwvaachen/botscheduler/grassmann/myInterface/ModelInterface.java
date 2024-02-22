@@ -3,8 +3,8 @@ package de.bwvaachen.botscheduler.grassmann.myInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-import klassenObjekte.schueler;
-import klassenObjekte.unternehmen;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * 
@@ -19,17 +19,17 @@ public interface ModelInterface {
 	
 	public Boolean checkLogin(String username, String password);
 	
-	public schueler getStudent();
+	public Schueler getStudent();
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,String klasse);
-	public void editStudent(schueler schueler);
-	public void deleteStudent(schueler schueler);
-	public List<schueler> importStudent(String absolutePath);
+	public void editStudent(Schueler schueler);
+	public void deleteStudent(Schueler schueler);
+	public List<Schueler> importStudent(String absolutePath);
 	public void exportStudent(); // download Excel
 	
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots, double gewichtung, boolean aktiv);
-	public void editCompany(unternehmen unternehmen);
-	public void deleteCompany(unternehmen unternehmen);
+	public void editCompany(Unternehmen unternehmen);
+	public void deleteCompany(Unternehmen unternehmen);
 	
-	public List<unternehmen> importCompany();
+	public List<Unternehmen> importCompany();
 	public void exportCompany(); // download Excel
 }
