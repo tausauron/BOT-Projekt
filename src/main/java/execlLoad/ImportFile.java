@@ -51,7 +51,7 @@ public class ImportFile {
 
                 List<String> wunschliste = new ArrayList<>();
                 // Geht davon aus, dass die Wünsche in den Spalten 3 bis 8 stehen
-                for (int colIndex = 3; colIndex < 8; colIndex++) {
+                for (int colIndex = 3; colIndex <= 8; colIndex++) {
                     Cell cell = row.getCell(colIndex);
                     if (cell != null) {
                         wunschliste.add(cell.toString());
