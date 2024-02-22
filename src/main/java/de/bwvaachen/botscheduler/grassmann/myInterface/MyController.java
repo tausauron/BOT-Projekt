@@ -1,15 +1,28 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
-import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
-import de.bwvaachen.botscheduler.grassmann.gui.TestGUI;
-import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import java.util.ArrayList;
+import java.util.List;
 
-// Grassmann
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
+import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
+import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
+import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
+
+/**
+ * 
+ * @author Grassmann
+ *
+ */
 
 public class MyController {
 
-	private TestGUI testGUI;
 	private GUI_Login loginGUI;
+	private GUI_ListView mainGUI;
 	private TestModal myModal;
 	
 	public MyController() {
@@ -20,7 +33,7 @@ public class MyController {
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			this.testGUI = new TestGUI(this);
+			this.mainGUI = new GUI_ListView(this);
 		} else {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
@@ -44,8 +57,30 @@ public class MyController {
 		System.out.println("editStudent");
 	}
 	
-	public void importStudent() {
+	public List<Schueler> importStudent() {
 		System.out.println("importStudent");
+		System.out.println(MyJFileChooser.getPath(mainGUI.getFrame()));
+		
+		// Modal:
+		ArrayList<String> wahlFacher = new ArrayList<String>();
+		wahlFacher.add("1");
+		wahlFacher.add("2");
+		wahlFacher.add("3");
+		wahlFacher.add("4");
+		wahlFacher.add("5");
+		wahlFacher.add("6");
+
+		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", wahlFacher);
+		
+		ArrayList<Schueler> students = new ArrayList<Schueler>();
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		students.add(newSchüler);
+		
+		
+		return students;
 	}
 	
 	public void exportStudent() {
@@ -78,11 +113,16 @@ public class MyController {
 		System.out.println("editCompany");
 	}
 	
-	public void importCompany() {
+	public List<Unternehmen> importCompany() {
 		System.out.println("importCompany");
+		return null;
 	}
 	
 	public void exportCompany() {
 		System.out.println("exportCompany");
+	}
+	
+	private static void handleEcxeption(Throwable e) {
+		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}
 }

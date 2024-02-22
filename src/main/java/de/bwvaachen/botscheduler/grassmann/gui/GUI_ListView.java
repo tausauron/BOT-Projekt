@@ -1,22 +1,16 @@
-package gui;
+package de.bwvaachen.botscheduler.grassmann.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-<<<<<<< HEAD
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.table.TableModel;
-
-import klassenObjekte.*;
-
-=======
 import javax.swing.JFrame;
 import javax.swing.JPanel;
->>>>>>> refs/heads/sprint1
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -24,49 +18,34 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-<<<<<<< HEAD
-import java.awt.Component;
-=======
 import javax.swing.table.TableModel;
 
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+import gui.StudentTableModel;
 import klassenObjekte.Schueler;
->>>>>>> refs/heads/sprint1
 
-//Eric
+//Eric, Grassmann
 
 public class GUI_ListView {
 
 	private JFrame frame;
 	private JScrollPane scrollPaneSchüler;
 	private JScrollPane scrollPaneUnternehmen;
-	private JScrollPane scrollPaneRaum;
-	
 	private JTabbedPane tabbedPane;
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
-<<<<<<< HEAD
-	private TableModel raumListModel;
-	private List<schueler> schülerList;
-	private List<unternehmen> unternehmenList;
-	private List<Raum> raumList;
-=======
 	private List<Schueler> schülerList;
 	private List<Schueler> unternehmenList;
->>>>>>> refs/heads/sprint1
+	private MyController myController;
 
 	/**
 	 * Create the application.
 	 */
 
-<<<<<<< HEAD
-	public GUI_ListView(List<schueler> schüler, List<unternehmen> unternehmen, List<Raum> räume) {
-=======
-	public GUI_ListView(List<Schueler> schüler, List<Schueler> unternehmen) {
->>>>>>> refs/heads/sprint1
-
-		this.schülerList = schüler;
-		this.unternehmenList = unternehmen;
-		this.raumList = räume;
+	public GUI_ListView(MyController myController) {
+		this.myController = myController;
+		this.schülerList = new ArrayList<Schueler>();
+		this.unternehmenList = new ArrayList<Schueler>();
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -84,7 +63,8 @@ public class GUI_ListView {
 
 		frame.setBounds(100, 100, 752, 506);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		frame.setTitle("BOT");
+		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
@@ -105,7 +85,6 @@ public class GUI_ListView {
 		JTable tableSchüler = new JTable(schülerListModel);
 
 		scrollPaneSchüler = new JScrollPane(tableSchüler);
-
 		scrollPaneSchüler.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelSchüler = new GroupLayout(panelSchüler);
 		gl_panelSchüler.setHorizontalGroup(gl_panelSchüler.createParallelGroup(Alignment.LEADING)
@@ -142,11 +121,10 @@ public class GUI_ListView {
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
 		// Model für Unternehmen GUI wird erstellt
-		unterNehmenListModel = new UnternehmenTableModel(unternehmenList);
+		unterNehmenListModel = new StudentTableModel(unternehmenList);
 		JTable tableUn = new JTable(unterNehmenListModel);
 
 		scrollPaneUnternehmen = new JScrollPane(tableUn);
-
 		scrollPaneUnternehmen.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		GroupLayout gl_panelUnternehmen = new GroupLayout(panelUnternehmen);
 		gl_panelUnternehmen.setHorizontalGroup(gl_panelUnternehmen.createParallelGroup(Alignment.LEADING)
@@ -171,47 +149,9 @@ public class GUI_ListView {
 						.addComponent(scrollPaneUnternehmen, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
 						.addGap(19)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
-
-		// Räume
-
-		JPanel panelRaum = new JPanel();
-
-		tabbedPane.addTab("Räume", null, panelRaum, null);
-
-		JButton btnRaumhinzufügen = new JButton("Hinzufügen");
-
-		JButton btnRaumImportieren = new JButton("Importieren");
-
-		JButton btnRaumExportieren = new JButton("Exportieren");
-
-		raumListModel = new RaumTableModel(raumList);
-		JTable tableRaum = new JTable(raumListModel);
-
-		scrollPaneRaum = new JScrollPane(tableRaum);
-
-		scrollPaneRaum.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		GroupLayout gl_panelRaum = new GroupLayout(panelRaum);
-		gl_panelRaum.setHorizontalGroup(gl_panelRaum.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 731, Short.MAX_VALUE)
-				.addGroup(gl_panelRaum.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panelRaum.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_panelRaum.createSequentialGroup()
-										.addComponent(btnRaumhinzufügen, GroupLayout.PREFERRED_SIZE, 100,
-												GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED, 427, Short.MAX_VALUE)
-										.addComponent(btnRaumImportieren).addGap(6).addComponent(btnRaumExportieren))
-								.addGroup(gl_panelRaum.createSequentialGroup()
-										.addComponent(scrollPaneRaum, GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
-										.addGap(3)))
-						.addContainerGap()));
-		gl_panelRaum.setVerticalGroup(gl_panelRaum.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 439, Short.MAX_VALUE)
-				.addGroup(gl_panelRaum.createSequentialGroup().addContainerGap()
-						.addGroup(gl_panelRaum.createParallelGroup(Alignment.LEADING).addComponent(btnRaumImportieren)
-								.addComponent(btnRaumExportieren).addComponent(btnRaumhinzufügen))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
-						.addComponent(scrollPaneRaum, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE).addGap(19)));
-		panelRaum.setLayout(gl_panelRaum);
+		
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));    
+		frame.setIconImage(ui_Logo);  
 	}
 
 	private void btnPressedUnternehmenExportieren() {
@@ -219,28 +159,21 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedUnternehmenImportieren() {
-		ArrayList<unternehmen> unList = new ArrayList<>();
-		unList.add(new unternehmen("Firma", 1, 1));
-		for (unternehmen unternehmen : unList) {
-			addUnternehmenToList(unternehmen);
-		}
+
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
 
-		addUnternehmenToList(null);
-
 	}
 
 	private void btnPressedSchülerExportieren() {
-
+		
 	}
 
 	private void btnPressedSchülerImportieren() {
-
-		for (schueler schueler : schülerList) {
-
-		}
+		List<Schueler> importedStudents = myController.importStudent();
+		
+		importedStudents.forEach((student) -> addSchülerToList(student)); 
 	}
 
 	private void btnPressedSchülerhinzufügen() {
@@ -256,12 +189,7 @@ public class GUI_ListView {
 		addSchülerToList(newSchüler);
 	}
 
-<<<<<<< HEAD
-	private void addSchülerToList(schueler newSchüler) {
-
-=======
 	private void addSchülerToList(Schueler newSchüler) {
->>>>>>> refs/heads/sprint1
 		schülerList.add(newSchüler);
 
 		TableModel modelSchüler = new StudentTableModel(schülerList);
@@ -269,13 +197,8 @@ public class GUI_ListView {
 
 		scrollPaneSchüler.setViewportView(tableSchüler);
 	}
-
-	private void addUnternehmenToList(unternehmen newUnternehmen) {
-		unternehmenList.add(newUnternehmen);
-
-		TableModel unTableModel = new UnternehmenTableModel(unternehmenList);
-		JTable tableUnternehmen = new JTable(unTableModel);
-
-		scrollPaneUnternehmen.setViewportView(tableUnternehmen);
+	
+	public JFrame getFrame() {
+		return this.frame;
 	}
 }
