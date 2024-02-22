@@ -2,8 +2,11 @@ package de.bwvaachen.botscheduler.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import klassenObjekte.*;
+
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
+import klassenObjekte.Kurse;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * Zentrale Modellklasse zur Verwaltung aller Daten
@@ -12,9 +15,9 @@ import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
  */
 public class Model implements ModelInterface{
 	
-	List<schueler> schueler = new ArrayList<>();
-	List<kurse> kurse = new ArrayList<>();
-	List<unternehmen> unternehmen = new ArrayList<>();
+	List<Schueler> schueler = new ArrayList<>();
+	List<Kurse> kurse = new ArrayList<>();
+	List<Unternehmen> unternehmen = new ArrayList<>();
 
 	@Override
 	public Boolean checkLogin(String username, String password) {
@@ -28,7 +31,7 @@ public class Model implements ModelInterface{
 	}
 
 	@Override
-	public klassenObjekte.schueler getStudent() {
+	public Schueler getStudent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -40,23 +43,6 @@ public class Model implements ModelInterface{
 		
 	}
 
-	@Override
-	public void editStudent(klassenObjekte.schueler schueler) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteStudent(klassenObjekte.schueler schueler) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<klassenObjekte.schueler> importStudent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void exportStudent() {
@@ -71,23 +57,6 @@ public class Model implements ModelInterface{
 		
 	}
 
-	@Override
-	public void editCompany(klassenObjekte.unternehmen unternehmen) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteCompany(klassenObjekte.unternehmen unternehmen) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<klassenObjekte.unternehmen> importCompany() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void exportCompany() {
@@ -95,8 +64,39 @@ public class Model implements ModelInterface{
 		
 	}
 
+
 	@Override
-	public List<klassenObjekte.schueler> importStudent(String absolutePath) {
+	public void editStudent(Schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteStudent(Schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editCompany(Unternehmen unternehmen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteCompany(Unternehmen unternehmen) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Schueler> importStudent(String absolutePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Unternehmen> importCompany() {
 		// TODO Auto-generated method stub
 		return null;
 	}

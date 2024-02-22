@@ -8,9 +8,9 @@ import klassenObjekte.*;
 public class StudentTableModel extends AbstractTableModel {
 	private static final String[] COLUMN_NAMES = { "Klasse", "Vorname", "Nachname", "Wahl1", "Wahl2", "Wahl3", "Wahl4",
 			"Wahl5", "Wahl6" };
-	private List<schueler> schülerListe;
+	private List<Schueler> schülerListe;
 
-	public StudentTableModel(List<schueler> schüler) {
+	public StudentTableModel(List<Schueler> schüler) {
 		this.schülerListe = schüler;
 	}
 
@@ -31,7 +31,7 @@ public class StudentTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		schueler student = schülerListe.get(rowIndex);
+		Schueler student = schülerListe.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
 			return student.getKlasse();

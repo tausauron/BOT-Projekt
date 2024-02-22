@@ -1,22 +1,24 @@
 package gui;
 
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.table.TableModel;
-import klassenObjekte.schueler;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.TableModel;
+
+import klassenObjekte.Schueler;
 
 //Eric
 
@@ -28,14 +30,14 @@ public class GUI_ListView {
 	private JTabbedPane tabbedPane;
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
-	private List<schueler> schülerList;
-	private List<schueler> unternehmenList;
+	private List<Schueler> schülerList;
+	private List<Schueler> unternehmenList;
 
 	/**
 	 * Create the application.
 	 */
 
-	public GUI_ListView(List<schueler> schüler, List<schueler> unternehmen) {
+	public GUI_ListView(List<Schueler> schüler, List<Schueler> unternehmen) {
 
 		this.schülerList = schüler;
 		this.unternehmenList = unternehmen;
@@ -172,11 +174,11 @@ public class GUI_ListView {
 		x.add("5");
 		x.add("6");
 
-		schueler newSchüler = new schueler("Klasse", "Vor", "Nach", x);
+		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", x);
 		addSchülerToList(newSchüler);
 	}
 
-	private void addSchülerToList(schueler newSchüler) {
+	private void addSchülerToList(Schueler newSchüler) {
 		schülerList.add(newSchüler);
 
 		TableModel modelSchüler = new StudentTableModel(schülerList);

@@ -10,8 +10,8 @@ import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
 import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
 import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
-import klassenObjekte.schueler;
-import klassenObjekte.unternehmen;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class MyController {
 		System.out.println("editStudent");
 	}
 	
-	public List<schueler> importStudent() {
+	public List<Schueler> importStudent() {
 		System.out.println("importStudent");
 		System.out.println(MyJFileChooser.getPath(mainGUI.getFrame()));
 		
@@ -70,9 +70,9 @@ public class MyController {
 		wahlFacher.add("5");
 		wahlFacher.add("6");
 
-		schueler newSchüler = new schueler("Klasse", "Vor", "Nach", wahlFacher);
+		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", wahlFacher);
 		
-		ArrayList<schueler> students = new ArrayList<schueler>();
+		ArrayList<Schueler> students = new ArrayList<Schueler>();
 		students.add(newSchüler);
 		students.add(newSchüler);
 		students.add(newSchüler);
@@ -113,7 +113,7 @@ public class MyController {
 		System.out.println("editCompany");
 	}
 	
-	public List<unternehmen> importCompany() {
+	public List<Unternehmen> importCompany() {
 		System.out.println("importCompany");
 		return null;
 	}

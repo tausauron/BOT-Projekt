@@ -1,27 +1,28 @@
 package de.bwvaachen.botscheduler.grassmann.gui;
 
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.TableModel;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import gui.StudentTableModel;
-import klassenObjekte.schueler;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import klassenObjekte.Schueler;
 
 //Eric, Grassmann
 
@@ -33,8 +34,8 @@ public class GUI_ListView {
 	private JTabbedPane tabbedPane;
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
-	private List<schueler> schülerList;
-	private List<schueler> unternehmenList;
+	private List<Schueler> schülerList;
+	private List<Schueler> unternehmenList;
 	private MyController myController;
 
 	/**
@@ -43,8 +44,8 @@ public class GUI_ListView {
 
 	public GUI_ListView(MyController myController) {
 		this.myController = myController;
-		this.schülerList = new ArrayList<schueler>();
-		this.unternehmenList = new ArrayList<schueler>();
+		this.schülerList = new ArrayList<Schueler>();
+		this.unternehmenList = new ArrayList<Schueler>();
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -170,7 +171,7 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedSchülerImportieren() {
-		List<schueler> importedStudents = myController.importStudent();
+		List<Schueler> importedStudents = myController.importStudent();
 		
 		importedStudents.forEach((student) -> addSchülerToList(student)); 
 	}
@@ -184,11 +185,11 @@ public class GUI_ListView {
 		x.add("5");
 		x.add("6");
 
-		schueler newSchüler = new schueler("Klasse", "Vor", "Nach", x);
+		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", x);
 		addSchülerToList(newSchüler);
 	}
 
-	private void addSchülerToList(schueler newSchüler) {
+	private void addSchülerToList(Schueler newSchüler) {
 		schülerList.add(newSchüler);
 
 		TableModel modelSchüler = new StudentTableModel(schülerList);

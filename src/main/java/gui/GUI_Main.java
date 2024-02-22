@@ -2,15 +2,15 @@ package gui;
 
 import java.util.ArrayList;
 
-import klassenObjekte.schueler;
+import klassenObjekte.Schueler;
 
 public class GUI_Main {
 
 	public GUI_Main() {
-		ArrayList<schueler> personen = new ArrayList<>();
+		ArrayList<Schueler> personen = new ArrayList<>();
 		
 		
-		ArrayList<schueler> un = new ArrayList<>();
+		ArrayList<Schueler> un = new ArrayList<>();
 		
 		GUI_ListView x = new GUI_ListView(personen,un);
 	}
