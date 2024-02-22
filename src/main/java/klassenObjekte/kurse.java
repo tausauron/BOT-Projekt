@@ -1,12 +1,13 @@
 package klassenObjekte;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class kurse
 {
 
 	private int raum;
-	private ArrayList<schueler> kursTeilnehmer;
+	private List<schueler> kursTeilnehmer;
 	private unternehmen unternehmen;
 	
 	
@@ -16,6 +17,7 @@ public class kurse
 		setKursTeilnehmer(kursTeilnehmer);
 		setUnternehmen(unternehmen);
 	}
+	
 	public int getRaum()
 	{
 		return raum;
@@ -24,7 +26,7 @@ public class kurse
 	{
 		this.raum = raum;
 	}
-	public ArrayList<schueler> getKursTeilnehmer()
+	public List<schueler> getKursTeilnehmer()
 	{
 		return kursTeilnehmer;
 	}

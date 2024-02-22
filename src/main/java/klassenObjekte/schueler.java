@@ -1,8 +1,7 @@
 package klassenObjekte;
 
+import java.util.ArrayList;
 import java.util.List;
-
-//Martin, Eric
 
 public class schueler
 {
@@ -10,17 +9,15 @@ public class schueler
 	private String vorname, nachname;
 	private List<String> wuensche;
 	private String klasse;
-	
-	public schueler(String klasse,String vorname, String nachname,List<String> wuensche) {
-		this.klasse=klasse;
-		this.vorname=vorname;
-		this.nachname=nachname;
-		this.wuensche=wuensche;
-	}
-	
-	
-	
 
+
+	public schueler(String klasse,String vorname, String nachname,List<String> wuensche)
+	{
+		setKlasse(klasse);
+		setVorname(vorname);
+		setNachname(nachname);
+		setAllWuensche(getAllWuensche());
+	}
 
 	public int getSchuelerID()
 	{
@@ -36,7 +33,14 @@ public class schueler
 	}
 	public void setVorname(String vorname)
 	{
-		this.vorname = vorname;
+		if(vorname==null)
+		{
+			throw new IllegalArgumentException("Vorname darf nicht leer sein");
+		}else
+		{
+			this.vorname = vorname;
+		}
+
 	}
 	public String getNachname()
 	{
@@ -44,15 +48,39 @@ public class schueler
 	}
 	public void setNachname(String nachname)
 	{
-		this.nachname = nachname;
+		if(nachname==null)
+		{
+			throw new IllegalArgumentException("Nachname darf nicht leer sein");
+		}else
+		{
+			this.nachname = nachname;
+		}
 	}
-	public String getWuensche(int i)
+	public List<String> getAllWuensche()
 	{
-		return wuensche.get(i);
+		return wuensche;
 	}
-	public void setWuensche(List<String> wuensche)
+
+	public String getWunsch(int i)
 	{
-		this.wuensche = wuensche;
+		if(i>this.wuensche.size())
+		{
+			throw new IllegalArgumentException("Eingegebener Wert ist außerhalb der Werte");
+		}else
+		{
+			return wuensche.get(i);
+		}
+	}
+
+	public void setAllWuensche(List<String> list)
+	{
+		if(list==null)
+		{
+			throw new IllegalArgumentException("Wünsche darf nicht leer sein");
+		}else
+		{
+			this.wuensche = list;
+		}
 	}
 	public String getKlasse()
 	{
@@ -60,6 +88,12 @@ public class schueler
 	}
 	public void setKlasse(String klasse)
 	{
-		this.klasse = klasse;
+		if(klasse==null)
+		{
+			throw new IllegalArgumentException("Klasse darf nicht leer sein");
+		}else
+		{
+			this.klasse = klasse;
+		}
 	}
 }

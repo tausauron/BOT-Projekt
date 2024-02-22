@@ -1,6 +1,7 @@
 package klassenObjekte;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class unternehmen
 {
@@ -8,7 +9,7 @@ public class unternehmen
 	private String firmenName;
 	private int firmenID;
 	private int maxTeilnehmer;
-	private ArrayList<Integer> zeitslots;
+	private List<Integer> zeitslots;
 	private double gewichtung;
 	private boolean aktiv;
 	
@@ -49,7 +50,7 @@ public class unternehmen
 		this.maxTeilnehmer = maxTeilnehmer;
 	}
 
-	public ArrayList<Integer> getZeitslots()
+	public List<Integer> getZeitslots()
 	{
 		return zeitslots;
 	}
