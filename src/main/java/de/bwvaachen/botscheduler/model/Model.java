@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
+import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -15,15 +16,9 @@ import klassenObjekte.Unternehmen;
  */
 public class Model implements ModelInterface{
 	
-<<<<<<< HEAD
-	private List<schueler> schueler = new ArrayList<>();
-	List<kurse> kurse = new ArrayList<>();
-	List<unternehmen> unternehmen = new ArrayList<>();
-=======
 	List<Schueler> schueler = new ArrayList<>();
 	List<Kurse> kurse = new ArrayList<>();
 	List<Unternehmen> unternehmen = new ArrayList<>();
->>>>>>> refs/heads/sprint1
 
 	@Override
 	public Boolean checkLogin(String username, String password) {
@@ -97,8 +92,7 @@ public class Model implements ModelInterface{
 
 	@Override
 	public List<Schueler> importStudent(String absolutePath) {
-		// TODO Auto-generated method stub
-		return null;
+		return ImportFile.getChoices(absolutePath);
 	}
 
 	@Override

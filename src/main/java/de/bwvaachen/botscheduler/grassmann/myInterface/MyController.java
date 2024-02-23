@@ -10,6 +10,7 @@ import de.bwvaachen.botscheduler.grassmann.gui.GUI_ListView;
 import de.bwvaachen.botscheduler.grassmann.gui.GUI_Login;
 import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import de.bwvaachen.botscheduler.model.Model;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -23,11 +24,11 @@ public class MyController {
 
 	private GUI_Login loginGUI;
 	private GUI_ListView mainGUI;
-	private TestModal myModal;
+	private ModelInterface myModal;
 	
 	public MyController() {
 		this.loginGUI = new GUI_Login(this);
-		this.myModal = new TestModal(this);
+		this.myModal = new Model();
 	}
 	
 	public void checkLogin(String username, String pwd) {
@@ -59,28 +60,10 @@ public class MyController {
 	
 	public List<Schueler> importStudent() {
 		System.out.println("importStudent");
-		System.out.println(MyJFileChooser.getPath(mainGUI.getFrame()));
-		
-		// Modal:
-		ArrayList<String> wahlFacher = new ArrayList<String>();
-		wahlFacher.add("1");
-		wahlFacher.add("2");
-		wahlFacher.add("3");
-		wahlFacher.add("4");
-		wahlFacher.add("5");
-		wahlFacher.add("6");
-
-		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", wahlFacher);
-		
-		ArrayList<Schueler> students = new ArrayList<Schueler>();
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
+		String path = MyJFileChooser.getPath(mainGUI.getFrame());	
 		
 		
-		return students;
+		return myModal.importStudent(path);
 	}
 	
 	public void exportStudent() {
