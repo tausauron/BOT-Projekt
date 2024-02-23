@@ -45,7 +45,7 @@ public class dbContext {
         String sql = "SELECT * FROM Persons;";
 
         Statement statement = conn.createStatement();
-        statement.executeUpdate(sqlCreate);
+        //statement.executeUpdate(sqlCreate);
         statement.executeUpdate(sqlInsert);
         ResultSet resultSet = statement.executeQuery(sql);
 
