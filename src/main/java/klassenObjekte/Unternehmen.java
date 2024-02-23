@@ -1,9 +1,5 @@
 package klassenObjekte;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/heads/Sprint2
 /**
  * 
  * @author Martin Albertz

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
+import de.bwvaachen.botscheduler.model.Model;
 import gui.GUI_ListView;
 import gui.GUI_Login;
 import gui.MyJFileChooser;
