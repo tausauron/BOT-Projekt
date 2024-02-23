@@ -36,7 +36,6 @@ public class dbContext {
                 "    fruehsterZeitSlot int," +
                 "    gewichtung double," + // double als datentyp näher anschauen was notwending
                 "    aktiv boolean," +
-                "    wunsch6 int," +
                 "    klasse varchar(50)" +
                 ");";
 
