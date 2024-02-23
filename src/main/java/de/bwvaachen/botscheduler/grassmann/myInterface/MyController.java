@@ -22,13 +22,13 @@ public class MyController {
 
 	private GUI_Login loginGUI;
 	private GUI_ListView mainGUI;
-	private TestModal myModal;
-	
+	private ModelInterface myModal;
+
 	public MyController() {
 		this.loginGUI = new GUI_Login(this);
-		this.myModal = new TestModal(this);
+		this.myModal = new Model();
 	}
-	
+
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
@@ -37,90 +37,71 @@ public class MyController {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
 	}
-	
+
 	// TODO: get data from backend/DB
 	public String getStudentData() {
 		return "";
 	}
-	
+
 	// Student functions
 	public void createStudent() {
 		System.out.println("createStudent");
 	}
-	
+
 	public void editStudent() {
 		System.out.println("editStudent");
 	}
-	
+
 	public void deleteStudent() {
 		System.out.println("editStudent");
 	}
-	
+
 	public List<Schueler> importStudent(JFrame frame) {
 		System.out.println("importStudent");
-		System.out.println(MyJFileChooser.getPath(frame));
-		
-		// Modal:
-		ArrayList<String> wahlFacher = new ArrayList<String>();
-		wahlFacher.add("1");
-		wahlFacher.add("2");
-		wahlFacher.add("3");
-		wahlFacher.add("4");
-		wahlFacher.add("5");
-		wahlFacher.add("6");
+		String path = MyJFileChooser.getPath(frame);
 
-		Schueler newSchüler = new Schueler("Klasse", "Vor", "Nach", wahlFacher);
-		
-		ArrayList<Schueler> students = new ArrayList<Schueler>();
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
-		students.add(newSchüler);
-		
-		
-		return students;
+		return myModal.importStudent(path);
 	}
-	
+
 	public void exportStudent() {
 		System.out.println("exportStudent");
 	}
-	
+
 	// Class functions
 	public void createClass() {
 		System.out.println("createClass");
 	}
-	
+
 	public void editClass() {
 		System.out.println("editClass");
 	}
-	
+
 	public void deleteClass() {
 		System.out.println("editClass");
 	}
-	
+
 	// Company functions
 	public void createCompany() {
 		System.out.println("createCompany");
 	}
-	
+
 	public void editCompany() {
 		System.out.println("editCompany");
 	}
-	
+
 	public void deleteCompany() {
 		System.out.println("editCompany");
 	}
-	
+
 	public List<Unternehmen> importCompany() {
 		System.out.println("importCompany");
 		return null;
 	}
-	
+
 	public void exportCompany() {
 		System.out.println("exportCompany");
 	}
-	
+
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}
