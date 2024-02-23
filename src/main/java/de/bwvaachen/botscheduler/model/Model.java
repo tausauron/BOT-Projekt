@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
+import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -91,8 +92,7 @@ public class Model implements ModelInterface{
 
 	@Override
 	public List<Schueler> importStudent(String absolutePath) {
-		// TODO Auto-generated method stub
-		return null;
+		return ImportFile.getChoices(absolutePath);
 	}
 
 	@Override
