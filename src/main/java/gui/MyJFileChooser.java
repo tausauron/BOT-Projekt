@@ -1,4 +1,4 @@
-package de.bwvaachen.botscheduler.grassmann.gui;
+package gui;
 
 import java.io.File;
 

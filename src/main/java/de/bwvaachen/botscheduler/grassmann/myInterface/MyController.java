@@ -6,10 +6,10 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import de.bwvaachen.botscheduler.grassmann.gui.MyJFileChooser;
 import de.bwvaachen.botscheduler.grassmann.modal.TestModal;
 import gui.GUI_ListView;
 import gui.GUI_Login;
+import gui.MyJFileChooser;
 import klassenObjekte.*;
 
 /**
@@ -56,9 +56,9 @@ public class MyController {
 		System.out.println("editStudent");
 	}
 	
-	public List<Schueler> importStudent() {
+	public List<Schueler> importStudent(JFrame frame) {
 		System.out.println("importStudent");
-		System.out.println(MyJFileChooser.getPath(mainGUI.getFrame()));
+		System.out.println(MyJFileChooser.getPath(frame));
 		
 		// Modal:
 		ArrayList<String> wahlFacher = new ArrayList<String>();
