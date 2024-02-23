@@ -1,5 +1,7 @@
 package de.bwvaachen.botscheduler;
 
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+
 /**
  * Hello world!
  *
@@ -7,7 +9,6 @@ package de.bwvaachen.botscheduler;
 public class App 
 {
     public static void main( String[] args ) {
-        System.out.println( "Hello World!" );
-        System.out.println( "new Branch" );
+    	new MyController();
     }
 }
