@@ -3,6 +3,7 @@ package de.bwvaachen.botscheduler.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
