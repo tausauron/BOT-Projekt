@@ -14,6 +14,7 @@ public class CalcSchueler {
 	
 	private final Schueler schueler;
 	private List<Wunsch> wuensche;
+	private Wunsch ausweichWunsch;
 	private List<SchuelerSlot> slots;
 	
 	public CalcSchueler(Schueler schueler, List<Unternehmen> unternehmen) {
@@ -28,16 +29,27 @@ public class CalcSchueler {
 		wuensche = new ArrayList<>();
 		List<String> strWuensche = schueler.getAllWuensche();
 		
-		for(int i = 0; i < strWuensche.size(); i++) {
-			Unternehmen unt = findUnternehmen(strWuensche.get(i), unternehmen);
-			if(unt != null) {
-				wuensche.add(new Wunsch(unt, strWuensche.size()-i));
-			}
-			else {
-				wuensche.add(new Wunsch());
-			}			
-		}		
+		for(int i = 0; i < strWuensche.size()-1; i++) {
+			wuensche.add(createWunsch(unternehmen, strWuensche.get(i), strWuensche.size()-i));
+		}
+		
+		ausweichWunsch = createWunsch(unternehmen, strWuensche.get(strWuensche.size()-1), 1);
 	}
+	
+	private Wunsch createWunsch(List<Unternehmen> unternehmen, String strWunsch, int prio) {
+		Wunsch retVal = null;		
+
+		Unternehmen unt = findUnternehmen(strWunsch, unternehmen);
+		if(unt != null) {
+			retVal = new Wunsch(unt, prio);
+		}
+		else {
+			retVal = new Wunsch();
+		}	
+		return retVal;	
+	}			
+	
+	
 	
 	private void initVeranstaltungen() {
 		slots = new ArrayList<>();
@@ -88,8 +100,7 @@ public class CalcSchueler {
 		int counter = 0;
 		
 		//erstmal alle ohne den letzten addieren
-		for(int i=0; i < wuensche.size()-1; i++) {
-
+		for(int i=0; i < wuensche.size(); i++) {
 			
 			if(wuensche.get(i).getVeranstaltung() != null) {
 				retVal += wuensche.get(i).getPrio();
@@ -98,8 +109,8 @@ public class CalcSchueler {
 		}
 		
 		//falls einer leer war, den letzten noch addieren
-		if(counter < wuensche.size()-1) {
-			retVal += wuensche.get(wuensche.size()-1).getPrio();
+		if(counter < wuensche.size() && ausweichWunsch.getVeranstaltung() != null) {
+			retVal += ausweichWunsch.getPrio();
 		}
 		
 		return retVal;
@@ -118,12 +129,12 @@ public class CalcSchueler {
 		return retVal;
 	}
 	
-	public SchuelerSlot nextFreeSlot(Zeitslot start) {
+	public SchuelerSlot nextFreeSlot(Typ start) {
 		SchuelerSlot retVal = null;
 		
 		for(SchuelerSlot slot : slots) {
 			if(slot.getKurs() == null
-				&&  Zeitslot.istGleichOderSpaeter(slot.getTyp(), start.getTyp())) {
+				&&  Zeitslot.istGleichOderSpaeter(slot.getTyp(), start)) {
 				retVal = slot;
 				break;
 			}
@@ -132,23 +143,34 @@ public class CalcSchueler {
 		return retVal;
 	}
 	
-	public void bookCourse(SchuelerSlot slot, Kurse kurs, Wunsch erfWunsch) {
-		slot.setKurs(kurs);
+	public void bookCourse(Kurse kurs, Wunsch erfWunsch) {
+		getSlotByType(kurs.getZeitslot().getTyp()).setKurs(kurs);
 		List<CalcSchueler> teilnehmer = kurs.getKursTeilnehmer();
 		teilnehmer.add(this);
 		kurs.setKursTeilnehmer(teilnehmer);
 		
 		
 		for(Wunsch wunsch : wuensche) {
-			WunschSlot wSlot = wunsch.getSlots().get(slot.getTyp());
+			WunschSlot wSlot = wunsch.getSlots().get(kurs.getZeitslot().getTyp());
 			if(wSlot.getStatus().equals(Status.FREI)) {
 				wSlot.setStatus(Status.BELEGT);
 			}
 			if(wunsch.equals(erfWunsch)) {
 				wunsch.setErfuellt(true);
 			}
-		}
+		}		
+	}
+	
+	public SchuelerSlot getSlotByType(Typ typ){
+		SchuelerSlot retVal = null;
 		
+		for(SchuelerSlot slot : slots) {
+			if(slot.getTyp().equals(typ)) {
+				retVal = slot;
+				break;
+			}
+		}
+		return retVal;		
 	}
 
 }

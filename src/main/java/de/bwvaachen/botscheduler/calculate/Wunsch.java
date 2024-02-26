@@ -63,7 +63,4 @@ public class Wunsch {
 	public void setErfuellt(boolean erfuellt) {
 		this.erfuellt = erfuellt;
 	}
-	
-	
-
 }

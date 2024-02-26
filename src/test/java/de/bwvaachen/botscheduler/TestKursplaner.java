@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.SchuelerSlot;
+import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
 import klassenObjekte.Schueler;
@@ -35,7 +36,7 @@ class TestKursplaner {
 		String path = TestKursplaner.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
 		schueler = ImportFile.getChoices(path);
 		unternehmen = new ArrayList<>();		
-		for(int i = 1; i <= 28; i++) {
+		for(int i = 1; i <= 27; i++) {
 		 unternehmen.add(new Unternehmen(i,"Unternehmen"+i, "Fachrichtung"+i, 20, 5, "A"));
 		}
 		planer = new KursPlaner();
@@ -104,10 +105,9 @@ class TestKursplaner {
 //		}
 		
 		for(Unternehmen unt : planer.getUnternehmen()) {
-			String zeile = unt.getFirmenID() + " | ";
-			
-			for(Kurse kurs : unt.getKurse().values()) {
-				
+			String zeile = unt.getFirmenID() + " | ";			
+			for(Typ typ : Typ.values()) {
+				Kurse kurs = unt.getKurse().get(typ);
 				if(kurs != null) {
 					zeile += kurs.getKursTeilnehmer().size() + " | ";
 				}else {
