@@ -29,7 +29,8 @@ public class Model implements ModelInterface{
 	
 	public void belegeKurse() {
 		KursPlaner planer = new KursPlaner();
-		kurse = planer.belegeKurse(schueler, unternehmen);
+		String score = planer.belegeKurse(schueler, unternehmen);
+		kurse = planer.getKurse();
 	}
 
 	@Override
