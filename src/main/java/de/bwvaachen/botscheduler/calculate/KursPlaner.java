@@ -23,13 +23,27 @@ public class KursPlaner {
 	private List<CalcSchueler> cSchueler;
 	private List<Unternehmen> unternehmen;
 
-	public List<Kurse> belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen) {
+	/**
+	 * 
+	 * @param schueler Schülerliste mit Wünschen, die durch Kursbelegungen erfüllt werden sollen
+	 * @param unternehmen Liste von Unternehmen, die eigentlich eine Liste von Veranstaltungen ist
+	 * @return Erfolgsscore als Prozentsatz vom maximal erreichbaren Score : String
+	 */
+	public String belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen) {
+		String score = "0.0 %";
+		
+		setcSchueler(schueler, unternehmen);
+		setKurse(new ArrayList<>());
+		setUnternehmen(unternehmen);
 
-		initSchueler(schueler, unternehmen);
-		kurse = new ArrayList<>();
-
-		return null;
-	}
+		for (int i = 0; i < 6; i++) {
+			runIteration();
+			score = prozentScore();
+			System.out.println(score);
+		}
+		
+		return score;		
+	}	
 
 	private void initSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 
@@ -74,11 +88,11 @@ public class KursPlaner {
 		return retVal;
 	}
 
-	public void setcSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
+	private void setcSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 		initSchueler(schueler, unternehmen);
 	}
 
-	public void runIteration() {
+	private void runIteration() {
 
 		for (CalcSchueler schuel : cSchueler) {
 
@@ -111,7 +125,7 @@ public class KursPlaner {
 	}
 	
 
-	public Kurse existsKurs(Zeitslot slot, Wunsch wunsch) {
+	private Kurse existsKurs(Zeitslot slot, Wunsch wunsch) {
 		Kurse retVal = null;
 
 		for (Kurse kurs : kurse) {
@@ -124,7 +138,7 @@ public class KursPlaner {
 		return retVal;
 	}
 
-	public boolean kursVoll(Kurse kurs) {
+	private boolean kursVoll(Kurse kurs) {
 		boolean retVal = true;
 
 		int maxTeilnehmer = kurs.getUnternehmen().getMaxTeilnehmer();
@@ -137,7 +151,7 @@ public class KursPlaner {
 		return retVal;
 	}
 
-	public SchuelerSlot nextMatching(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
+	private SchuelerSlot nextMatching(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		SchuelerSlot retVal = null;
 		Typ freeSlot = start;
 
@@ -151,7 +165,7 @@ public class KursPlaner {
 		return retVal;
 	}
 
-	public Kurse findMatchingKurs(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
+	private Kurse findMatchingKurs(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		Kurse retVal = null;
 
 		SchuelerSlot freeSlot = nextMatching(wunsch, cSchuel, start);
@@ -172,7 +186,7 @@ public class KursPlaner {
 		return retVal;
 	}
 	
-	public Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
+	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		Typ retVal = null;
 		
 		Unternehmen unt = wunsch.getVeranstaltung();
@@ -192,7 +206,7 @@ public class KursPlaner {
 	}
 	
 
-	public void setKurse(List<Kurse> kurse) {
+	private void setKurse(List<Kurse> kurse) {
 		this.kurse = kurse;
 	}
 
@@ -208,7 +222,7 @@ public class KursPlaner {
 		return unternehmen;
 	}
 
-	public void setUnternehmen(List<Unternehmen> unternehmen) {
+	private void setUnternehmen(List<Unternehmen> unternehmen) {
 		this.unternehmen = unternehmen;
 		
 		for(Unternehmen unt : unternehmen) {

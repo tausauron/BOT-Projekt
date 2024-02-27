@@ -1,6 +1,5 @@
 package de.bwvaachen.botscheduler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.util.ArrayList;
@@ -26,24 +25,19 @@ class TestKursplaner {
 	private static List<Schueler> schueler;
 	private static List<Unternehmen> unternehmen;
 	private static KursPlaner planer;
-	
-	
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		
-		
-		
+
 		String path = TestKursplaner.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
 		schueler = ImportFile.getChoices(path);
-		unternehmen = new ArrayList<>();		
-		for(int i = 1; i <= 27; i++) {
-		 unternehmen.add(new Unternehmen(i,"Unternehmen"+i, "Fachrichtung"+i, 20, 5, "A"));
+		unternehmen = new ArrayList<>();
+		for (int i = 1; i <= 27; i++) {
+			unternehmen.add(new Unternehmen(i, "Unternehmen" + i, "Fachrichtung" + i, 20, 5, "A"));
 		}
 		planer = new KursPlaner();
-		planer.setcSchueler(schueler, unternehmen);	
-		planer.setKurse(new ArrayList<>());
-		planer.setUnternehmen(unternehmen);
-		
+
+
 	}
 
 	@AfterAll
@@ -58,44 +52,30 @@ class TestKursplaner {
 	void tearDown() throws Exception {
 	}
 
-//	@Test
-//	void testBelegeKurse() {
-//	}
-	
+
 	@Test
-	void testProzentScore() {
-		String score = planer.prozentScore();
-		System.out.println(score);	
-		assertEquals(score, "0.0 %");
-	}
-	
-	@Test
-	void testRunIteration() {
+	void testBelegeKurse() {
 		String score = "0.0 %";
+
+		score = planer.belegeKurse(schueler, unternehmen);
 		
-		for(int i=0; i<6; i++) {
-		planer.runIteration();
-		score = planer.prozentScore();
-		System.out.println(score);	
-		}
-		
-		for(CalcSchueler cSchuel : planer.getcSchueler()) {
-			
+
+		for (CalcSchueler cSchuel : planer.getcSchueler()) {
+
 			String zeile = cSchuel.getSchueler().getNachname() + " | ";
-			
-			for(SchuelerSlot slot : cSchuel.getSlots()) {
+
+			for (SchuelerSlot slot : cSchuel.getSlots()) {
 				Kurse kurs = slot.getKurs();
-				if(kurs != null) {
+				if (kurs != null) {
 					zeile += slot.getKurs().getUnternehmen().getFirmenID() + " | ";
-				}
-				else {
+				} else {
 					zeile += "null |";
 				}
 			}
-			
+
 			System.out.println(zeile);
 		}
-		
+
 //		for(Kurse kurs : planer.getKurse()) {
 //			
 //			String zeile = kurs.getUnternehmen().getFirmenID() + " | ";
@@ -103,22 +83,24 @@ class TestKursplaner {
 //			System.out.println(zeile);
 //			
 //		}
-		
-		for(Unternehmen unt : planer.getUnternehmen()) {
-			String zeile = unt.getFirmenID() + " | ";			
-			for(Typ typ : Typ.values()) {
+
+		for (Unternehmen unt : planer.getUnternehmen()) {
+			String zeile = unt.getFirmenID() + " | ";
+			for (Typ typ : Typ.values()) {
 				Kurse kurs = unt.getKurse().get(typ);
-				if(kurs != null) {
+				if (kurs != null) {
 					zeile += kurs.getKursTeilnehmer().size() + " | ";
-				}else {
+				} else {
 					zeile += "null | ";
 				}
-			}	
+			}
 			System.out.println(zeile);
 		}
 		
+		System.out.println("Score: " + score);
+
 		assertNotEquals(score, "0.0 %");
-		
+
 	}
 
 }
