@@ -1,5 +1,4 @@
 package de.bwvaachen.botscheduler;
-
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 
 /**

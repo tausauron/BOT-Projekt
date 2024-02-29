@@ -11,7 +11,7 @@ public class Unternehmen
 {
 
 	private int firmenID; // ist die Firmen Nr
-	private String unternehmen;
+	private String unternehmen; 
 	private String fachrichtung;
 	private int maxTeilnehmer, maxVeranstaltungen;
 	private String fruehsterZeitslot;
