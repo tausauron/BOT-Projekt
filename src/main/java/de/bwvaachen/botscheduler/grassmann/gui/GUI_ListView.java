@@ -1,6 +1,8 @@
-package gui;
+package de.bwvaachen.botscheduler.grassmann.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +20,11 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.TableModel;
 
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+import gui.StudentTableModel;
 import klassenObjekte.Schueler;
 
-//Eric
+//Eric, Grassmann
 
 public class GUI_ListView {
 
@@ -32,15 +36,16 @@ public class GUI_ListView {
 	private TableModel unterNehmenListModel;
 	private List<Schueler> schülerList;
 	private List<Schueler> unternehmenList;
+	private MyController myController;
 
 	/**
 	 * Create the application.
 	 */
 
-	public GUI_ListView(List<Schueler> schüler, List<Schueler> unternehmen) {
-
-		this.schülerList = schüler;
-		this.unternehmenList = unternehmen;
+	public GUI_ListView(MyController myController) {
+		this.myController = myController;
+		this.schülerList = new ArrayList<Schueler>();
+		this.unternehmenList = new ArrayList<Schueler>();
 		initialize();
 		this.frame.setVisible(true);
 	}
@@ -58,7 +63,8 @@ public class GUI_ListView {
 
 		frame.setBounds(100, 100, 752, 506);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		frame.setTitle("BOT");
+		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
@@ -143,6 +149,9 @@ public class GUI_ListView {
 						.addComponent(scrollPaneUnternehmen, GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
 						.addGap(19)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
+		
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));    
+		frame.setIconImage(ui_Logo);  
 	}
 
 	private void btnPressedUnternehmenExportieren() {
@@ -158,11 +167,13 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedSchülerExportieren() {
-
+		
 	}
 
 	private void btnPressedSchülerImportieren() {
-
+		List<Schueler> importedStudents = myController.importStudent();
+		
+		importedStudents.forEach((student) -> addSchülerToList(student)); 
 	}
 
 	private void btnPressedSchülerhinzufügen() {
@@ -185,5 +196,9 @@ public class GUI_ListView {
 		JTable tableSchüler = new JTable(modelSchüler);
 
 		scrollPaneSchüler.setViewportView(tableSchüler);
+	}
+	
+	public JFrame getFrame() {
+		return this.frame;
 	}
 }

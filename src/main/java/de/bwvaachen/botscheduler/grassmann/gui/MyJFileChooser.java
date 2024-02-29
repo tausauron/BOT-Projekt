@@ -1,5 +1,7 @@
-package gui;
+package de.bwvaachen.botscheduler.grassmann.gui;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.swing.JFileChooser;

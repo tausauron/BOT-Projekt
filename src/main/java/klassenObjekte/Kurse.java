@@ -3,9 +3,6 @@ package klassenObjekte;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bwvaachen.botscheduler.calculate.CalcSchueler;
-import de.bwvaachen.botscheduler.calculate.Zeitslot;
-
 /**
  * @author Martin Albertz
  * Diese Klasse soll bietet das Grundgerüst, um ein Kursobjekt zu erstellen in wlechem relevante informationen zu einem Kurs gespeichert werden.
@@ -15,12 +12,12 @@ public class Kurse
 {
 
 	private int raum;
-	private List<CalcSchueler> kursTeilnehmer;
+	private List<Schueler> kursTeilnehmer;
 	private Unternehmen unternehmen;
-	private Zeitslot zeitslot;
+	private String zeitslot;
 	
 	
-	public Kurse(int raum,ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(int raum,ArrayList<Schueler> kursTeilnehmer, Unternehmen unternehmen, String zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);
@@ -55,12 +52,12 @@ public class Kurse
 		this.raum = raum;
 	}
 
-	public List<CalcSchueler> getKursTeilnehmer()
+	public List<Schueler> getKursTeilnehmer()
 	{
 		return kursTeilnehmer;
 	}
 
-	public void setKursTeilnehmer(List<CalcSchueler> kursTeilnehmer)
+	public void setKursTeilnehmer(List<Schueler> kursTeilnehmer)
 	{
 		pruefeNullEingabe(kursTeilnehmer, "Die Kurs Teilnehmer");
 		this.kursTeilnehmer = kursTeilnehmer;
@@ -77,12 +74,12 @@ public class Kurse
 		this.unternehmen = unternehmen;
 	}
 
-	public Zeitslot getZeitslot()
+	public String getZeitslot()
 	{
 		return zeitslot;
 	}
 
-	public void setZeitslot(Zeitslot zeitslot)
+	public void setZeitslot(String zeitslot)
 	{
 		pruefeNullEingabe(zeitslot, "Der Zeitslot, in welchem der Kurs stattfindet");
 		this.zeitslot = zeitslot;
