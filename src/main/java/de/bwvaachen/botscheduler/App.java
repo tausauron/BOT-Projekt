@@ -9,6 +9,6 @@ import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 public class App 
 {
     public static void main( String[] args ) {
-    	new MyController();
+    	new MyController(false);
     }
 }
