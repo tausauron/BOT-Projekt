@@ -33,12 +33,12 @@ public class DBModel {
                 "    schuelerID int," +
                 "    nachname varchar(50)," +
                 "    vorname varchar(50)," +
-                "    wunsch1 int," +
-                "    wunsch2 int," +
-                "    wunsch3 int," +
-                "    wunsch4 int," +
-                "    wunsch5 int," +
-                "    wunsch6 int," +
+                "    wunsch1 varchar(50)," +
+                "    wunsch2 varchar(50)," +
+                "    wunsch3 varchar(50)," +
+                "    wunsch4 varchar(50)," +
+                "    wunsch5 varchar(50)," +
+                "    wunsch6 varchar(50)," +
                 "    klasse varchar(50)" +
                 ");";
 
@@ -83,13 +83,29 @@ public class DBModel {
                     "'"+ schuelerList.get(i).getAllWuensche().get(3) +"', " +
                     "'"+ schuelerList.get(i).getAllWuensche().get(4) +"', " +
                     "'"+ schuelerList.get(i).getAllWuensche().get(5) +"', " +
-                    "'"+ schuelerList.get(i).getKlasse() +"'');";
+                    "'"+ schuelerList.get(i).getKlasse() +"');";
 
             Statement statement = connection().createStatement();
             statement.executeUpdate(sqlInsert);
+
         }
+        connection().close();
+    }
 
+    public List<Schueler> getSchuelerData() throws SQLException, ClassNotFoundException {
+        connection();
+        List<Schueler> schuelerList;
 
+        String getRowCount = "SELECT COUNT(schuelerID) FROM Schueler;";
 
+        Statement statement = connection().createStatement();
+        ResultSet resultSet = statement.executeQuery(getRowCount);
+
+        //for (int i = 0; resultSet.get; i++)
+        //int resultID = resultSet.getInt(0);
+
+        connection().close();
+
+        return null;
     }
 }
