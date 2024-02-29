@@ -10,7 +10,7 @@ public class MyMain {
 	}
 
 	public static void main(String[] args) {
-		MyController myController = new MyController();
+		MyController myController = new MyController(false);
 	}
 
 }
