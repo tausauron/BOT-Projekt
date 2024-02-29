@@ -3,7 +3,6 @@ package de.bwvaachen.botscheduler.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
@@ -29,8 +28,7 @@ public class Model implements ModelInterface{
 	
 	public void belegeKurse() {
 		KursPlaner planer = new KursPlaner();
-		String score = planer.belegeKurse(schueler, unternehmen);
-		kurse = planer.getKurse();
+		kurse = planer.belegeKurse(schueler, unternehmen);
 	}
 
 	@Override

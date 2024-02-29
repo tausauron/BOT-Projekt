@@ -54,7 +54,7 @@ public class ImportFile {
                 for (int colIndex = 3; colIndex <= 8; colIndex++) {
                     Cell cell = row.getCell(colIndex);
                     if (cell != null) {
-                        wunschliste.add( String.valueOf(((int)cell.getNumericCellValue())));
+                        wunschliste.add(cell.toString());
                     } else {
                         wunschliste.add(""); // oder fügen Sie einen Standardwert hinzu
                     }
