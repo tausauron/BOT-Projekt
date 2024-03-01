@@ -1,5 +1,6 @@
 package klassenObjekte;
 
+<<<<<<< HEAD
 /**
  * 
  * @author Martin Albertz
@@ -17,6 +18,14 @@ public class Raum
 		// TODO Auto-generated constructor stub
 		setKapazitaet(kapazitaet);
 		setName(name);
+=======
+public class Raum {
+
+	String name;
+
+	public Raum(String name) {
+		this.name = name;
+>>>>>>> branch 'Sprint2' of https://github.com/tausauron/BOT-Projekt.git
 	}
 	public String getName()
 	{
