@@ -1,16 +1,19 @@
 package klassenObjekte;
 
+
+
 /**
  * 
  * @author Martin Albertz
  * 
  * 
- *         TODO Liste mit Zeitslots hinzufuegen
+ *  TODO Liste mit Zeitslots hinzufuegen
  */
 public class Raum
 {
 	private String name;
 	private int kapazitaet;
+
 
 	public Raum(String name, int kapazitaet)
 	{
@@ -18,8 +21,8 @@ public class Raum
 		setKapazitaet(kapazitaet);
 		setName(name);
 
-	}
-
+  }
+    
 	public String getName()
 	{
 		return name;
@@ -29,15 +32,14 @@ public class Raum
 	{
 		this.name = name;
 	}
-
 	public int getKapazitaet()
 	{
 		return kapazitaet;
 	}
-
 	public void setKapazitaet(int kapazitaet)
 	{
 		this.kapazitaet = kapazitaet;
 	}
+
 
 }
