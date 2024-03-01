@@ -17,17 +17,22 @@ import klassenObjekte.Unternehmen;
 
 public class ImportFile {
     public static void main(String[] args) {
-
+        System.out.println("---------------Schuelerlist------------------------------------------");
         List<Schueler> schulerListe = getChoices("H:\\SUD\\IMPORT BOT2_Wahl.xlsx");
          for (Schueler schuler : schulerListe) {
             System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getAllWuensche());
         }
-        System.out.println("---------------------------------------------------------");
+        System.out.println("---------------UnternehmenListe------------------------------------------");
         List<Unternehmen> unternehmenListe = getCompany("H:\\SUD\\IMPORT BOT1_Veranstaltungsliste.xlsx");
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
                     " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruesterZeitslot());
         }
+        System.out.println("----------------------RaumListe-----------------------------------");
+        List<Unternehmen> RaumListe = getCompany("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
+        //for (Raum raum : RaumListe) {
+       //     System.out.println(raum.get +" - "+ raum.getUnternehmen());
+       // }
 
     }
     //prüf, ob Schueler-Excel-Datei im korrekten Format ist
@@ -172,6 +177,64 @@ public class ImportFile {
         }
 
         return companyListe;
+    }
+
+    //prüf, ob Raum-Excel-Datei im korrekten Format ist
+    private static boolean checkFormatRoom(Sheet sheet) {
+        Row headerRow = sheet.getRow(0);
+        if (headerRow == null) return false;
+
+        //Raum-Format :RaumNr. 	RaumName
+        try {
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("RaumNr");
+            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("RaumName");
+
+
+            return isFirmenIDCorrect && isUnternehmenCorrect ;
+        } catch (NullPointerException e) {
+            return false; // Falls eine Zelle fehlt oder null ist
+        }
+    }
+    // get RaumList von Excel-Datei
+    public static List<Raum> getRoom(String path) {
+        List<Raum> RoomListe = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(new File(path));
+             Workbook workbook = new XSSFWorkbook(fis)) {
+            Sheet sheet = workbook.getSheetAt(0);
+            boolean isCorrectFormat = checkFormatRoom(sheet); // .getRow(0));
+
+            if (!isCorrectFormat) {
+                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.");
+            }
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) continue; // Kopfzeile überspringen
+                //Raum	Kapazität
+
+                Cell roomNameCell = row.getCell(1);
+                Cell roomKapazitaetCell = row.getCell(0);
+
+
+
+                String roomName = roomNameCell.getStringCellValue();
+                int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
+
+
+
+
+                // Hier weitere Informationen auslesen und zum Unternehmen-Objekt hinzufügen
+                RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return RoomListe;
+
+
+
     }
 
 }
