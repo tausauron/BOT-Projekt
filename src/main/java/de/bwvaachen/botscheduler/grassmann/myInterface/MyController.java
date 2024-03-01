@@ -12,9 +12,7 @@ import gui.MyJFileChooser;
 import klassenObjekte.*;
 
 /**
- * 
  * @author Grassmann
- *
  */
 
 public class MyController {
@@ -38,7 +36,7 @@ public class MyController {
 		}
 	}
 	
-	private void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
+	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
 		this.saveAllCompanies(companies);
