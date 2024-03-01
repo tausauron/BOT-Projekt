@@ -38,7 +38,7 @@ public class MyController {
 		}
 	}
 	
-	private void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
+	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
 		this.saveAllCompanies(companies);

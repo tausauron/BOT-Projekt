@@ -3,7 +3,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
 
-//Eric
+// Eric
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 public class RaumTableModel extends AbstractTableModel {
 	private static final String[] COLUMN_NAMES = {"Name","Kapazität"};
