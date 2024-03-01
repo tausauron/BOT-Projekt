@@ -1,16 +1,12 @@
 package execlLoad;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -18,160 +14,140 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import klassenObjekte.*;
 
-
 /**
  * 
  * @author Grassmann_Dus
  * 
- * */
+ */
 
 public class ExportFile {
 
-    public static void main(String[] args) {
-        // Assuming you have lists of students and companies
-        List<Schueler> schuelerListe = getChoices("H:\\BOT2_Wahl.xlsx");
+	public static void main(String[] args) {
+		String exportFilePath = "H:\\ExportedData.xlsx";
 
-        // Specify the output file path for the export
-        String exportFilePath = "H:\\ExportedData.xlsx";
+		exportCompanyData(List.of(new Unternehmen(0, "BWV", "Schule", 20, 2, "A")), exportFilePath);
+	}
 
-        // Call the export method for students
-        exportStudentData(schuelerListe, exportFilePath);
+	public static void exportStudentData(List<Schueler> studentList, String exportFilePath) {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
-        // You can do a similar export for company data
-        // List<Unternehmen> companyListe = getCompany("Path to Company Excel file");
-        // exportCompanyData(companyListe, "Output path for company export");
-    }
-    
-    public static List<Schueler> getChoices(String path) {
-        List<Schueler> schulerListe = new ArrayList<>();
+			Sheet sheet = workbook.createSheet("Schueler");
 
-        try (FileInputStream fis = new FileInputStream(new File(path));
-             Workbook workbook = new XSSFWorkbook(fis)) {
-            Sheet sheet = workbook.getSheetAt(0);
-            for (Row row : sheet) {
+			// Create header row
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("Klasse");
+			headerRow.createCell(1).setCellValue("Vorname");
+			headerRow.createCell(2).setCellValue("Nachname");
+			headerRow.createCell(3).setCellValue("Wunsch 1");
+			headerRow.createCell(4).setCellValue("Wunsch 2");
+			headerRow.createCell(5).setCellValue("Wunsch 3");
+			headerRow.createCell(6).setCellValue("Wunsch 4");
+			headerRow.createCell(7).setCellValue("Wunsch 5");
+			headerRow.createCell(8).setCellValue("Wunsch 6");
 
-                if (row.getRowNum() == 0) continue; // Kopfzeile überspringen, wenn vorhanden
+			// Fill data rows
+			int rowNum = 1;
+			for (Schueler schueler : studentList) {
+				Row dataRow = sheet.createRow(rowNum++);
+				dataRow.createCell(0).setCellValue(schueler.getKlasse());
+				dataRow.createCell(1).setCellValue(schueler.getVorname());
+				dataRow.createCell(2).setCellValue(schueler.getNachname());
 
-                Cell klasseCell = row.getCell(0);
-                Cell nachnameCell = row.getCell(1);
-                Cell vornameCell = row.getCell(2);
+				List<String> wunschliste = schueler.getAllWuensche();
+				for (int i = 0; i < wunschliste.size(); i++) {
+					dataRow.createCell(3 + i).setCellValue(wunschliste.get(i));
+				}
+			}
 
+			// Write the workbook content to the output file
+			workbook.write(fos);
 
-                String klasse = klasseCell.getStringCellValue();
-                String vorname = vornameCell.getStringCellValue();
-                String nachname = nachnameCell.getStringCellValue();
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+			}
 
+			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-                List<String> wunschliste = new ArrayList<>();
-                // Geht davon aus, dass die Wünsche in den Spalten 3 bis 8 stehen
-                for (int colIndex = 3; colIndex <= 8; colIndex++) {
-                    Cell cell = row.getCell(colIndex);
-                    if (cell != null) {
-                        wunschliste.add( String.valueOf(((int)cell.getNumericCellValue())));
-                    } else {
-                        wunschliste.add(""); // oder fügen Sie einen Standardwert hinzu
-                    }
-                }
+	public static void exportCompanyData(List<Unternehmen> companyList, String exportFilePath) {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
-                schulerListe.add(new Schueler(klasse, vorname, nachname, wunschliste)); // fügen aller Schueler mit der Wünsche hinzu
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			Sheet sheet = workbook.createSheet("Firmen");
 
-        return schulerListe;
-    }
+			// Create header row
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("Nr.");
+			headerRow.createCell(1).setCellValue("Unternehmen");
+			headerRow.createCell(2).setCellValue("Fachrichtung");
+			headerRow.createCell(3).setCellValue("Max. Teilnehmer");
+			headerRow.createCell(4).setCellValue("Max. Veranstaltungen");
+			headerRow.createCell(5).setCellValue("Frühester Zeitpunkt");
 
-    public static void exportStudentData(List<Schueler> schuelerListe, String exportFilePath) {
-        try (Workbook workbook = new XSSFWorkbook(); 
-             FileOutputStream fos = new FileOutputStream(exportFilePath)) {
+			// Fill data rows
+			int rowNum = 1;
+			for (Unternehmen company : companyList) {
+				Row dataRow = sheet.createRow(rowNum++);
+				dataRow.createCell(0).setCellValue(company.getFirmenID());
+				dataRow.createCell(1).setCellValue(company.getUnternehmen());
+				dataRow.createCell(2).setCellValue(company.getFachrichtung());
+				dataRow.createCell(3).setCellValue(company.getMaxTeilnehmer());
+				dataRow.createCell(4).setCellValue(company.getMaxVeranstaltungen());
+				dataRow.createCell(5).setCellValue(company.getFruehesterZeitslot());
+			}
 
-            Sheet sheet = workbook.createSheet("Schueler");
+			// Write the workbook content to the output file
+			workbook.write(fos);
 
-            // Create header row
-            Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue("Klasse");
-            headerRow.createCell(1).setCellValue("Vorname");
-            headerRow.createCell(2).setCellValue("Nachname");
-            headerRow.createCell(3).setCellValue("Wunsch 1");
-            headerRow.createCell(4).setCellValue("Wunsch 2");
-            headerRow.createCell(5).setCellValue("Wunsch 3");
-            headerRow.createCell(6).setCellValue("Wunsch 4");
-            headerRow.createCell(7).setCellValue("Wunsch 5");
-            headerRow.createCell(8).setCellValue("Wunsch 6");
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+			}
 
-            // Fill data rows
-            int rowNum = 1;
-            for (Schueler schueler : schuelerListe) {
-                Row dataRow = sheet.createRow(rowNum++);
-                dataRow.createCell(0).setCellValue(schueler.getKlasse());
-                dataRow.createCell(1).setCellValue(schueler.getVorname());
-                dataRow.createCell(2).setCellValue(schueler.getNachname());
+			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void exportRoomData(List<Raum> roomList, String exportFilePath) {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
-                List<String> wunschliste = schueler.getAllWuensche();
-                for (int i = 0; i < wunschliste.size(); i++) {
-                    dataRow.createCell(3 + i).setCellValue(wunschliste.get(i));
-                }
-            }
+			Sheet sheet = workbook.createSheet("Räume");
 
-            // Write the workbook content to the output file
-            workbook.write(fos);
+			// Create header row
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("Raum");
+			headerRow.createCell(1).setCellValue("Kapazität");
 
+			// Fill data rows
+			int rowNum = 1;
+			for (Raum room : roomList) {
+				Row dataRow = sheet.createRow(rowNum++);
+				dataRow.createCell(0).setCellValue(room.getName());
+				dataRow.createCell(1).setCellValue(room.getKapazität());
+			}
 
-    		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); }
-    		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) { }
+			// Write the workbook content to the output file
+			workbook.write(fos);
 
-            JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export", JOptionPane.INFORMATION_MESSAGE);
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+			}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // TODO: exportCompanyData anpassen an das Sheet
-    public static void exportCompanyData(List<Unternehmen> companyListe, String exportFilePath) {
-        try (Workbook workbook = new XSSFWorkbook(); 
-                FileOutputStream fos = new FileOutputStream(exportFilePath)) {
-
-               Sheet sheet = workbook.createSheet("Firmen");
-
-               // Create header row
-               Row headerRow = sheet.createRow(0);
-               headerRow.createCell(0).setCellValue("Klasse");
-               headerRow.createCell(1).setCellValue("Vorname");
-               headerRow.createCell(2).setCellValue("Nachname");
-               headerRow.createCell(3).setCellValue("Wunsch 1");
-               headerRow.createCell(4).setCellValue("Wunsch 2");
-               headerRow.createCell(5).setCellValue("Wunsch 3");
-               headerRow.createCell(6).setCellValue("Wunsch 4");
-               headerRow.createCell(7).setCellValue("Wunsch 5");
-               headerRow.createCell(8).setCellValue("Wunsch 6");
-
-               // Fill data rows
-               int rowNum = 1;
-               for (Unternehmen company: companyListe) {
-                   Row dataRow = sheet.createRow(rowNum++);
-                   dataRow.createCell(0).setCellValue(company.getKlasse());
-                   dataRow.createCell(1).setCellValue(company.getVorname());
-                   dataRow.createCell(2).setCellValue(company.getNachname());
-
-                   List<String> wunschliste = company.getAllWuensche();
-                   for (int i = 0; i < wunschliste.size(); i++) {
-                       dataRow.createCell(3 + i).setCellValue(wunschliste.get(i));
-                   }
-               }
-
-               // Write the workbook content to the output file
-               workbook.write(fos);
-
-
-       		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); }
-       		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) { }
-
-               JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export", JOptionPane.INFORMATION_MESSAGE);
-
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
-    }
+			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

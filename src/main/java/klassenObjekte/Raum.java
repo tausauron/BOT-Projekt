@@ -3,9 +3,11 @@ package klassenObjekte;
 public class Raum {
 
 	String name;
+	private int kapazität;
 
-	Raum(String name) {
+	Raum(String name, int roomroomKapazitaet) {
 		this.name = name;
+		this.kapazität = roomroomKapazitaet;
 	}
 
 	public String getName() {
@@ -16,4 +18,11 @@ public class Raum {
 		this.name = name;
 	}
 
+	public int getKapazität() {
+		return kapazität;
+	}
+
+	public void setKapazität(int kapazität) {
+		this.kapazität = kapazität;
+	}
 }
