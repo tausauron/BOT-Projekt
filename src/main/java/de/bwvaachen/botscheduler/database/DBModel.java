@@ -14,6 +14,7 @@ public class DBModel {
     public static void main(String[] args) throws Exception {
         DBModel db = new DBModel();
         db.createDbModel();
+        db.getSchuelerData();
 
     }
 
@@ -30,7 +31,7 @@ public class DBModel {
         connection();
         String sqlCreateTblSchueler = "DROP TABLE IF EXISTS Schueler;" +
                 "CREATE TABLE Schueler (" +
-                "    schuelerID int," +
+                "    schuelerID int NOT NULL AUTO_INCREMENT," +
                 "    nachname varchar(50)," +
                 "    vorname varchar(50)," +
                 "    wunsch1 varchar(50)," +
@@ -94,18 +95,33 @@ public class DBModel {
 
     public List<Schueler> getSchuelerData() throws SQLException, ClassNotFoundException {
         connection();
-        List<Schueler> schuelerList;
+        List<Schueler> schuelerList = null;
+        int schulerID;
+        String vorname, nachname, klasse;
+        List<String> wuensche = null;
 
-        String getRowCount = "SELECT COUNT(schuelerID) FROM Schueler;";
+        String schulerList = "SELECT * FROM Schueler;";
 
         Statement statement = connection().createStatement();
-        ResultSet resultSet = statement.executeQuery(getRowCount);
+        ResultSet resultSet = statement.executeQuery(schulerList);
 
-        //for (int i = 0; resultSet.get; i++)
-        //int resultID = resultSet.getInt(0);
+        while (resultSet.next()){
+            schulerID = resultSet.getInt("schuelerID");
+            vorname = resultSet.getString("vorname");
+            nachname = resultSet.getString("nachname");
+            klasse = resultSet.getString("klasse");
+            for (int i = 0; i < 6; i++){
+                wuensche.add(i, resultSet.getString("wunsch" + i++));
+            }
+
+            Schueler schueler = new Schueler(klasse, vorname, nachname, wuensche);
+
+            schuelerList.add(schueler);
+        }
+
 
         connection().close();
 
-        return null;
+        return schuelerList;
     }
 }
