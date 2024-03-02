@@ -8,6 +8,7 @@ import java.util.Map;
 import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Kurse;
+import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -22,6 +23,7 @@ public class KursPlaner {
 	private List<Kurse> kurse;
 	private List<CalcSchueler> cSchueler;
 	private List<Unternehmen> unternehmen;
+	private List<Raum> raeume;
 
 	/**
 	 * 
@@ -29,12 +31,13 @@ public class KursPlaner {
 	 * @param unternehmen Liste von Unternehmen, die eigentlich eine Liste von Veranstaltungen ist
 	 * @return Erfolgsscore als Prozentsatz vom maximal erreichbaren Score : String
 	 */
-	public String belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen) {
+	public String belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen, List<Raum> raeume) {
 		String score = "0.0 %";
 		
 		setcSchueler(schueler, unternehmen);
 		setKurse(new ArrayList<>());
 		setUnternehmen(unternehmen);
+		setRaeume(raeume);
 
 		for (int i = 0; i < 6; i++) {
 			runIteration();
@@ -160,6 +163,8 @@ public class KursPlaner {
 			if (wunsch.getSlots().get(freeSlot).getStatus().equals(Status.FREI)) {
 				retVal = cSchuel.getSlotByType(freeSlot);
 				break;
+			}else {
+				freeSlot = Typ.values()[freeSlot.ordinal()+1];
 			}
 		}
 		return retVal;
@@ -194,7 +199,7 @@ public class KursPlaner {
 		
 		if (freeSlot != null) {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
-			if (kurs == null) {				
+			if (kurs == null && freeRoom(start)) {				
 				retVal = freeSlot.getTyp();
 			} 
 			else  if (start.ordinal() < Typ.values().length-1) {
@@ -203,6 +208,17 @@ public class KursPlaner {
 			}
 		}		
 		return retVal;
+	}
+	
+	
+	private boolean freeRoom(Typ slotTyp) {
+		int number = 0;
+		for( Kurse kurs : kurse ) {
+			if(kurs.getZeitslot().getTyp().equals(slotTyp)) {
+				number++;
+			}
+		}
+		return (number <= raeume.size());		
 	}
 	
 
@@ -220,6 +236,10 @@ public class KursPlaner {
 
 	public List<Unternehmen> getUnternehmen() {
 		return unternehmen;
+	}
+	
+	private void setRaeume(List<Raum> raeume) {
+		this.raeume = raeume;
 	}
 
 	private void setUnternehmen(List<Unternehmen> unternehmen) {

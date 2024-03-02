@@ -17,6 +17,7 @@ import de.bwvaachen.botscheduler.calculate.SchuelerSlot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
+import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -25,19 +26,29 @@ class TestKursplaner {
 	private static List<Schueler> schueler;
 	private static List<Unternehmen> unternehmen;
 	private static KursPlaner planer;
+	private static List<Raum> raeume;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 
-		String path = TestKursplaner.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
-		schueler = ImportFile.getChoices(path);
-		unternehmen = new ArrayList<>();
-		for (int i = 1; i <= 27; i++) {
-			unternehmen.add(new Unternehmen(i, "Unternehmen" + i, "Fachrichtung" + i, 20, 5, "A"));
-		}
+		String schuelerPath = TestKursplaner.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
+		schueler = ImportFile.getChoices(schuelerPath);
+//		unternehmen = new ArrayList<>();
+//		for (int i = 1; i <= 27; i++) {
+//			unternehmen.add(new Unternehmen(i, "Unternehmen" + i, "Fachrichtung" + i, 20, 5, "A"));
+//		}
+		
+		String eventPath =  TestKursplaner.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
+		unternehmen = ImportFile.getCompany(eventPath);
+		
 		planer = new KursPlaner();
-
-
+		String roomPath = TestKursplaner.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
+		raeume = new ArrayList<>();
+		for (int i = 1; i <= 12; i++) {
+			raeume.add(new Raum("Raum" + i, 20));
+		}
+		raeume.add(new Raum("Raum 13", 25));
+		raeume.add(new Raum("Aula", 50));
 	}
 
 	@AfterAll
@@ -57,7 +68,7 @@ class TestKursplaner {
 	void testBelegeKurse() {
 		String score = "0.0 %";
 
-		score = planer.belegeKurse(schueler, unternehmen);
+		score = planer.belegeKurse(schueler, unternehmen, raeume);
 		
 
 		for (CalcSchueler cSchuel : planer.getcSchueler()) {

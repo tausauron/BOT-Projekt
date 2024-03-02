@@ -7,6 +7,7 @@ import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
+import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -33,11 +34,6 @@ public class Model implements ModelInterface{
 		kurse = planer.getKurse();
 	}
 
-	@Override
-	public Schueler getStudent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,
@@ -48,24 +44,12 @@ public class Model implements ModelInterface{
 
 
 	@Override
-	public void exportStudent() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots,
 			double gewichtung, boolean aktiv) {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
-	public void exportCompany() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -97,10 +81,89 @@ public class Model implements ModelInterface{
 		return ImportFile.getChoices(absolutePath);
 	}
 
+
 	@Override
-	public List<Unternehmen> importCompany() {
+	public List<Schueler> getAllStudents() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void saveAllStudents(List<Schueler> students) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportStudent(String path, List<Schueler> students) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Raum> getAllRooms() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void saveAllRooms(List<Raum> rooms) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createRoom(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void editRoom(Raum room) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteRoom(Raum room) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Raum> importRooms(String path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportRooms(String path, List<Raum> rooms) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Unternehmen> getAllCompanies() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void saveAllCompanies(List<Unternehmen> companies) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Unternehmen> importCompany(String absolutePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportCompany(String path, List<Unternehmen> companies) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
