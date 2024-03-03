@@ -3,7 +3,6 @@ package de.bwvaachen.botscheduler.calculate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
@@ -191,24 +190,26 @@ public class KursPlaner {
 		return retVal;
 	}
 	
-	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
+	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot) {
 		Typ retVal = null;
 		
 		Unternehmen unt = wunsch.getVeranstaltung();
-		SchuelerSlot freeSlot = nextMatching(wunsch, cSchuel, start);
+		SchuelerSlot freeSlot = nextMatching(wunsch, cSchuel, slot);
 		
 		if (freeSlot != null) {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
-			if (kurs == null && freeRoom(start)) {				
+			if (kurs == null && freeRoom(slot) && unt.freeSlot()) {				
 				retVal = freeSlot.getTyp();
 			} 
-			else  if (start.ordinal() < Typ.values().length-1) {
-				Typ typ = Typ.values()[start.ordinal()+1];
+			else  if (slot.ordinal() < Typ.values().length-1) {
+				Typ typ = Typ.values()[slot.ordinal()+1];
 				retVal = findOpenKursSlot(wunsch, cSchuel, typ);
 			}
 		}		
 		return retVal;
 	}
+	
+	
 	
 	
 	private boolean freeRoom(Typ slotTyp) {
@@ -245,13 +246,13 @@ public class KursPlaner {
 	private void setUnternehmen(List<Unternehmen> unternehmen) {
 		this.unternehmen = unternehmen;
 		
-		for(Unternehmen unt : unternehmen) {
-			Map<Typ, Kurse> kurse = unt.getKurse();
-			
-			for(Typ typ : Typ.values()) {
-				kurse.put(typ, null);
-			}
-		}
+//		for(Unternehmen unt : unternehmen) {
+//			Map<Typ, Kurse> kurse = unt.getKurse();
+//			
+//			for(Typ typ : Typ.values()) {
+//				kurse.put(typ, null);
+//			}
+//		}
 	}
 	
 	

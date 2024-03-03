@@ -141,4 +141,8 @@ public class Unternehmen
 	public Map<Typ, Kurse> getKurse() {
 		return kurse;
 	}
+	
+	public boolean freeSlot() {
+		return (kurse.values().size() < maxVeranstaltungen);
+	}
 }

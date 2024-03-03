@@ -42,7 +42,7 @@ class TestKursplaner {
 		unternehmen = ImportFile.getCompany(eventPath);
 		
 		planer = new KursPlaner();
-		String roomPath = TestKursplaner.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
+		//String roomPath = TestKursplaner.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
 		raeume = new ArrayList<>();
 		for (int i = 1; i <= 12; i++) {
 			raeume.add(new Raum("Raum" + i, 20));
