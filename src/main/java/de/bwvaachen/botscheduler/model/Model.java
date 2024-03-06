@@ -21,6 +21,7 @@ public class Model implements ModelInterface{
 	List<Schueler> schueler = new ArrayList<>();
 	List<Kurse> kurse = new ArrayList<>();
 	List<Unternehmen> unternehmen = new ArrayList<>();
+	List<Raum> raeume = new ArrayList<>();
 
 	@Override
 	public Boolean checkLogin(String username, String password) {
@@ -30,7 +31,7 @@ public class Model implements ModelInterface{
 	
 	public void belegeKurse() {
 		KursPlaner planer = new KursPlaner();
-		String score = planer.belegeKurse(schueler, unternehmen);
+		String score = planer.belegeKurse(schueler, unternehmen, raeume);
 		kurse = planer.getKurse();
 	}
 
