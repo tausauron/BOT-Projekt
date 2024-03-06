@@ -12,17 +12,20 @@ public class Wunsch {
 	private Unternehmen veranstaltung;
 	private Map<Typ,WunschSlot> slots;
 	private final int prio;
-	private boolean erfuellt = false;
-	
+	private WunschState status;
+		
 	
 	public Wunsch() {
-		this(null, 0);
+		initSlotMap();
+		status = WunschState.LEER;
+		prio = 0;
 	}
 	
 	public Wunsch(Unternehmen veranstaltung, int prio) {
 		this.veranstaltung = veranstaltung;
 		initSlotMap();
 		this.prio = prio;
+		this.status = WunschState.UNERFUELLT;
 	}
 	
 	private void initSlotMap() {
@@ -56,11 +59,15 @@ public class Wunsch {
 		return prio;
 	}
 
-	public boolean isErfuellt() {
-		return erfuellt;
+	public WunschState getState() {
+		return status;
 	}
 	
-	public void setErfuellt(boolean erfuellt) {
-		this.erfuellt = erfuellt;
+	public void setState(WunschState state) {
+		this.status = state;
+	}
+	
+	public enum WunschState {
+		ERFUELLT, LEER, UNERFUELLT
 	}
 }

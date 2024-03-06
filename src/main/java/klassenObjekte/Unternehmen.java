@@ -142,6 +142,10 @@ public class Unternehmen
 		return kurse;
 	}
 	
+	/**
+	 * maximale Anzahl Veranstaltungen erreicht?
+	 * @return
+	 */
 	public boolean freeSlot() {
 		return (kurse.values().size() < maxVeranstaltungen);
 	}

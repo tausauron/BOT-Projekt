@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import de.bwvaachen.botscheduler.calculate.Wunsch.WunschState;
 import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Kurse;
@@ -40,6 +41,12 @@ public class KursPlaner {
 
 		for (int i = 0; i < 6; i++) {
 			runIteration();
+			score = prozentScore();
+			System.out.println(score);
+		}
+		
+		for (int i = 0; i < 6; i++) {
+			trySwapping();
 			score = prozentScore();
 			System.out.println(score);
 		}
@@ -103,7 +110,7 @@ public class KursPlaner {
 
 			for (Wunsch wunsch : wuensche) {
 
-				if (!wunsch.isErfuellt() && wunsch.getVeranstaltung() != null) {
+				if (wunsch.getState() == WunschState.UNERFUELLT) {
 					Kurse kurs = findMatchingKurs(wunsch, schuel, Typ.A);
 					
 					if(kurs != null ) {
@@ -124,6 +131,53 @@ public class KursPlaner {
 			}
 		}
 
+	}
+	
+	private void trySwapping() {
+		for (CalcSchueler schuel : cSchueler) {
+			
+			List<Wunsch> wuensche = schuel.getWuensche();
+			wuensche.sort(wunschByOccurrence);
+
+			for (Wunsch wunsch : wuensche) {
+
+				if (wunsch.getState() == WunschState.UNERFUELLT) {
+					
+					swapCourse(wunsch, schuel, Typ.A);
+					
+				}
+			}
+			
+		}
+
+	}
+	
+	private void swapCourse(Wunsch wunsch, CalcSchueler schuel, Typ typ) {
+		Kurse kurs = findMatchingKurs(wunsch, typ);
+		
+		if(kurs != null) {
+			Wunsch candidate = schuel.getSlotByType(kurs.getZeitslot().getTyp()).getErfuellterWunsch();
+			
+			if(candidate != null) {						
+				Kurse ausweichKurs = findMatchingKurs(candidate, schuel, Typ.A);
+				if(ausweichKurs != null) {
+					schuel.leaveCourse(schuel.getSlotByType(kurs.getZeitslot().getTyp()).getKurs(), candidate);
+					schuel.bookCourse(kurs, wunsch);
+					schuel.bookCourse(ausweichKurs, candidate);
+				}
+				else {
+					typ = kurs.getZeitslot().getTyp();
+				
+					if (typ.ordinal() < Typ.values().length-1){
+						typ = Typ.values()[typ.ordinal()+1];					
+						swapCourse(wunsch, schuel, typ);
+					}					
+				}
+			}
+			else {
+				schuel.bookCourse(kurs, wunsch);
+			}					
+		}
 	}
 	
 
@@ -169,6 +223,13 @@ public class KursPlaner {
 		return retVal;
 	}
 
+	/**
+	 * Kurs finden fuer einen leeren Schuelerslot
+	 * @param wunsch
+	 * @param cSchuel
+	 * @param start
+	 * @return
+	 */
 	private Kurse findMatchingKurs(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		Kurse retVal = null;
 
@@ -190,6 +251,25 @@ public class KursPlaner {
 		return retVal;
 	}
 	
+	private Kurse findMatchingKurs(Wunsch wunsch,  Typ start) {
+		
+		Kurse retVal = null;
+
+		Kurse kurs = existsKurs(new Zeitslot(start), wunsch);
+
+		if (kurs != null) {
+			if (!kursVoll(kurs)) {
+				retVal = kurs;
+			} 
+		}
+		else if (start.ordinal() < Typ.values().length-1){
+			Typ typ = Typ.values()[start.ordinal()+1];
+			retVal = findMatchingKurs(wunsch, typ);
+		}		
+		return retVal;
+	}
+	
+	
 	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot) {
 		Typ retVal = null;
 		
@@ -198,7 +278,7 @@ public class KursPlaner {
 		
 		if (freeSlot != null) {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
-			if (kurs == null && freeRoom(slot) && unt.freeSlot()) {				
+			if (kurs == null && freeRoom(slot) && unt.freeSlot() && nextToExisting(slot, unt)) {				
 				retVal = freeSlot.getTyp();
 			} 
 			else  if (slot.ordinal() < Typ.values().length-1) {
@@ -206,6 +286,37 @@ public class KursPlaner {
 				retVal = findOpenKursSlot(wunsch, cSchuel, typ);
 			}
 		}		
+		return retVal;
+	}
+	
+	/**
+	 * hat die Veranstaltung schon einen Kurs neben diesem Slot? 
+	 * (Luecken vermeiden)
+	 * @param slot
+	 * @param unt
+	 * @return
+	 */
+	private boolean nextToExisting(Typ slot, Unternehmen unt) {
+		boolean retVal = false;
+		
+		
+		if(unt.getKurse().size() > 0) {
+			if(slot.ordinal() < Typ.values().length-1) {
+				if(unt.getKurse().get(Typ.values()[slot.ordinal()+1]) != null) {
+					retVal = true;
+				}
+			}
+			
+			if(slot.ordinal() > 0) {
+				if(unt.getKurse().get(Typ.values()[slot.ordinal()-1]) != null) {
+					retVal = true;
+				}	
+			}
+		}
+		else {
+			retVal = true;
+		}
+		
 		return retVal;
 	}
 	
