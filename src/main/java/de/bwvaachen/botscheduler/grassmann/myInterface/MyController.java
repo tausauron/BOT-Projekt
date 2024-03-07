@@ -144,7 +144,12 @@ public class MyController {
 		String path = MyJFileChooser.getPath(frame);
 		myModal.exportCompany(path, companies);
 	}
-
+	
+	public void exportStudentSchedule(JFrame frame) {
+		String path = MyJFileChooser.getPath(frame);
+		myModal.exportSchuelerSchedule(path);
+	}
+	
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}

@@ -22,11 +22,7 @@ import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
-public class TestExportFile {
-
-	public TestExportFile() {
-		// TODO Auto-generated constructor stub
-	}
+public class TestExportStudentSchedule {
 
 	private static List<Schueler> schueler;
 	private static List<Unternehmen> unternehmen;
@@ -115,8 +111,8 @@ public class TestExportFile {
 		
 		System.out.println("Score: " + score);
 
-		
-		ExportFile.exportResult(planer.getcSchueler(), "H:\\ExportedData.xlsx");
+		ExportFile exFile = new ExportFile();
+		exFile.exportStudentSchedule(planer.getcSchueler(), "./target/ExportedData.xlsx");
 		
 		
 		

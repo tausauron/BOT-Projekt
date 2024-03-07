@@ -20,7 +20,7 @@ public class Kurse
 	private Zeitslot zeitslot;
 	
 	
-	public Kurse(Raum raum,ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);
@@ -38,10 +38,7 @@ public class Kurse
 	 */
 	private void pruefeNullEingabe(Object objekt, String variable)
 	{
-		if(objekt==null)
-		{
-			throw new IllegalArgumentException(variable+ " darf/duerfen nicht leer sein");
-		}
+
 	}
 
 	public Raum getRaum()

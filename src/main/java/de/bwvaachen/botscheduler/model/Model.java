@@ -1,11 +1,15 @@
 package de.bwvaachen.botscheduler.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
+import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
+import execlLoad.ExportFile;
+import execlLoad.IExport;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
@@ -32,7 +36,20 @@ public class Model implements ModelInterface{
 //	}
 	
 	@Override
-	public String belegeKurse() {
+	public String belegeKurse() throws IllegalStateException{
+		
+		if(schueler.size()==0) {
+			throw new IllegalStateException("Keine Schülerliste geladen!");
+		}
+		
+		if(unternehmen.size()==0) {
+			throw new IllegalStateException("Keine Veranstaltungsliste geladen!");
+		}
+		
+		if(raeume.size()==0) {
+			throw new IllegalStateException("Keine Raumliste geladen!");
+		}
+		
 		KursPlaner planer = new KursPlaner();
 		String score = planer.belegeKurse(schueler, unternehmen, raeume);
 		kurse = planer.getKurse();
@@ -45,7 +62,8 @@ public class Model implements ModelInterface{
 	@Override
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,
 			String klasse) {
-		// TODO Auto-generated method stub
+		Schueler schuel = new Schueler(klasse, vorname, nachname, wuensche);
+		schueler.add(schuel);
 		
 	}
 
@@ -53,8 +71,9 @@ public class Model implements ModelInterface{
 	@Override
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots,
 			double gewichtung, boolean aktiv) {
-		// TODO Auto-generated method stub
-		
+		Typ fruehesterSlot = Typ.values()[(int)(Collections.min(zeitslots))];
+		Unternehmen unt = new Unternehmen(firmenID, firmenName, "", maxTeilnehmer, zeitslots.size(), fruehesterSlot.name());
+		unternehmen.add(unt);
 	}
 
 
@@ -67,8 +86,17 @@ public class Model implements ModelInterface{
 
 	@Override
 	public void deleteStudent(Schueler schueler) {
-		// TODO Auto-generated method stub
+		this.schueler.remove(schueler);
 		
+		try {
+			for(CalcSchueler cSchuel : cSchueler) {
+				if(cSchuel.getSchueler().equals(schueler)) {
+					cSchueler.remove(cSchuel);
+				}
+			}
+		}catch(Exception e){
+			//do nothing
+		}
 	}
 
 	@Override
@@ -79,12 +107,11 @@ public class Model implements ModelInterface{
 
 	@Override
 	public void deleteCompany(Unternehmen unternehmen) {
-		// TODO Auto-generated method stub
-		
+		this.unternehmen.remove(unternehmen);		
 	}
 
 	@Override
-	public List<Schueler> importStudent(String absolutePath) {
+	public List<Schueler> importStudent(String absolutePath) throws IllegalArgumentException{
 		
 		schueler = ImportFile.getChoices(absolutePath);
 		return schueler;
@@ -94,91 +121,102 @@ public class Model implements ModelInterface{
 	@Override
 	public List<Schueler> getAllStudents() {
 		return schueler;
+
 	}
 
 	@Override
 	public void saveAllStudents(List<Schueler> students) {
-		// TODO Auto-generated method stub
+		this.schueler = students;
 		
 	}
 
 	@Override
 	public void exportStudent(String path, List<Schueler> students) {
-		// TODO Auto-generated method stub
-		
+		IExport exporter = new ExportFile();
+		exporter.exportStudentData(students, path);
 	}
 
 	@Override
 	public List<Raum> getAllRooms() {
-		// TODO Auto-generated method stub
-		return null;
+		return raeume;
 	}
 
 	@Override
 	public void saveAllRooms(List<Raum> rooms) {
-		// TODO Auto-generated method stub
-		
+		this.raeume = rooms;		
 	}
 
 	@Override
 	public void createRoom(String name) {
-		// TODO Auto-generated method stub
-		
+		this.raeume.add(new Raum(name, 20));		
 	}
 
 	@Override
 	public void editRoom(Raum room) {
-		// TODO Auto-generated method stub
-		
+		//wieso?		
 	}
 
 	@Override
 	public void deleteRoom(Raum room) {
-		// TODO Auto-generated method stub
-		
+		this.raeume.remove(room);
 	}
 
 	@Override
-	public List<Raum> importRooms(String path) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Raum> importRooms(String path) throws IllegalArgumentException{
+		this.raeume = ImportFile.getRoom(path);
+		return raeume;
 	}
 
 	@Override
 	public void exportRooms(String path, List<Raum> rooms) {
-		// TODO Auto-generated method stub
-		
+		IExport exporter = new ExportFile();
+		exporter.exportRoomData(rooms, path);		
 	}
 
 	@Override
 	public List<Unternehmen> getAllCompanies() {
-		// TODO Auto-generated method stub
-		return null;
+		return unternehmen;
 	}
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) {
-		// TODO Auto-generated method stub
-		
+		this.unternehmen = companies;		
 	}
 
 	@Override
-	public List<Unternehmen> importCompany(String absolutePath) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Unternehmen> importCompany(String absolutePath) throws IllegalArgumentException{
+		this.unternehmen = ImportFile.getCompany(absolutePath);
+		return unternehmen;
 	}
 
 	@Override
 	public void exportCompany(String path, List<Unternehmen> companies) {
-		// TODO Auto-generated method stub
-		
+		IExport exporter = new ExportFile();
+		exporter.exportCompanyData(companies, path);			
 	}
 
 
 	@Override
 	public void exportSchuelerSchedule(String path) {
-		// TODO Auto-generated method stub
-		
+		IExport exporter = new ExportFile();
+		exporter.exportStudentSchedule(cSchueler, path);		
 	}
 
+
+	@Override
+	public Boolean checkLogin(String username, String password) {
+		try {
+			String decryptUsername = StringEncryption.decrypt(ModelInterface.username, ModelInterface.key);
+			String decryptPassword = StringEncryption.decrypt(ModelInterface.password, ModelInterface.key);
+			
+			if (decryptUsername.equals(username) && decryptPassword.equals(password)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }

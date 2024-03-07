@@ -256,19 +256,19 @@ public class GUI_ListView {
 	// Button Hinzufügen
 	private void btnPressedSchülerhinzufügen() {
 		// TODO
-		addSchülerToList(new Schueler("Klasse", "Vorname", "Nachname", new ArrayList<>()));
+		new GUI_Create_Schueler(this,unternehmenList);
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
-		// TODO
+		// TODO 
 
-		addUnternehmenToList(new Unternehmen(0, "Firma", "Fach", 10, 5, "A"));
+		new GUI_Create_Unternehmen(this, unternehmenList);
 	}
 
 	private void btnPressedRaumHinzufügen() {
-		// TODO
-
-		addRaumToList(new Raum("Test", 0));
+		// TODO Raum Hinzufügen
+		new GUI_Create_Raum(this);
+	
 	}
 
 	// Button die den Index Ermitteln und dann Löschen
@@ -361,20 +361,20 @@ public class GUI_ListView {
 	}
 
 	// Methode to add "" to List
-	private void addSchülerToList(Schueler newSchüler) {
+	protected void addSchülerToList(Schueler newSchüler) {
 
 		schülerList.add(newSchüler);
 
 		refreshSchüler();
 	}
 
-	private void addUnternehmenToList(Unternehmen newUnternehmen) {
+	protected void addUnternehmenToList(Unternehmen newUnternehmen) {
 		unternehmenList.add(newUnternehmen);
 
 		refreshUnternehmen();
 	}
 
-	private void addRaumToList(Raum newRaum) {
+	protected void addRaumToList(Raum newRaum) {
 
 		raumList.add(newRaum);
 

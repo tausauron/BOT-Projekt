@@ -18,7 +18,7 @@ public interface ModelInterface {
 	final String username = "ZZZoY280jtXErmFp8FelzQ==";
 	final String password = "pzB75ocJmB/BwEQuxx3Q7A==";
 	
-	//public Boolean checkLogin(String username, String password);
+	public Boolean checkLogin(String username, String password);
 	
 	// Student
 	public List<Schueler> getAllStudents();
@@ -35,7 +35,7 @@ public interface ModelInterface {
 	public void createRoom(String name);
 	public void editRoom(Raum room);
 	public void deleteRoom(Raum room);
-	public List<Raum> importRooms(String path);
+	public List<Raum> importRooms(String path) throws IllegalArgumentException;
 	public void exportRooms(String path, List<Raum> rooms);
 	
 	// Company
@@ -44,11 +44,11 @@ public interface ModelInterface {
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots, double gewichtung, boolean aktiv);
 	public void editCompany(Unternehmen unternehmen);
 	public void deleteCompany(Unternehmen unternehmen);
-	public List<Unternehmen> importCompany(String absolutePath);
+	public List<Unternehmen> importCompany(String absolutePath) throws IllegalArgumentException;
 	public void exportCompany(String path, List<Unternehmen> companies); // download Excel
 	
 	//Scheduling Algorithm
-	public String belegeKurse();
+	public String belegeKurse() throws IllegalStateException;
 	
 	//Export
 	public void exportSchuelerSchedule(String path);

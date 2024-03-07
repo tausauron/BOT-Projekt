@@ -1,7 +1,5 @@
 package de.bwvaachen.botscheduler.calculate;
 
-import klassenObjekte.Kurse;
-
 public class SchuelerSlot extends Zeitslot{
 	
 	private Wunsch erfuellterWunsch;
