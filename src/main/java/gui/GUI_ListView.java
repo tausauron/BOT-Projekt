@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import klassenObjekte.*;
@@ -28,7 +27,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
-//Eric
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 
 public class GUI_ListView {
 
@@ -49,8 +52,6 @@ public class GUI_ListView {
 	private JTable tableSchüler;
 	private JTable tableUn;
 	private JTable tableRaum;
-
-	private ListSelectionModel schülerSelectionModel;
 
 	/**
 	 * Create the application.
@@ -112,7 +113,7 @@ public class GUI_ListView {
 		JButton btnSchülerDelete = new JButton("Löschen");
 		btnSchülerDelete.addActionListener((e) -> btnPressedSchülerLöschen(e));
 
-		// Model für Schüler GUI wird erstellt
+		// Schüler GUI
 		schülerListModel = new StudentTableModel(schülerList);
 
 		tableSchüler = new JTable(schülerListModel);
@@ -164,7 +165,7 @@ public class GUI_ListView {
 		JButton btnUnternehmenExportieren = new JButton("Exportieren");
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
-		// Model für Unternehmen GUI wird erstellt
+		// Unternehmen GUI
 		unterNehmenListModel = new UnternehmenTableModel(unternehmenList);
 		tableUn = new JTable(unterNehmenListModel);
 
@@ -202,7 +203,7 @@ public class GUI_ListView {
 						.addGap(19)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
 
-		// Räume
+		// Räume GUI
 
 		JPanel panelRaum = new JPanel();
 
@@ -253,21 +254,21 @@ public class GUI_ListView {
 	}
 
 	// Button Hinzufügen
-	private void btnPressedSchülerhinzufügen() {// TODO
+	private void btnPressedSchülerhinzufügen() {
 		// TODO
 		addSchülerToList(new Schueler("Klasse", "Vorname", "Nachname", new ArrayList<>()));
-	}
-
-	private void btnPressedRaumHinzufügen() {
-		// TODO
-
-		addRaumToList(new Raum("Test"));
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
 		// TODO
 
 		addUnternehmenToList(new Unternehmen(0, "Firma", "Fach", 10, 5, "A"));
+	}
+
+	private void btnPressedRaumHinzufügen() {
+		// TODO
+
+		addRaumToList(new Raum("Test", 0));
 	}
 
 	// Button die den Index Ermitteln und dann Löschen
