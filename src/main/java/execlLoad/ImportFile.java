@@ -12,8 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import klassenObjekte.Schueler;
-import klassenObjekte.Unternehmen;
+import klassenObjekte.*;
 
 public class ImportFile {
     public static void main(String[] args) {
@@ -26,7 +25,7 @@ public class ImportFile {
         List<Unternehmen> unternehmenListe = getCompany("H:\\SUD\\IMPORT BOT1_Veranstaltungsliste.xlsx");
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
-                    " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruesterZeitslot());
+                    " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruehesterZeitslot());
         }
         System.out.println("----------------------RaumListe-----------------------------------");
         List<Unternehmen> RaumListe = getCompany("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
