@@ -18,7 +18,7 @@ public interface ModelInterface {
 	final String username = "ZZZoY280jtXErmFp8FelzQ==";
 	final String password = "pzB75ocJmB/BwEQuxx3Q7A==";
 	
-	public Boolean checkLogin(String username, String password);
+	//public Boolean checkLogin(String username, String password);
 	
 	// Student
 	public List<Schueler> getAllStudents();
@@ -46,4 +46,7 @@ public interface ModelInterface {
 	public void deleteCompany(Unternehmen unternehmen);
 	public List<Unternehmen> importCompany(String absolutePath);
 	public void exportCompany(String path, List<Unternehmen> companies); // download Excel
+	
+	//Scheduling Algorithm
+	public String belegeKurse();
 }

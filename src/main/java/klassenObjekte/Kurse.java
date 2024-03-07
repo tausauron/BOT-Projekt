@@ -14,13 +14,13 @@ import de.bwvaachen.botscheduler.calculate.Zeitslot;
 public class Kurse
 {
 
-	private int raum;
+	private Raum raum;
 	private List<CalcSchueler> kursTeilnehmer;
 	private Unternehmen unternehmen;
 	private Zeitslot zeitslot;
 	
 	
-	public Kurse(int raum,ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(Raum raum,ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);
@@ -44,12 +44,12 @@ public class Kurse
 		}
 	}
 
-	public int getRaum()
+	public Raum getRaum()
 	{
 		return raum;
 	}
 
-	public void setRaum(int raum)
+	public void setRaum(Raum raum)
 	{
 		pruefeNullEingabe(raum, "Der Raum");
 		this.raum = raum;

@@ -3,6 +3,7 @@ package de.bwvaachen.botscheduler.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ImportFile;
@@ -22,17 +23,22 @@ public class Model implements ModelInterface{
 	List<Kurse> kurse = new ArrayList<>();
 	List<Unternehmen> unternehmen = new ArrayList<>();
 	List<Raum> raeume = new ArrayList<>();
+	List<CalcSchueler> cSchueler;
 
-	@Override
-	public Boolean checkLogin(String username, String password) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+//	@Override
+//	public Boolean checkLogin(String username, String password) {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
 	
-	public void belegeKurse() {
+	@Override
+	public String belegeKurse() {
 		KursPlaner planer = new KursPlaner();
 		String score = planer.belegeKurse(schueler, unternehmen, raeume);
 		kurse = planer.getKurse();
+		cSchueler = planer.getcSchueler();
+		
+		return score;
 	}
 
 
@@ -79,14 +85,15 @@ public class Model implements ModelInterface{
 
 	@Override
 	public List<Schueler> importStudent(String absolutePath) {
-		return ImportFile.getChoices(absolutePath);
+		
+		schueler = ImportFile.getChoices(absolutePath);
+		return schueler;
 	}
 
 
 	@Override
 	public List<Schueler> getAllStudents() {
-		// TODO Auto-generated method stub
-		return null;
+		return schueler;
 	}
 
 	@Override
