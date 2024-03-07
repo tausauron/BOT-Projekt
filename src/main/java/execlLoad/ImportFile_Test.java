@@ -13,6 +13,7 @@ import java.util.List;
 public class ImportFile_Test {
     public static void main(String[] args) {
         testGetChoices_ValidFile();
+        //testGetCompany_ValidFile();
     }
 
         @Test
@@ -56,11 +57,14 @@ public class ImportFile_Test {
             assertFalse( "Die Liste sollte nicht leer sein.", unternehmenList.isEmpty());
 
             // Überprüfen Sie, ob der erste Schüler in der Liste den erwarteten Werten entspricht
+            //ersten Unternehmen : 1	Zentis	Industriekaufleute	20	5	A
             Unternehmen ersterUnternehmen = unternehmenList.get(0);
-            assertEquals("Klasse des ersten Schülers stimmt nicht überein.", ersterUnternehmen.getFirmenID(), "1");
-            assertEquals("Vorname des ersten Schülers stimmt nicht überein.", ersterUnternehmen.getUnternehmen().toString(), "Ali Eren");
-            assertEquals("Nachname des ersten Schülers stimmt nicht überein.", ersterUnternehmen, "Bigay");
-
+            assertEquals("ID der Firme des ersten Unternehmen stimmt nicht überein.", ersterUnternehmen.getFirmenID(), "1");
+            assertEquals("Unternehmen des ersten Schülers Unternehmen nicht überein.", ersterUnternehmen.getUnternehmen().toString(), "Zentis");
+            assertEquals("Fachrichtung des ersten Schülers Unternehmen nicht überein.", ersterUnternehmen.getFachrichtung().toString(), "Industriekaufleute");
+            assertEquals("MaxTeilnehmer des ersten Schülers Unternehmen nicht überein.", ersterUnternehmen.getMaxTeilnehmer(), "20");
+            assertEquals("MaxVeranstaltungen des ersten Unternehmen stimmt nicht überein.", ersterUnternehmen.getMaxVeranstaltungen(), "5");
+            assertEquals("FruehesterZeitslot des ersten Unternehmen stimmt nicht überein.", ersterUnternehmen.getFruehesterZeitslot().toString(), "A");
 
 
         } catch (IllegalArgumentException e) {
