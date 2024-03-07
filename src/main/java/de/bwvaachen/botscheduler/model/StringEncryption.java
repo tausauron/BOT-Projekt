@@ -1,4 +1,4 @@
-package de.bwvaachen.botscheduler.grassmann.modal;
+package de.bwvaachen.botscheduler.model;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
