@@ -10,19 +10,13 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-<<<<<<< HEAD
 import klassenObjekte.*;
-=======
 
 
->>>>>>> branch 'Sprint2' of https://github.com/tausauron/BOT-Projekt.git
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
-<<<<<<< HEAD
-=======
 
->>>>>>> branch 'Sprint2' of https://github.com/tausauron/BOT-Projekt.git
 
 public class ImportFile {
     public static void main(String[] args) {
