@@ -49,4 +49,7 @@ public interface ModelInterface {
 	
 	//Scheduling Algorithm
 	public String belegeKurse();
+	
+	//Export
+	public void exportSchuelerSchedule(String path);
 }
