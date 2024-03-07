@@ -39,7 +39,7 @@ public class RaumTableModel extends AbstractTableModel {
 		case 0:
 			return raum.getName();
 		case 1:
-			return "";//raum.();
+			return raum.getKapazitaet();
 		default:
 			throw new IllegalArgumentException("Invalid column index");
 		}
