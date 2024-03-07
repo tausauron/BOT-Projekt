@@ -119,11 +119,7 @@ public class KursPlaner {
 					else {
 						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A);
 						if(typ != null) {
-<<<<<<< HEAD
 							kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
-=======
-							kurs = new Kurse(null, new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
->>>>>>> refs/remotes/origin/DGR_Sprint2
 							kurse.add(kurs);
 							wunsch.getVeranstaltung().getKurse().put(kurs.getZeitslot().getTyp(), kurs);
 							schuel.bookCourse(kurs, wunsch);

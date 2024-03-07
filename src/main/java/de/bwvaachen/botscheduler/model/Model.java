@@ -84,7 +84,7 @@ public class Model implements ModelInterface{
 	}
 
 	@Override
-	public List<Schueler> importStudent(String absolutePath) {
+	public List<Schueler> importStudent(String absolutePath)  {
 		
 		schueler = ImportFile.getChoices(absolutePath);
 		return schueler;
@@ -181,9 +181,7 @@ public class Model implements ModelInterface{
 		
 	}
 
-<<<<<<< HEAD
-}
-=======
+
 	@Override
 	public Boolean checkLogin(String username, String password) {
 		try {
@@ -201,4 +199,3 @@ public class Model implements ModelInterface{
 		return false;
 	}
 }
->>>>>>> refs/remotes/origin/DGR_Sprint2
