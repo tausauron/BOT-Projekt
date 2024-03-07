@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import klassenObjekte.*;
 
 /**
@@ -149,5 +150,48 @@ public class ExportFile {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	public static void exportResult(List<CalcSchueler> calcStudents, String exportFilePath) {
+		for (CalcSchueler calcStudent : calcStudents) {
+			System.out.println(calcStudent.getSchueler().getNachname());
+		}
+		
+		
+		
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
+
+			Sheet sheet = workbook.createSheet("Laufzettel");
+
+			// Create header row
+			Row headerRow = sheet.createRow(0);
+			headerRow.createCell(0).setCellValue("Raum");
+			headerRow.createCell(1).setCellValue("Kapazität");
+
+			// Fill data rows
+			int rowNum = 0;
+			for (Raum room : roomList) {
+				Row dataRow = sheet.createRow(rowNum++);
+				dataRow.createCell(0).setCellValue(room.getName());
+				dataRow.createCell(1).setCellValue(room.getKapazität());
+			}
+
+			// Write the workbook content to the output file
+			workbook.write(fos);
+
+			try {
+				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+			}
+
+			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 }
