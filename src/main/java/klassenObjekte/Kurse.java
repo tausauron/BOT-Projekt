@@ -20,7 +20,7 @@ public class Kurse
 	private Zeitslot zeitslot;
 	
 	
-	public Kurse(Raum raum,ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);
