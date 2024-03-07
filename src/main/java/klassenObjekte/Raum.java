@@ -1,7 +1,18 @@
 package klassenObjekte;
 
 
+<<<<<<< HEAD
+	String name;
+	private int kapazität;
+=======
+>>>>>>> branch 'Sprint2' of https://github.com/tausauron/BOT-Projekt
 
+<<<<<<< HEAD
+	Raum(String name, int roomroomKapazitaet) {
+		this.name = name;
+		this.kapazität = roomroomKapazitaet;
+	}
+=======
 /**
  * 
  * @author Martin Albertz
@@ -13,6 +24,7 @@ public class Raum
 {
 	private String name;
 	private int kapazitaet;
+>>>>>>> branch 'Sprint2' of https://github.com/tausauron/BOT-Projekt
 
 
 	public Raum(String name, int kapazitaet)
@@ -42,4 +54,11 @@ public class Raum
 	}
 
 
+	public int getKapazität() {
+		return kapazität;
+	}
+
+	public void setKapazität(int kapazität) {
+		this.kapazität = kapazität;
+	}
 }

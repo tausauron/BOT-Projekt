@@ -12,9 +12,7 @@ import gui.MyJFileChooser;
 import klassenObjekte.*;
 
 /**
- * 
  * @author Grassmann
- *
  */
 
 public class MyController {
