@@ -21,7 +21,7 @@ import klassenObjekte.Unternehmen;
 
 public class ImportFile {
     public static void main(String[] args) {
- /*       System.out.println("---------------Schuelerlist------------------------------------------");
+        System.out.println("---------------Schuelerlist------------------------------------------");
         List<Schueler> schulerListe = getChoices("H:\\SUD\\IMPORT BOT2_Wahl.xlsx");
          for (Schueler schuler : schulerListe) {
             System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getAllWuensche());
@@ -31,7 +31,7 @@ public class ImportFile {
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
                     " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruehesterZeitslot());
-        }*/
+        }
         System.out.println("----------------------RaumListe-----------------------------------");
         List<Raum> RaumListe = getRoom("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
         for (Raum raum : RaumListe) {
@@ -219,16 +219,19 @@ public class ImportFile {
                 if (row.getRowNum() == 0) continue; // Kopfzeile überspringen
                 Cell roomNameCell = row.getCell(0);
                 Cell roomKapazitaetCell = row.getCell(1);
-                System.out.printf("ist "+ roomNameCell.getCellType());
+
+               // prüf, ob roomNameCell String oder int sein
                 if (roomNameCell.getCellType().toString() == "NUMERIC"){
                     int roomName1 = (int)roomNameCell.getNumericCellValue();
                     int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
                     RoomListe.add(new Raum(String.valueOf(roomName1) ,roomroomKapazitaet));
                     }
-                else {String roomName = roomNameCell.getStringCellValue();
+                else if(roomNameCell.getCellType().toString() == "STRING")
+                {String roomName = roomNameCell.getStringCellValue();
                     int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
                     RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
                     }
+                else System.out.printf("Diese Wert muss String oder Anzahl sein");
 
             }
         } catch (FileNotFoundException e) {
