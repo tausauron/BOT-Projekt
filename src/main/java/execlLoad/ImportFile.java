@@ -219,13 +219,16 @@ public class ImportFile {
                 if (row.getRowNum() == 0) continue; // Kopfzeile überspringen
                 Cell roomNameCell = row.getCell(0);
                 Cell roomKapazitaetCell = row.getCell(1);
-
-                String roomName = roomNameCell.getStringCellValue();
-                int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
-
-
-                // Hier weitere Informationen auslesen und zum Unternehmen-Objekt hinzufügen
-                RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
+                System.out.printf("ist "+ roomNameCell.getCellType());
+                if (roomNameCell.getCellType().toString() == "NUMERIC"){
+                    int roomName1 = (int)roomNameCell.getNumericCellValue();
+                    int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
+                    RoomListe.add(new Raum(String.valueOf(roomName1) ,roomroomKapazitaet));
+                    }
+                else {String roomName = roomNameCell.getStringCellValue();
+                    int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
+                    RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
+                    }
 
             }
         } catch (FileNotFoundException e) {
