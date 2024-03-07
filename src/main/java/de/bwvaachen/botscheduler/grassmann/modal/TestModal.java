@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -29,6 +30,16 @@ public class TestModal implements ModelInterface{
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	@Override
+	public List<Schueler> getAllStudents() {
+		return null;
+	}
+
+	@Override
+	public void saveAllStudents(List<Schueler> students) {
+
 	}
 
 	@Override
@@ -82,6 +93,16 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
+	public List<Unternehmen> importCompany(String absolutePath) {
+		return null;
+	}
+
+	@Override
+	public void exportCompany(String path, List<Unternehmen> companies) {
+
+	}
+
+	@Override
 	public List<Unternehmen> importCompany() {
 		// TODO Auto-generated method stub
 		return null;
@@ -97,6 +118,56 @@ public class TestModal implements ModelInterface{
 	public List<Schueler> importStudent(String absolutePath) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void exportStudent(String path, List<Schueler> students) {
+
+	}
+
+	@Override
+	public List<Raum> getAllRooms() {
+		return null;
+	}
+
+	@Override
+	public void saveAllRooms(List<Raum> rooms) {
+
+	}
+
+	@Override
+	public void createRoom(String name) {
+
+	}
+
+	@Override
+	public void editRoom(Raum room) {
+
+	}
+
+	@Override
+	public void deleteRoom(Raum room) {
+
+	}
+
+	@Override
+	public List<Raum> importRooms(String path) {
+		return null;
+	}
+
+	@Override
+	public void exportRooms(String path, List<Raum> rooms) {
+
+	}
+
+	@Override
+	public List<Unternehmen> getAllCompanies() {
+		return null;
+	}
+
+	@Override
+	public void saveAllCompanies(List<Unternehmen> companies) {
+
 	}
 
 	@Override

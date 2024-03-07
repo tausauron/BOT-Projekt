@@ -141,4 +141,19 @@ public class Unternehmen
 	public Map<Typ, Kurse> getKurse() {
 		return kurse;
 	}
+
+	@Override
+	public String toString() {
+		return "Unternehmen{" +
+				"firmenID=" + firmenID +
+				", unternehmen='" + unternehmen + '\'' +
+				", fachrichtung='" + fachrichtung + '\'' +
+				", maxTeilnehmer=" + maxTeilnehmer +
+				", maxVeranstaltungen=" + maxVeranstaltungen +
+				", fruehsterZeitslot='" + fruehsterZeitslot + '\'' +
+				", gewichtung=" + gewichtung +
+				", aktiv=" + aktiv +
+				", kurse=" + kurse +
+				'}';
+	}
 }

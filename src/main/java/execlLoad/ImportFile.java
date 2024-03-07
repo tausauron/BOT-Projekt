@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import klassenObjekte.Raum;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,9 +18,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
+
 public class ImportFile {
     public static void main(String[] args) {
-        System.out.println("---------------Schuelerlist------------------------------------------");
+ /*       System.out.println("---------------Schuelerlist------------------------------------------");
         List<Schueler> schulerListe = getChoices("H:\\SUD\\IMPORT BOT2_Wahl.xlsx");
          for (Schueler schuler : schulerListe) {
             System.out.println(schuler.getKlasse() + "- " + schuler.getVorname() + "- " + schuler.getNachname() + " - " + schuler.getAllWuensche());
@@ -28,13 +30,14 @@ public class ImportFile {
         List<Unternehmen> unternehmenListe = getCompany("H:\\SUD\\IMPORT BOT1_Veranstaltungsliste.xlsx");
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
-                    " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruesterZeitslot());
-        }
+                    " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruehesterZeitslot());
+        }*/
         System.out.println("----------------------RaumListe-----------------------------------");
-        List<Unternehmen> RaumListe = getCompany("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
-        //for (Raum raum : RaumListe) {
-       //     System.out.println(raum.get +" - "+ raum.getUnternehmen());
-       // }
+        List<Raum> RaumListe = getRoom("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
+        for (Raum raum : RaumListe) {
+            System.out.println(raum.getName() + " - " + raum.getKapazitaet());
+        }
+
 
     }
     //prüf, ob Schueler-Excel-Datei im korrekten Format ist
@@ -191,9 +194,8 @@ public class ImportFile {
 
         //Raum-Format :RaumNr. 	RaumName
         try {
-            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("RaumNr");
-            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("RaumName");
-
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Raum");
+            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Kapazität");
 
             return isFirmenIDCorrect && isUnternehmenCorrect ;
         } catch (NullPointerException e) {
@@ -215,17 +217,11 @@ public class ImportFile {
 
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Kopfzeile überspringen
-                //Raum	Kapazität
-
-                Cell roomNameCell = row.getCell(1);
-                Cell roomKapazitaetCell = row.getCell(0);
-
-
+                Cell roomNameCell = row.getCell(0);
+                Cell roomKapazitaetCell = row.getCell(1);
 
                 String roomName = roomNameCell.getStringCellValue();
                 int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
-
-
 
 
                 // Hier weitere Informationen auslesen und zum Unternehmen-Objekt hinzufügen
@@ -239,8 +235,6 @@ public class ImportFile {
         }
 
         return RoomListe;
-
-
 
     }
 
