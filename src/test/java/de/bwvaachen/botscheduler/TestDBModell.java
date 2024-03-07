@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import de.bwvaachen.botscheduler.database.DBModel;
 import execlLoad.ImportFile;
+import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +20,7 @@ import java.util.List;
 public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
+    private static List<Raum> raum;
     private DBModel database = new DBModel();
 
     @BeforeAll
@@ -26,11 +28,13 @@ public class TestDBModell {
         URL dbPfad = DBModel.class.getResource("test.mv.db");
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
+        String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
         DBModel database = new DBModel();
 
         String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
         schueler = ImportFile.getChoices(path);
         unternehmen = ImportFile.getCompany(unternehmenListPath);
+        raum = ImportFile.getRoom(raumListPath);
         database.createDbModel();
     }
 
@@ -95,6 +99,37 @@ public class TestDBModell {
             System.out.println("Unternehmen aus Excel: " + unternehmen.get(i).getUnternehmen());
             System.out.println("----------------------------");
             assertEquals(unternehmen.get(i).getUnternehmen(), testList.get(i).getUnternehmen());
+        }
+    }
+
+
+    @Test
+    void testSetRaumData() throws SQLException, ClassNotFoundException {
+        Connection conn = database.connection();
+        database.setRaumData(raum);
+
+        String getRow = "SELECT name FROM Raum;";
+        Statement statement = conn.createStatement();
+        ResultSet resultSet = statement.executeQuery(getRow);
+
+        for (int i = 0; resultSet.next(); i++){
+            System.out.println("Raum aus DB: " + resultSet.getString("name"));
+            System.out.println("Raum aus Excel: " + raum.get(i).getName());
+            System.out.println("----------------------------");
+            assertEquals(raum.get(i).getName(), resultSet.getString("name"));
+        }
+    }
+
+    @Test
+    void testGetRaumData() throws SQLException, ClassNotFoundException {
+        database.setRaumData(raum);
+        List<Raum> testList = database.getRaumData();
+
+        for (int i = 0; i < unternehmen.size(); i++) {
+            System.out.println("Raum aus DB: " + testList.get(i).getName());
+            System.out.println("Raum aus Excel: " + raum.get(i).getName());
+            System.out.println("----------------------------");
+            assertEquals(raum.get(i).getName(), testList.get(i).getName());
         }
     }
 }

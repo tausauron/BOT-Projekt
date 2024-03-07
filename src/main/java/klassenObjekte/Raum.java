@@ -11,14 +11,6 @@ package klassenObjekte;
  */
 public class Raum
 {
-	public int getRaumID() {
-		return raumID;
-	}
-
-	public void setRaumID(int raumID) {
-		this.raumID = raumID;
-	}
-
 	private int raumID;
 	private String name;
 	private int kapazitaet;
@@ -48,6 +40,13 @@ public class Raum
 	public void setKapazitaet(int kapazitaet)
 	{
 		this.kapazitaet = kapazitaet;
+	}
+	public int getRaumID() {
+		return raumID;
+	}
+
+	public void setRaumID(int raumID) {
+		this.raumID = raumID;
 	}
 
 
