@@ -33,22 +33,6 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
-	public List<Schueler> getAllStudents() {
-		return null;
-	}
-
-	@Override
-	public void saveAllStudents(List<Schueler> students) {
-
-	}
-
-	@Override
-	public Schueler getStudent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,
 			String klasse) {
 		// TODO Auto-generated method stub
@@ -65,12 +49,6 @@ public class TestModal implements ModelInterface{
 	public List<Schueler> importStudent() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void exportStudent() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -93,85 +71,97 @@ public class TestModal implements ModelInterface{
 	}
 
 	@Override
-	public List<Unternehmen> importCompany(String absolutePath) {
-		return null;
-	}
-
-	@Override
-	public void exportCompany(String path, List<Unternehmen> companies) {
-
-	}
-
-	@Override
-	public List<Unternehmen> importCompany() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void exportCompany() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<Schueler> importStudent(String absolutePath) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void exportStudent(String path, List<Schueler> students) {
+	public void editStudent(Schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public List<Schueler> getAllStudents() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void saveAllStudents(List<Schueler> students) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportStudent(String path, List<Schueler> students) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public List<Raum> getAllRooms() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void saveAllRooms(List<Raum> rooms) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void createRoom(String name) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void editRoom(Raum room) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void deleteRoom(Raum room) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public List<Raum> importRooms(String path) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void exportRooms(String path, List<Raum> rooms) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public List<Unternehmen> getAllCompanies() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void editStudent(Schueler schueler) {
+	public List<Unternehmen> importCompany(String absolutePath) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportCompany(String path, List<Unternehmen> companies) {
 		// TODO Auto-generated method stub
 		
 	}
