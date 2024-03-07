@@ -39,12 +39,4 @@ public class Raum
 		this.kapazitaet = kapazitaet;
 	}
 
-
-	public int getKapazität() {
-		return kapazitaet;
-	}
-
-	public void setKapazität(int kapazität) {
-		this.kapazitaet = kapazität;
-	}
 }
