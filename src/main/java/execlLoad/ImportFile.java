@@ -11,11 +11,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import klassenObjekte.*;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/origin/feature/algorithmFD
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -32,11 +27,9 @@ public class ImportFile {
         List<Unternehmen> unternehmenListe = getCompany("H:\\SUD\\IMPORT BOT1_Veranstaltungsliste.xlsx");
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
-<<<<<<< HEAD
+
                     " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruehesterZeitslot());
-=======
-                    " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruesterZeitslot());
->>>>>>> refs/remotes/origin/feature/excelload
+
         }
         System.out.println("----------------------RaumListe-----------------------------------");
         List<Unternehmen> RaumListe = getCompany("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
