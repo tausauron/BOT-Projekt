@@ -1,5 +1,10 @@
 package klassenObjekte;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
+
 /**
  * 
  * @author Martin Albertz
@@ -11,12 +16,13 @@ public class Unternehmen
 {
 
 	private int firmenID; // ist die Firmen Nr
-	private String unternehmen;
+	private String unternehmen; 
 	private String fachrichtung;
 	private int maxTeilnehmer, maxVeranstaltungen;
 	private String fruehsterZeitslot;
 	private double gewichtung;
 	private boolean aktiv;
+	private Map<Typ, Kurse> kurse = new HashMap<>();
 	
 	public Unternehmen(int firmenID,String unternehmen, String fachrichtung, 
 						int maxTeilnehmer, int maxVeranstaltungen, String fruehsterZeitslot)
@@ -83,7 +89,7 @@ public class Unternehmen
 		this.maxVeranstaltungen = maxVeranstaltungen;
 	}
 
-	public String getFruesterZeitslot()
+	public String getFruehesterZeitslot()
 	{
 		return fruehsterZeitslot;
 	}
@@ -130,5 +136,9 @@ public class Unternehmen
 		{
 			throw new IllegalArgumentException(variable+ " darf/duerfen nicht leer sein");
 		}
+	}
+	
+	public Map<Typ, Kurse> getKurse() {
+		return kurse;
 	}
 }
