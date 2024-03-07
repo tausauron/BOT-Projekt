@@ -2,6 +2,8 @@ package execlLoad;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +68,7 @@ public class ImportFile {
     }
 
     // Import Schueler mit Wuenche
-    public static List<Schueler> getChoices(String path) {
+    public static List<Schueler> getChoices(String path) throws IllegalArgumentException{
         List<Schueler> schulerListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -105,10 +107,11 @@ public class ImportFile {
 
                 schulerListe.add(new Schueler(klasse, vorname, nachname, wunschliste)); // fügen aller Schueler mit der Wünsche hinzu
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
         return schulerListe;
     }
 
@@ -134,7 +137,7 @@ public class ImportFile {
             return false; // Falls eine Zelle fehlt oder null ist
         }
     }
-    public static List<Unternehmen> getCompany(String path) {
+    public static List<Unternehmen> getCompany(String path) throws IllegalArgumentException {
         List<Unternehmen> companyListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -172,8 +175,10 @@ public class ImportFile {
                               						maxTeilnehmer,  maxVeranstaltungen,  fruehsterZeitslot));
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return companyListe;
@@ -196,7 +201,7 @@ public class ImportFile {
         }
     }
     // get RaumList von Excel-Datei
-    public static List<Raum> getRoom(String path) {
+    public static List<Raum> getRoom(String path) throws IllegalArgumentException{
         List<Raum> RoomListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -227,8 +232,10 @@ public class ImportFile {
                 RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return RoomListe;
