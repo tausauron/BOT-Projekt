@@ -18,7 +18,7 @@ public interface ModelInterface {
 	final String username = "ZZZoY280jtXErmFp8FelzQ==";
 	final String password = "pzB75ocJmB/BwEQuxx3Q7A==";
 	
-	//public Boolean checkLogin(String username, String password);
+	public Boolean checkLogin(String username, String password);
 	
 	// Student
 	public List<Schueler> getAllStudents();

@@ -13,15 +13,17 @@ public class Wunsch {
 	private Map<Typ,WunschSlot> slots;
 	private final int prio;
 	private WunschState status;
-		
+	private int nummer;
 	
-	public Wunsch() {
+	public Wunsch(int nummer) {
 		initSlotMap();
 		status = WunschState.LEER;
+		this.nummer = nummer;
 		prio = 0;
 	}
 	
-	public Wunsch(Unternehmen veranstaltung, int prio) {
+	public Wunsch(int nummer, Unternehmen veranstaltung, int prio) {
+		this.nummer = nummer;
 		this.veranstaltung = veranstaltung;
 		initSlotMap();
 		this.prio = prio;
@@ -63,6 +65,14 @@ public class Wunsch {
 		return status;
 	}
 	
+	public int getNummer() {
+		return nummer;
+	}
+
+	private void setNummer(int nummer) {
+		this.nummer = nummer;
+	}
+
 	public void setState(WunschState state) {
 		this.status = state;
 	}

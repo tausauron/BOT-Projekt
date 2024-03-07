@@ -38,10 +38,7 @@ public class Kurse
 	 */
 	private void pruefeNullEingabe(Object objekt, String variable)
 	{
-		if(objekt==null)
-		{
-			throw new IllegalArgumentException(variable+ " darf/duerfen nicht leer sein");
-		}
+
 	}
 
 	public Raum getRaum()

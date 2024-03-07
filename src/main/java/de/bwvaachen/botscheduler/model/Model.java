@@ -181,4 +181,24 @@ public class Model implements ModelInterface{
 		
 	}
 
+<<<<<<< HEAD
 }
+=======
+	@Override
+	public Boolean checkLogin(String username, String password) {
+		try {
+			String decryptUsername = StringEncryption.decrypt(ModelInterface.username, ModelInterface.key);
+			String decryptPassword = StringEncryption.decrypt(ModelInterface.password, ModelInterface.key);
+			
+			if (decryptUsername.equals(username) && decryptPassword.equals(password)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+}
+>>>>>>> refs/remotes/origin/DGR_Sprint2
