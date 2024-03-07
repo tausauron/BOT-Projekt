@@ -40,9 +40,4 @@ public class Raum
 	{
 		this.kapazitaet = kapazitaet;
 	}
-<<<<<<< HEAD
 }
-=======
-
-}
->>>>>>> refs/remotes/origin/Eric
