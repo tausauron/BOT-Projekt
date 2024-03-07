@@ -149,4 +149,19 @@ public class Unternehmen
 	public boolean freeSlot() {
 		return (kurse.values().size() < maxVeranstaltungen);
 	}
+
+	@Override
+	public String toString() {
+		return "Unternehmen{" +
+				"firmenID=" + firmenID +
+				", unternehmen='" + unternehmen + '\'' +
+				", fachrichtung='" + fachrichtung + '\'' +
+				", maxTeilnehmer=" + maxTeilnehmer +
+				", maxVeranstaltungen=" + maxVeranstaltungen +
+				", fruehsterZeitslot='" + fruehsterZeitslot + '\'' +
+				", gewichtung=" + gewichtung +
+				", aktiv=" + aktiv +
+				", kurse=" + kurse +
+				'}';
+	}
 }

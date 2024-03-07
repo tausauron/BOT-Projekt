@@ -1,14 +1,6 @@
 package klassenObjekte;
 
 
-
-/**
- * 
- * @author Martin Albertz
- * 
- * 
- *  TODO Liste mit Zeitslots hinzufuegen
- */
 public class Raum
 {
 	private int raumID;
@@ -23,7 +15,7 @@ public class Raum
 		setName(name);
 
   }
-    
+
 	public String getName()
 	{
 		return name;

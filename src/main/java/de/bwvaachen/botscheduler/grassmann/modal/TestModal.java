@@ -1,31 +1,35 @@
-package de.bwvaachen.botscheduler.model;
+package de.bwvaachen.botscheduler.grassmann.modal;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
-import execlLoad.ImportFile;
-import klassenObjekte.Kurse;
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
-/**
- * Zentrale Modellklasse zur Verwaltung aller Daten
- * 
- * @author Max Tautenhahn
- */
-public class Model implements ModelInterface{
-	
-	List<Schueler> schueler = new ArrayList<>();
-	List<Kurse> kurse = new ArrayList<>();
-	List<Unternehmen> unternehmen = new ArrayList<>();
+// Grassmann
 
-	@Override
+public class TestModal implements ModelInterface{
+	
+	public TestModal(MyController myController) {
+	}
+	
 	public Boolean checkLogin(String username, String password) {
-		// TODO Auto-generated method stub
-		return true;
+		try {
+			String decryptUsername = StringEncryption.decrypt(ModelInterface.username, ModelInterface.key);
+			String decryptPassword = StringEncryption.decrypt(ModelInterface.password, ModelInterface.key);
+			
+			if (decryptUsername.equals(username) && decryptPassword.equals(password)) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override
@@ -36,12 +40,6 @@ public class Model implements ModelInterface{
 	@Override
 	public void saveAllStudents(List<Schueler> students) {
 
-	}
-
-	public void belegeKurse() {
-		KursPlaner planer = new KursPlaner();
-		String score = planer.belegeKurse(schueler, unternehmen);
-		kurse = planer.getKurse();
 	}
 
 	@Override
@@ -59,6 +57,17 @@ public class Model implements ModelInterface{
 
 
 	@Override
+	public void deleteStudent(Schueler schueler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Schueler> importStudent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void exportStudent() {
 		// TODO Auto-generated method stub
 		
@@ -67,26 +76,6 @@ public class Model implements ModelInterface{
 	@Override
 	public void createCompany(String firmenName, int firmenID, int maxTeilnehmer, ArrayList<Integer> zeitslots,
 			double gewichtung, boolean aktiv) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void exportCompany() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void editStudent(Schueler schueler) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteStudent(Schueler schueler) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -114,8 +103,21 @@ public class Model implements ModelInterface{
 	}
 
 	@Override
+	public List<Unternehmen> importCompany() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exportCompany() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public List<Schueler> importStudent(String absolutePath) {
-		return ImportFile.getChoices(absolutePath);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -169,9 +171,9 @@ public class Model implements ModelInterface{
 	}
 
 	@Override
-	public List<Unternehmen> importCompany() {
+	public void editStudent(Schueler schueler) {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 }
