@@ -2,11 +2,15 @@ package gui;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
-
-//Eric
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
+// Eric
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 public class RaumTableModel extends AbstractTableModel {
-	private static final String[] COLUMN_NAMES = {"Name"};
+	private static final String[] COLUMN_NAMES = {"Name","Kapazität"};
 	private List<Raum> raumListe;
 
 	public RaumTableModel(List<Raum> räume) {
@@ -34,6 +38,8 @@ public class RaumTableModel extends AbstractTableModel {
 		switch (columnIndex) {
 		case 0:
 			return raum.getName();
+		case 1:
+			return "";//raum.();
 		default:
 			throw new IllegalArgumentException("Invalid column index");
 		}

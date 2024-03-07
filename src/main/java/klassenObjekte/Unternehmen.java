@@ -16,7 +16,7 @@ public class Unternehmen
 {
 
 	private int firmenID; // ist die Firmen Nr
-	private String unternehmen;
+	private String unternehmen; 
 	private String fachrichtung;
 	private int maxTeilnehmer, maxVeranstaltungen;
 	private String fruehsterZeitslot;
@@ -140,5 +140,13 @@ public class Unternehmen
 	
 	public Map<Typ, Kurse> getKurse() {
 		return kurse;
+	}
+	
+	/**
+	 * maximale Anzahl Veranstaltungen erreicht?
+	 * @return
+	 */
+	public boolean freeSlot() {
+		return (kurse.values().size() < maxVeranstaltungen);
 	}
 }
