@@ -33,6 +33,9 @@ public class DBModel {
     public void createDbModel() throws Exception {
         connection();
 
+
+        //********** Define SQL-Statements **********
+
         String sqlCreateTblSchueler =
                 "DROP TABLE IF EXISTS Schueler;" +
                 "CREATE TABLE Schueler (" +
@@ -60,7 +63,7 @@ public class DBModel {
                 "    gewichtung double," + // double als datentyp näher anschauen was notwending
                 "    aktiv boolean," +
                 "    mapKurse varchar(50)," +
-                "    FOREIGN KEY fruehsterZeitSlot REFERENCE Zeitslot(value)" +
+                "    FOREIGN KEY (fruehsterZeitSlot) REFERENCES Zeitslot(zeitslotChar)" +
                 ");";
 
         String sqlCreateTblRaum =
@@ -77,26 +80,22 @@ public class DBModel {
                         "raum int, " +
                         "firmenID int ," +
                         "fruehsterZeitslot char(1)," +
-                        "FOREIGN KEY fruehsterZeitslot REFERENCE Zeitslot(value)" +
+                        "FOREIGN KEY fruehsterZeitslot REFERENCES Zeitslot(zeitslotChar)," +
+                        "FOREIGN KEY firmenID REFERENCES Unternehmen(firmenID)," +
+                        "FOREIGN KEY raum REFERENCES Raum(raumID)" +
                         ");";
 
         String sqlCreateTblZeitslot =
                 "DROP TABLE IF EXISTS Zeitslot;" +
                         "CREATE TABLE Zeitslot (" +
-                        "value char(1) NOT NULL PRIMARY KEY, " +
-                        "zeitStart DATETIME" +
-                        "zeitEnde DATETIME," +
-                        ");";
-
-        String sqlCreateTblCalcSchueler =
-                "DROP TABLE IF EXISTS Zeitslot;" +
-                        "CREATE TABLE Zeitslot (" +
-                        "value char(1) NOT NULL PRIMARY KEY, " +
-                        "zeitStart DATETIME" +
-                        "zeitEnde DATETIME," +
+                        "zeitslotChar char(1) NOT NULL PRIMARY KEY, " +
+                        "zeitStart DATETIME," +
+                        "zeitEnde DATETIME" +
                         ");";
 
 
+
+        //********** Execute Statements **********
 
         // Statement for creating Schuler Table
         Statement schuelerTblStmnt = connection().createStatement();
@@ -110,9 +109,19 @@ public class DBModel {
         Statement raumTblStmnt = connection().createStatement();
         raumTblStmnt.executeUpdate(sqlCreateTblRaum);
 
+        // Statement for creating Kurs Table
+        Statement kursTblStmnt = connection().createStatement();
+        kursTblStmnt.executeUpdate(sqlCreateTblKurs);
+
+        // Statement for creating Zeitslot Table
+        Statement zeitslotTblStmnt = connection().createStatement();
+        zeitslotTblStmnt.executeUpdate(sqlCreateTblZeitslot);
+
         connection().close();
     }
 
+
+    //********** GET- & SET-Methods for Database **********
 
     // Schueler
     public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {

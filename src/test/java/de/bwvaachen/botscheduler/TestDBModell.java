@@ -21,7 +21,7 @@ public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
     private static List<Raum> raum;
-    private DBModel database = new DBModel();
+    private final DBModel database = new DBModel();
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
