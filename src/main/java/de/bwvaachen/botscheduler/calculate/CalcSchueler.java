@@ -3,6 +3,7 @@ package de.bwvaachen.botscheduler.calculate;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bwvaachen.botscheduler.calculate.Wunsch.WunschState;
 import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Kurse;
@@ -121,9 +122,12 @@ public class CalcSchueler {
 		int retVal = 0;
 		
 		for(Wunsch wunsch : wuensche) {
-			if(wunsch.isErfuellt()) {
+			if(wunsch.getState() == WunschState.ERFUELLT) {
 				retVal += wunsch.getPrio();
 			}
+		}
+		if(ausweichWunsch.getState() == WunschState.ERFUELLT) {
+			retVal += ausweichWunsch.getPrio();
 		}
 		
 		return retVal;
@@ -144,7 +148,9 @@ public class CalcSchueler {
 	}
 	
 	public void bookCourse(Kurse kurs, Wunsch erfWunsch) {
-		getSlotByType(kurs.getZeitslot().getTyp()).setKurs(kurs);
+		SchuelerSlot sSlot = getSlotByType(kurs.getZeitslot().getTyp());
+		sSlot.setKurs(kurs);
+		sSlot.setErfuellterWunsch(erfWunsch);
 		List<CalcSchueler> teilnehmer = kurs.getKursTeilnehmer();
 		teilnehmer.add(this);
 		kurs.setKursTeilnehmer(teilnehmer);
@@ -156,9 +162,30 @@ public class CalcSchueler {
 				wSlot.setStatus(Status.BELEGT);
 			}
 			if(wunsch.equals(erfWunsch)) {
-				wunsch.setErfuellt(true);
+				wunsch.setState(WunschState.ERFUELLT);;
 			}
 		}		
+	}
+	
+	public void leaveCourse(Kurse kurs, Wunsch erfWunsch) {
+		SchuelerSlot sSlot = getSlotByType(kurs.getZeitslot().getTyp());
+		sSlot.setKurs(null);
+		sSlot.setErfuellterWunsch(null);
+		List<CalcSchueler> teilnehmer = kurs.getKursTeilnehmer();
+		teilnehmer.remove(this);
+		kurs.setKursTeilnehmer(teilnehmer);
+		
+		for(Wunsch wunsch : wuensche) {
+			WunschSlot wSlot = wunsch.getSlots().get(kurs.getZeitslot().getTyp());
+			if(wSlot.getStatus().equals(Status.BELEGT)) {
+				wSlot.setStatus(Status.FREI);
+			}
+			if(wunsch.equals(erfWunsch)) {
+				wunsch.setState(WunschState.UNERFUELLT);;
+			}
+		}
+		
+		
 	}
 	
 	public SchuelerSlot getSlotByType(Typ typ){
