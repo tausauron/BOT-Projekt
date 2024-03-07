@@ -32,9 +32,11 @@ public class DBModel {
 
     public void createDbModel() throws Exception {
         connection();
-        String sqlCreateTblSchueler = "DROP TABLE IF EXISTS Schueler;" +
+
+        String sqlCreateTblSchueler =
+                "DROP TABLE IF EXISTS Schueler;" +
                 "CREATE TABLE Schueler (" +
-                "    schuelerID int NOT NULL AUTO_INCREMENT," +
+                "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                 "    nachname varchar(50)," +
                 "    vorname varchar(50)," +
                 "    wunsch0 varchar(50)," +
@@ -46,9 +48,10 @@ public class DBModel {
                 "    klasse varchar(50)" +
                 ");";
 
-        String sqlCreateTblUnternehmen = "DROP TABLE IF EXISTS Unternehmen;" +
+        String sqlCreateTblUnternehmen =
+                "DROP TABLE IF EXISTS Unternehmen;" +
                 "CREATE TABLE Unternehmen (" +
-                "    firmenID int," +
+                "    firmenID int NOT NULL PRIMARY KEY," +
                 "    unternehmenName varchar(50)," +
                 "    fachrichtung varchar(200)," +
                 "    maxTeilnehmer int," +
@@ -59,32 +62,33 @@ public class DBModel {
                 "    mapKurse varchar(50)" +
                 ");";
 
-        String sqlCreateTblRaum = "DROP TABLE IF EXISTS Raum;" +
+        String sqlCreateTblRaum =
+                "DROP TABLE IF EXISTS Raum;" +
                 "CREATE TABLE Raum (" +
-                "    raumID int NOT NULL AUTO_INCREMENT," +
+                "    raumID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                 "    name varchar(50)," +
                 "    kapazitaet int" +
                 ");";
 
 
 
-
+        // Statement for creating Schuler Table
         Statement schuelerTblStmnt = connection().createStatement();
         schuelerTblStmnt.executeUpdate(sqlCreateTblSchueler);
 
+        // Statement for creating Unternehmen Table
         Statement unternehmenTblStmnt = connection().createStatement();
         unternehmenTblStmnt.executeUpdate(sqlCreateTblUnternehmen);
 
+        // Statement for creating Raum Table
         Statement raumTblStmnt = connection().createStatement();
         raumTblStmnt.executeUpdate(sqlCreateTblRaum);
-        //statement.executeUpdate(sqlInsert);
-        //System.out.println(resultSet.getString("PersonID"));
 
         connection().close();
     }
 
 
-    // Schuüler
+    // Schueler
     public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         connection();
         for (Schueler schuel : schuelerList){
