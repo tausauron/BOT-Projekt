@@ -56,10 +56,11 @@ public class DBModel {
                 "    fachrichtung varchar(200)," +
                 "    maxTeilnehmer int," +
                 "    maxVeranstaltungen int," +
-                "    fruehsterZeitSlot varchar(100)," +
+                "    fruehsterZeitSlot char(1)," +
                 "    gewichtung double," + // double als datentyp näher anschauen was notwending
                 "    aktiv boolean," +
-                "    mapKurse varchar(50)" +
+                "    mapKurse varchar(50)," +
+                "    FOREIGN KEY fruehsterZeitSlot REFERENCE Zeitslot(value)" +
                 ");";
 
         String sqlCreateTblRaum =
@@ -69,6 +70,31 @@ public class DBModel {
                 "    name varchar(50)," +
                 "    kapazitaet int" +
                 ");";
+
+        String sqlCreateTblKurs =
+                "DROP TABLE IF EXISTS Kurs;" +
+                        "CREATE TABLE Kurs (" +
+                        "raum int, " +
+                        "firmenID int ," +
+                        "fruehsterZeitslot char(1)," +
+                        "FOREIGN KEY fruehsterZeitslot REFERENCE Zeitslot(value)" +
+                        ");";
+
+        String sqlCreateTblZeitslot =
+                "DROP TABLE IF EXISTS Zeitslot;" +
+                        "CREATE TABLE Zeitslot (" +
+                        "value char(1) NOT NULL PRIMARY KEY, " +
+                        "zeitStart DATETIME" +
+                        "zeitEnde DATETIME," +
+                        ");";
+
+        String sqlCreateTblCalcSchueler =
+                "DROP TABLE IF EXISTS Zeitslot;" +
+                        "CREATE TABLE Zeitslot (" +
+                        "value char(1) NOT NULL PRIMARY KEY, " +
+                        "zeitStart DATETIME" +
+                        "zeitEnde DATETIME," +
+                        ");";
 
 
 
