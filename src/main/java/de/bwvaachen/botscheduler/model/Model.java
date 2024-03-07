@@ -94,6 +94,7 @@ public class Model implements ModelInterface{
 	@Override
 	public List<Schueler> getAllStudents() {
 		return schueler;
+
 	}
 
 	@Override
@@ -198,4 +199,16 @@ public class Model implements ModelInterface{
 		}
 		return false;
 	}
+
+
+	@Override
+	public void exportCompany() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+
 }

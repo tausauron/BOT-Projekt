@@ -26,6 +26,9 @@ public interface ModelInterface {
 	public void createStudent(int schuelerID, String vorname, String nachname, ArrayList<String> wuensche,String klasse);
 	public void editStudent(Schueler schueler);
 	public void deleteStudent(Schueler schueler);
+
+	void exportCompany();
+
 	public List<Schueler> importStudent(String absolutePath);
 	public void exportStudent(String path, List<Schueler> students); // download Excel
 	

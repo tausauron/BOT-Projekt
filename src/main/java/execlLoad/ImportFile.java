@@ -2,15 +2,19 @@ package execlLoad;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import klassenObjekte.Raum;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import klassenObjekte.Raum;
+
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
@@ -26,15 +30,14 @@ public class ImportFile {
         List<Unternehmen> unternehmenListe = getCompany("H:\\SUD\\IMPORT BOT1_Veranstaltungsliste.xlsx");
         for (Unternehmen unternehmen : unternehmenListe) {
             System.out.println(unternehmen.getFirmenID() +" - "+ unternehmen.getUnternehmen()+" - "+unternehmen.getFachrichtung()+
-
                     " - "+unternehmen.getMaxTeilnehmer()+" - "+ unternehmen.getMaxVeranstaltungen() +" - "+unternehmen.getFruehesterZeitslot());
-
         }
         System.out.println("----------------------RaumListe-----------------------------------");
-        List<Unternehmen> RaumListe = getCompany("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
-        //for (Raum raum : RaumListe) {
-       //     System.out.println(raum.get +" - "+ raum.getUnternehmen());
-       // }
+        List<Raum> RaumListe = getRoom("H:\\SUD\\IMPORT BOT0_Raumliste.xlsx");
+        for (Raum raum : RaumListe) {
+            System.out.println(raum.getName() + " - " + raum.getKapazitaet());
+        }
+
 
     }
     //prüf, ob Schueler-Excel-Datei im korrekten Format ist
@@ -68,7 +71,7 @@ public class ImportFile {
     }
 
     // Import Schueler mit Wuenche
-    public static List<Schueler> getChoices(String path) {
+    public static List<Schueler> getChoices(String path) throws IllegalArgumentException{
         List<Schueler> schulerListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -107,10 +110,11 @@ public class ImportFile {
 
                 schulerListe.add(new Schueler(klasse, vorname, nachname, wunschliste)); // fügen aller Schueler mit der Wünsche hinzu
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
         return schulerListe;
     }
 
@@ -136,7 +140,7 @@ public class ImportFile {
             return false; // Falls eine Zelle fehlt oder null ist
         }
     }
-    public static List<Unternehmen> getCompany(String path) {
+    public static List<Unternehmen> getCompany(String path) throws IllegalArgumentException {
         List<Unternehmen> companyListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -174,8 +178,10 @@ public class ImportFile {
                               						maxTeilnehmer,  maxVeranstaltungen,  fruehsterZeitslot));
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return companyListe;
@@ -188,9 +194,8 @@ public class ImportFile {
 
         //Raum-Format :RaumNr. 	RaumName
         try {
-            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("RaumNr");
-            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("RaumName");
-
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Raum");
+            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Kapazität");
 
             return isFirmenIDCorrect && isUnternehmenCorrect ;
         } catch (NullPointerException e) {
@@ -198,7 +203,7 @@ public class ImportFile {
         }
     }
     // get RaumList von Excel-Datei
-    public static List<Raum> getRoom(String path) {
+    public static List<Raum> getRoom(String path) throws IllegalArgumentException{
         List<Raum> RoomListe = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(new File(path));
@@ -212,30 +217,30 @@ public class ImportFile {
 
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue; // Kopfzeile überspringen
-                //Raum	Kapazität
+                Cell roomNameCell = row.getCell(0);
+                Cell roomKapazitaetCell = row.getCell(1);
 
-                Cell roomNameCell = row.getCell(1);
-                Cell roomKapazitaetCell = row.getCell(0);
-
-
-
-                String roomName = roomNameCell.getStringCellValue();
-                int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
-
-
-
-
-                // Hier weitere Informationen auslesen und zum Unternehmen-Objekt hinzufügen
-                RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
+               // prüf, ob roomNameCell String oder int sein
+                if (roomNameCell.getCellType().toString() == "NUMERIC"){
+                    int roomName1 = (int)roomNameCell.getNumericCellValue();
+                    int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
+                    RoomListe.add(new Raum(String.valueOf(roomName1) ,roomroomKapazitaet));
+                    }
+                else if(roomNameCell.getCellType().toString() == "STRING")
+                {String roomName = roomNameCell.getStringCellValue();
+                    int  roomroomKapazitaet = (int)roomKapazitaetCell.getNumericCellValue();
+                    RoomListe.add(new Raum(roomName ,roomroomKapazitaet));
+                    }
+                else System.out.printf("Diese Wert muss String oder Anzahl sein");
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return RoomListe;
-
-
 
     }
 
