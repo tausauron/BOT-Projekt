@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import de.bwvaachen.botscheduler.database.DBModel;
 import execlLoad.ImportFile;
 import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,16 +18,19 @@ import java.util.List;
 
 public class TestDBModell {
     private static List<Schueler> schueler;
+    private static List<Unternehmen> unternehmen;
     private DBModel database = new DBModel();
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
         URL dbPfad = DBModel.class.getResource("test.mv.db");
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
+        String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         DBModel database = new DBModel();
 
         String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
         schueler = ImportFile.getChoices(path);
+        unternehmen = ImportFile.getCompany(unternehmenListPath);
         database.createDbModel();
     }
 
@@ -55,10 +59,42 @@ public class TestDBModell {
 
     @Test
     void testGetSchuelerData() throws SQLException, ClassNotFoundException {
+        database.setSchuelerData(schueler);
         List<Schueler> testList = database.getSchuelerData();
 
         for (int i = 0; i < schueler.size(); i++) {
             assertEquals(schueler.get(i).getVorname(), testList.get(i).getVorname());
+        }
+    }
+
+
+    @Test
+    void testSetUnternehmenData() throws SQLException, ClassNotFoundException {
+        Connection conn = database.connection();
+        database.setUnternehmenData(unternehmen);
+
+        String getRow = "SELECT unternehmenName FROM Unternehmen;";
+        Statement statement = conn.createStatement();
+        ResultSet resultSet = statement.executeQuery(getRow);
+
+        for (int i = 0; resultSet.next(); i++){
+            System.out.println("Unternehmen aus DB: " + resultSet.getString("unternehmenName"));
+            System.out.println("Unternehmen aus Excel: " + unternehmen.get(i).getUnternehmen());
+            System.out.println("----------------------------");
+            assertEquals(unternehmen.get(i).getUnternehmen(), resultSet.getString("unternehmenName"));
+        }
+    }
+
+    @Test
+    void testGetUnternehmenData() throws SQLException, ClassNotFoundException {
+        database.setUnternehmenData(unternehmen);
+        List<Unternehmen> testList = database.getUnternehmenData();
+
+        for (int i = 0; i < unternehmen.size(); i++) {
+            System.out.println("Unternehmen aus DB: " + testList.get(i).getUnternehmen());
+            System.out.println("Unternehmen aus Excel: " + unternehmen.get(i).getUnternehmen());
+            System.out.println("----------------------------");
+            assertEquals(unternehmen.get(i).getUnternehmen(), testList.get(i).getUnternehmen());
         }
     }
 }
