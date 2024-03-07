@@ -130,7 +130,7 @@ public class ExportFile implements IExport {
 			for (Raum room : roomList) {
 				Row dataRow = sheet.createRow(rowNum++);
 				dataRow.createCell(0).setCellValue(room.getName());
-				dataRow.createCell(1).setCellValue(room.getKapazität());
+				dataRow.createCell(1).setCellValue(room.getKapazitaet());
 			}
 
 			// Write the workbook content to the output file

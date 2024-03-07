@@ -112,7 +112,7 @@ public class TestExportStudentSchedule {
 		System.out.println("Score: " + score);
 
 		ExportFile exFile = new ExportFile();
-		exFile.exportStudentSchedule(planer.getcSchueler(), "H:\\ExportedData.xlsx");
+		exFile.exportStudentSchedule(planer.getcSchueler(), "./target/ExportedData.xlsx");
 		
 		
 		
