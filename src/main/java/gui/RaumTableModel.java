@@ -2,7 +2,11 @@ package gui;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
-
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 // Eric
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 public class RaumTableModel extends AbstractTableModel {

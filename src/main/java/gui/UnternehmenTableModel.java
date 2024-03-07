@@ -3,7 +3,12 @@ import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
 
-//Eric
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
+
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 public class UnternehmenTableModel extends AbstractTableModel {
 	private static final String[] COLUMN_NAMES = { "Firma", "Fachrichtung","Max Teilnehmer","Max Veranstaltungen"};
