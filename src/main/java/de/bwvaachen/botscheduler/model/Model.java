@@ -174,4 +174,11 @@ public class Model implements ModelInterface{
 		
 	}
 
+
+	@Override
+	public void exportSchuelerSchedule(String path) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
