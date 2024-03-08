@@ -3,7 +3,11 @@ package execlLoad;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -124,83 +128,88 @@ public class ExportFile implements IExport {
 
 	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) throws FileNotFoundException, IOException {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
-
-			Sheet sheet = workbook.createSheet("Laufzettel");
-
-/*
-			TODO: create a sheet for each class
-			
 			
 			Set<String> uniqueKlassen = new HashSet<>();
-
 			for (CalcSchueler calcStudent : calcStudents) {
 			    String klasse = calcStudent.getSchueler().getKlasse();
-			    uniqueKlassen.add(klasse);
+			    uniqueKlassen.add(klasse.toUpperCase());
 			}
 
-			for (String klasse : uniqueKlassen) {
-			    System.out.println(klasse);
-			}
+			List<String> sortedKlassen = new ArrayList<>(uniqueKlassen);
+			Collections.sort(sortedKlassen);
 
-*/
 			
-			int rowNum = 0;
-			for (CalcSchueler calcStudent : calcStudents) {
-				// Klasse
-				Row dataRow = sheet.createRow(rowNum);
-				rowNum++;
-				dataRow.createCell(0).setCellValue(calcStudent.getSchueler().getKlasse());
+			for (String klasse : sortedKlassen) {
+				Sheet sheet = workbook.createSheet(klasse);
+				
+				int rowNum = 0;
+				for (CalcSchueler calcStudent : calcStudents) {
+					if (calcStudent.getSchueler().getKlasse().equals(klasse)) {
 
-				// Name
-				Row dataRow2 = sheet.createRow(rowNum);
-				rowNum++;
-				dataRow2.createCell(0).setCellValue(
-						calcStudent.getSchueler().getNachname() + ", " + calcStudent.getSchueler().getVorname());
+						// Klasse
+						Row dataRow = sheet.createRow(rowNum);
+						rowNum++;
+						dataRow.createCell(0).setCellValue(calcStudent.getSchueler().getKlasse());
 
-				// Überschriften
-				Row dataRow3 = sheet.createRow(rowNum);
-				rowNum++;
-				dataRow3.createCell(0).setCellValue("Zeit");
-				dataRow3.createCell(1).setCellValue("Raum");
-				dataRow3.createCell(2).setCellValue("Veranstaltung");
-				dataRow3.createCell(4).setCellValue("Wunsch");
+						// Name
+						Row dataRow2 = sheet.createRow(rowNum);
+						rowNum++;
+						dataRow2.createCell(0).setCellValue(
+								calcStudent.getSchueler().getNachname() + ", " + calcStudent.getSchueler().getVorname());
 
-				for (SchuelerSlot slot : calcStudent.getSlots()) {
-					// Daten
-					Row dataRow4 = sheet.createRow(rowNum);
-					rowNum++;
-					Typ t = slot.getTyp();
-					dataRow4.createCell(0).setCellValue(t.getZeitraum());
+						// Überschriften
+						Row dataRow3 = sheet.createRow(rowNum);
+						rowNum++;
+						dataRow3.createCell(0).setCellValue("Zeit");
+						dataRow3.createCell(1).setCellValue("Raum");
+						dataRow3.createCell(2).setCellValue("Veranstaltung");
+						dataRow3.createCell(4).setCellValue("Wunsch");
 
-					if (slot.getKurs() != null ) {
-						if (slot.getKurs().getRaum() != null) {
-							dataRow4.createCell(1).setCellValue(slot.getKurs().getRaum().getName());
-						} else {
-							dataRow4.createCell(1).setCellValue(" - ");
+						for (SchuelerSlot slot : calcStudent.getSlots()) {
+							// Daten
+							Row dataRow4 = sheet.createRow(rowNum);
+							rowNum++;
+							Typ t = slot.getTyp();
+							dataRow4.createCell(0).setCellValue(t.getZeitraum());
+
+							if (slot.getKurs() != null ) {
+								if (slot.getKurs().getRaum() != null) {
+									dataRow4.createCell(1).setCellValue(slot.getKurs().getRaum().getName());
+								} else {
+									dataRow4.createCell(1).setCellValue(" - ");
+								}
+							} else {
+								dataRow4.createCell(1).setCellValue(" - ");
+							}
+
+							if (slot.getErfuellterWunsch() != null) {
+								dataRow4.createCell(2).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getUnternehmen());
+								dataRow4.createCell(3).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getFachrichtung());
+								dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
+							} else {
+								dataRow4.createCell(2).setCellValue(" - ");
+								dataRow4.createCell(3).setCellValue(" - ");
+								dataRow4.createCell(4).setCellValue(" - ");
+							}
 						}
-					} else {
-						dataRow4.createCell(1).setCellValue(" - ");
-					}
 
-					if (slot.getErfuellterWunsch() != null) {
-						dataRow4.createCell(2).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getUnternehmen());
-						dataRow4.createCell(3).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getFachrichtung());
-						dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
-					} else {
-						dataRow4.createCell(2).setCellValue(" - ");
-						dataRow4.createCell(3).setCellValue(" - ");
-						dataRow4.createCell(4).setCellValue(" - ");
+						// Eine Zeile frei lassen
+						rowNum++;
 					}
+					
 				}
 
-				// Eine Zeile frei lassen
-				rowNum++;
+		        // Auto-Size für jede Spalte
+		        for (int i = 0; i < 5; i++) {
+		            sheet.autoSizeColumn(i);
+		        }
+				
 			}
 
-	        // Auto-Size für jede Spalte
-	        for (int i = 0; i < 5; i++) {
-	            sheet.autoSizeColumn(i);
-	        }
+			
+
+			
+			
 			
 			// Write the workbook content to the output file
 			workbook.write(fos);
