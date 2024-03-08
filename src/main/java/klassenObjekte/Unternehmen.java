@@ -11,6 +11,10 @@ import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
  * 
  * Diese Klasse beitet das grundgerüst für die Unternehmen. 
  * Diese Klasse erlaubt es ein Unternehmensobjekt anzulegen
+ * 
+ * TODO: Klasse Umbenennen zu Veranstaltung
+ * Dies ist eigentlich die Klasse für eine Veranstaltung eines Unternehmen!
+ * Daten kommen aus der "Veranstaltungsliste.xlsx"
  */
 public class Unternehmen
 {
