@@ -1,5 +1,7 @@
 package de.bwvaachen.botscheduler.model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -195,7 +197,7 @@ public class Model implements ModelInterface{
 
 
 	@Override
-	public void exportSchuelerSchedule(String path) {
+	public void exportSchuelerSchedule(String path) throws FileNotFoundException, IOException {
 		IExport exporter = new ExportFile();
 		exporter.exportStudentSchedule(cSchueler, path);		
 	}

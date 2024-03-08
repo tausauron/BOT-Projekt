@@ -1,5 +1,8 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -20,6 +23,7 @@ public class MyController {
 
 	private GUI_Login loginGUI;
 	private GUI_ListView listView;
+	private GUI_Main_Start mainStart;
 	private ModelInterface myModal;
 	private boolean activateLogin = false;
 
@@ -33,7 +37,7 @@ public class MyController {
 		if (this.activateLogin) {
 			loginGUI = new GUI_Login(this);
 		} else {
-			new GUI_Main_Start(this);
+			this.mainStart = new GUI_Main_Start(this);
 			this.listView = new GUI_ListView(this);
 		}
 	}
@@ -76,13 +80,19 @@ public class MyController {
 	}
 
 	public List<Schueler> importStudent(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importStudent(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			return myModal.importStudent(path);
+		} catch (Exception e) { handleEcxeption(e); }
+		// return empty list
+		return new ArrayList<Schueler>();
 	}
 
 	public void exportStudent(List<Schueler> students, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportStudent(path, students);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			myModal.exportStudent(path, students);
+		} catch (Exception e) { handleEcxeption(e); }
 	}
 
 	// Room functions
@@ -107,13 +117,19 @@ public class MyController {
 	}
 	
 	public List<Raum> importRooms(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importRooms(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			return myModal.importRooms(path);
+		} catch (Exception e) { handleEcxeption(e); }
+		// return empty list
+		return new ArrayList<Raum>();
 	}
 	
 	public void exportRooms(List<Raum> rooms, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportRooms(path, rooms);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			myModal.exportRooms(path, rooms);
+		} catch (FileNotFoundException e) { handleEcxeption(e); }
 	}
 	
 	// Company functions
@@ -138,18 +154,28 @@ public class MyController {
 	}
 
 	public List<Unternehmen> importCompany(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importCompany(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			return myModal.importCompany(path);
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
+		// return empty list
+		return new ArrayList<Unternehmen>();
 	}
 
 	public void exportCompany(List<Unternehmen> companies, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportCompany(path, companies);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			myModal.exportCompany(path, companies);
+		} catch (Exception e) { handleEcxeption(e); }
 	}
 	
 	public void exportStudentSchedule(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportSchuelerSchedule(path);
+		try {
+			String path = MyJFileChooser.getPath(frame, "Laufzettel.xlsx");
+			myModal.exportSchuelerSchedule(path);
+		} catch (IOException e) { handleEcxeption(e); }
 	}
 	
 	private static void handleEcxeption(Throwable e) {
