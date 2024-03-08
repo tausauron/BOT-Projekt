@@ -7,6 +7,11 @@ import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Unternehmen;
 
+/**
+ * Ausprägung von Schülerwünschen für den Belegungsalgorithmus
+ * 
+ * @author Max Tautenhahn
+ */
 public class Wunsch {
 	
 	private Unternehmen veranstaltung;
