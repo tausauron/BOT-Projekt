@@ -1,5 +1,7 @@
 package de.bwvaachen.botscheduler.database;
 
+import de.bwvaachen.botscheduler.model.KursDAO;
+import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -10,14 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DBModel {
+public class DBModel implements IDatabase {
     private URL pfad = getClass().getResource("test.mv.db");
 
 
     public static void main(String[] args) throws Exception {
         DBModel db = new DBModel();
         db.createDbModel();
-        db.getSchuelerData();
+
 
     }
 
@@ -59,10 +61,9 @@ public class DBModel {
                 "    fachrichtung varchar(200)," +
                 "    maxTeilnehmer int," +
                 "    maxVeranstaltungen int," +
-                "    fruehsterZeitSlot char(1)," +
+                "    fruehsterZeitSlot varchar(1) NOT NULL," +
                 "    gewichtung double," + // double als datentyp näher anschauen was notwending
-                "    aktiv boolean," +
-                "    mapKurse varchar(50)," +
+                "    aktiv boolean" +
                 "    FOREIGN KEY (fruehsterZeitSlot) REFERENCES Zeitslot(zeitslotChar)" +
                 ");";
 
@@ -77,18 +78,29 @@ public class DBModel {
         String sqlCreateTblKurs =
                 "DROP TABLE IF EXISTS Kurs;" +
                         "CREATE TABLE Kurs (" +
-                        "raum int, " +
-                        "firmenID int ," +
-                        "fruehsterZeitslot char(1)," +
+                        "kursID int NOT NULL PRIMARY KEY, " +
+                        "raumID int NOT NULL, " +
+                        "firmenID int NOT NULL," +
+                        "fruehsterZeitslot varchar(1) NOT NULL," +
                         "FOREIGN KEY fruehsterZeitslot REFERENCES Zeitslot(zeitslotChar)," +
                         "FOREIGN KEY firmenID REFERENCES Unternehmen(firmenID)," +
                         "FOREIGN KEY raum REFERENCES Raum(raumID)" +
                         ");";
 
+        String sqlCreateTblKursTeilnehmer =
+                "DROP TABLE IF EXISTS KursTeilnehmer;" +
+                        "CREATE TABLE KursTeilnehmer (" +
+                        "kursID int NOT NULL, " +
+                        "schuelerID int NOT NULL," +
+                        "FOREIGN KEY kursID REFERENCES Kurs(kursID)," +
+                        "FOREIGN KEY schuelerID REFERENCES Schueler(schuelerID)," +
+                        "PRIMARY KEY (kursID, schuelerID)" +
+                        ");";
+
         String sqlCreateTblZeitslot =
                 "DROP TABLE IF EXISTS Zeitslot;" +
                         "CREATE TABLE Zeitslot (" +
-                        "zeitslotChar char(1) NOT NULL PRIMARY KEY, " +
+                        "zeitslotChar varchar(1) NOT NULL PRIMARY KEY, " +
                         "zeitStart DATETIME," +
                         "zeitEnde DATETIME" +
                         ");";
@@ -112,6 +124,10 @@ public class DBModel {
         // Statement for creating Kurs Table
         Statement kursTblStmnt = connection().createStatement();
         kursTblStmnt.executeUpdate(sqlCreateTblKurs);
+
+        // Statement for creating Kurs Teilnehmer Table
+        Statement kursTeilnehmerTblStmnt = connection().createStatement();
+        kursTeilnehmerTblStmnt.executeUpdate(sqlCreateTblKursTeilnehmer);
 
         // Statement for creating Zeitslot Table
         Statement zeitslotTblStmnt = connection().createStatement();
@@ -139,14 +155,22 @@ public class DBModel {
                     "'"+ schuel.getAllWuensche().get(5) +"', " +
                     "'"+ schuel.getKlasse() +"');";
 
+            String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
+
+
             Statement statement = connection().createStatement();
             statement.executeUpdate(sqlInsert);
+            Statement statementGetSchlr = connection().createStatement();
+            ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
+
+            schuel.setSchuelerID(rsSet.getInt("schuelerID"));
 
         }
         connection().close();
     }
 
-    public List<Schueler> getSchuelerData() throws SQLException, ClassNotFoundException {
+    @Override
+    public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
         connection();
         List<Schueler> schuelerList = new ArrayList<Schueler>();
         int schulerID;
@@ -202,9 +226,10 @@ public class DBModel {
         connection().close();
     }
 
-    public List<Unternehmen> getUnternehmenData() throws SQLException, ClassNotFoundException {
+    @Override
+    public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         connection();
-        List<Unternehmen> unternehmenList = new ArrayList<Unternehmen>();
+        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
         int firmenID, maxVeranstaltungen, maxTeilnehmer;
         String fruehsterZeitslot, unternehmenName, fachrichtung;
         double gewichtung;
@@ -226,7 +251,7 @@ public class DBModel {
             aktiv = resultSet.getBoolean("aktiv");
 
 
-            Unternehmen unternehmen = new Unternehmen(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
+            UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
             unternehmen.setAktiv(aktiv);
             unternehmen.setGewichtung(gewichtung);
 
@@ -237,6 +262,65 @@ public class DBModel {
         connection().close();
 
         return unternehmenList;
+    }
+
+    public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
+        connection();
+
+        for (KursDAO kurseIn : kurse){
+            String sqlInsert = "INSERT INTO Kurse VALUES (" +
+                    "'"+ kurseIn.getRaum().getRaumID() +"', " +
+                    "'"+ kurseIn.getUnternehmen().getFirmenID() + "', " +
+                    "'"+ kurseIn.getZeitslot() + "');";
+            Statement statement = connection().createStatement();
+            statement.executeUpdate(sqlInsert);
+
+            String sql_getKursID = "SELECT kursID FROM Kurs;";
+            Statement stmt_getKursID = connection().createStatement();
+            ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
+            kurseIn.setID(result.getInt("kursID"));
+
+            for (Schueler schlr:kurseIn.getKursTeilnehmer()) {
+
+                String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
+                        "'" + schlr.getSchuelerID() + "'" +
+                        "'" + kurseIn.getID() + "');";
+
+                Statement statementKursTeilnehmer = connection().createStatement();
+                statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
+            }
+        }
+        connection().close();
+    }
+
+    @Override
+    public List<KursDAO> loadKurse() throws SQLException, ClassNotFoundException {
+        connection();
+        List<KursDAO> kursDAOList = new ArrayList<KursDAO>();
+        Raum raum;
+        List<Schueler> kursTeilnehmer;
+        UnternehmenDAO unternehmen;
+        String zeitslot;
+
+        String sql_kursList = "SELECT * FROM Kurs;";
+        String sql_kursTeilnehmerList = "SELECT Schueler.schuelerID, Schueler.vorname, Schueler.nachname, Schueler.klasse, " +
+                "Schueler.wunsch0, Schueler.wunsch1, Schueler.wunsch2, Schueler.wunsch3, Schueler.wunsch4, Schueler.wunsch5" +
+                "FROM KursTeilnehmer" +
+                "RIGHT JOIN Schueler ON kursTeilnehmer.schuelerID = Schueler.schuelerID" +
+                "LEFT JOIN Kurs ON kursTeilnehmer.kursID = Kurs.kursID;";
+
+        Statement statementKurs = connection().createStatement();
+        ResultSet resultSetKurs = statementKurs.executeQuery(sql_kursList);
+        Statement statementKursTeil = connection().createStatement();
+        ResultSet resultSetKursTeilnehmer = statementKursTeil.executeQuery(sql_kursTeilnehmerList);
+
+        while (resultSetKursTeilnehmer.next()){
+            System.out.println(resultSetKurs.getString("vorname"));
+        }
+
+        connection().close();
+
+        return null;
     }
 
 
@@ -256,7 +340,8 @@ public class DBModel {
         connection().close();
     }
 
-    public List<Raum> getRaumData() throws SQLException, ClassNotFoundException {
+    @Override
+    public List<Raum> loadRooms() throws SQLException, ClassNotFoundException {
         connection();
         List<Raum> raumList = new ArrayList<Raum>();
         int raumID, kapazitaet;
@@ -282,5 +367,11 @@ public class DBModel {
         connection().close();
 
         return raumList;
+    }
+
+
+    @Override
+    public void saveState(List<Raum> raeume, List<Schueler> schueler, List<UnternehmenDAO> unternehmen, List<KursDAO> kurse) {
+
     }
 }

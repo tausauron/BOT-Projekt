@@ -3,6 +3,8 @@ package de.bwvaachen.botscheduler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import de.bwvaachen.botscheduler.database.DBModel;
+import de.bwvaachen.botscheduler.model.KursDAO;
+import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import execlLoad.ImportFile;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
@@ -21,6 +23,7 @@ public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
     private static List<Raum> raum;
+    private static List<KursDAO> kurse;
     private final DBModel database = new DBModel();
 
     @BeforeAll
@@ -64,7 +67,7 @@ public class TestDBModell {
     @Test
     void testGetSchuelerData() throws SQLException, ClassNotFoundException {
         database.setSchuelerData(schueler);
-        List<Schueler> testList = database.getSchuelerData();
+        List<Schueler> testList = database.loadSchueler();
 
         for (int i = 0; i < schueler.size(); i++) {
             assertEquals(schueler.get(i).getVorname(), testList.get(i).getVorname());
@@ -92,7 +95,7 @@ public class TestDBModell {
     @Test
     void testGetUnternehmenData() throws SQLException, ClassNotFoundException {
         database.setUnternehmenData(unternehmen);
-        List<Unternehmen> testList = database.getUnternehmenData();
+        List<UnternehmenDAO> testList = database.loadUnternehmen();
 
         for (int i = 0; i < unternehmen.size(); i++) {
             System.out.println("Unternehmen aus DB: " + testList.get(i).getUnternehmen());
@@ -123,13 +126,24 @@ public class TestDBModell {
     @Test
     void testGetRaumData() throws SQLException, ClassNotFoundException {
         database.setRaumData(raum);
-        List<Raum> testList = database.getRaumData();
+        List<Raum> testList = database.loadRooms();
 
         for (int i = 0; i < unternehmen.size(); i++) {
             System.out.println("Raum aus DB: " + testList.get(i).getName());
             System.out.println("Raum aus Excel: " + raum.get(i).getName());
             System.out.println("----------------------------");
             assertEquals(raum.get(i).getName(), testList.get(i).getName());
+        }
+    }
+
+
+    @Test
+    void testLoadKurse() throws SQLException, ClassNotFoundException {
+        database.saveKurse(kurse);
+        List<KursDAO> testList = database.loadKurse();
+
+        for (KursDAO kursDAO : testList){
+            System.out.println(kursDAO.getKursTeilnehmer());
         }
     }
 }

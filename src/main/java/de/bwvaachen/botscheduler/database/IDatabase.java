@@ -1,5 +1,6 @@
 package de.bwvaachen.botscheduler.database;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import de.bwvaachen.botscheduler.model.KursDAO;
@@ -17,12 +18,12 @@ public interface IDatabase {
 	public void saveState(List<Raum> raeume, List<Schueler> schueler,
 			List<UnternehmenDAO> unternehmen, List<KursDAO> kurse);
 	
-	public List<Raum> loadRooms();
+	public List<Raum> loadRooms() throws SQLException, ClassNotFoundException;
 	
-	public List<Schueler> loadSchueler();
+	public List<Schueler> loadSchueler() throws SQLException, ClassNotFoundException;
 	
-	public List<UnternehmenDAO> loadUnternehmen();
+	public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException;
 	
-	public List<KursDAO> loadKurse();
+	public List<KursDAO> loadKurse() throws SQLException, ClassNotFoundException;
 
 }
