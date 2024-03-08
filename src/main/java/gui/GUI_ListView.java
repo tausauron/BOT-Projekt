@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -16,26 +15,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
-
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import klassenObjekte.*;
-
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-//Eric, Grassmann
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 
 public class GUI_ListView {
 
@@ -56,8 +52,6 @@ public class GUI_ListView {
 	private JTable tableSchüler;
 	private JTable tableUn;
 	private JTable tableRaum;
-
-	private ListSelectionModel schülerSelectionModel;
 
 	/**
 	 * Create the application.
@@ -119,7 +113,7 @@ public class GUI_ListView {
 		JButton btnSchülerDelete = new JButton("Löschen");
 		btnSchülerDelete.addActionListener((e) -> btnPressedSchülerLöschen(e));
 
-		// Model für Schüler GUI wird erstellt
+		// Schüler GUI
 		schülerListModel = new StudentTableModel(schülerList);
 
 		tableSchüler = new JTable(schülerListModel);
@@ -171,7 +165,7 @@ public class GUI_ListView {
 		JButton btnUnternehmenExportieren = new JButton("Exportieren");
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
-		// Model für Unternehmen GUI wird erstellt
+		// Unternehmen GUI
 		unterNehmenListModel = new UnternehmenTableModel(unternehmenList);
 		tableUn = new JTable(unterNehmenListModel);
 
@@ -209,7 +203,7 @@ public class GUI_ListView {
 						.addGap(19)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
 
-		// Räume
+		// Räume GUI
 
 		JPanel panelRaum = new JPanel();
 
@@ -219,8 +213,10 @@ public class GUI_ListView {
 		btnRaumhinzufügen.addActionListener((e) -> btnPressedRaumHinzufügen());
 
 		JButton btnRaumImportieren = new JButton("Importieren");
-
+		btnRaumImportieren.addActionListener((e) -> btnPressedRaumImportieren());
+		
 		JButton btnRaumExportieren = new JButton("Exportieren");
+		btnRaumExportieren.addActionListener((e) -> btnPressedRaumExportieren());
 
 		raumListModel = new RaumTableModel(raumList);
 		tableRaum = new JTable(raumListModel);
@@ -230,7 +226,7 @@ public class GUI_ListView {
 		scrollPaneRaum.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		JButton btnRaumLöschen = new JButton("Löschen");
-		btnRaumLöschen.addActionListener((e)->btnPressedRaumLöschen());
+		btnRaumLöschen.addActionListener((e) -> btnPressedRaumLöschen());
 		GroupLayout gl_panelRaum = new GroupLayout(panelRaum);
 		gl_panelRaum.setHorizontalGroup(gl_panelRaum.createParallelGroup(Alignment.LEADING).addGroup(gl_panelRaum
 				.createSequentialGroup().addContainerGap()
@@ -259,25 +255,25 @@ public class GUI_ListView {
 		frame.setIconImage(ui_Logo);
 	}
 
-	//Button Hinzufügen
-	private void btnPressedRaumHinzufügen() {
+	// Button Hinzufügen
+	private void btnPressedSchülerhinzufügen() {
 		// TODO
-		
-		addRaumToList(new Raum("Test"));
-	}
-
-	private void btnPressedSchülerhinzufügen() {// TODO
-		// TODO
-		addSchülerToList(new Schueler("Klase", "Vorname", "Nachname", new ArrayList<>()));
+		new GUI_Create_Schueler(this,unternehmenList);
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
-		// TODO
+		// TODO 
 
-		addUnternehmenToList(new Unternehmen(0, "Firma", "Fach", 10, 5, "A"));
+		new GUI_Create_Unternehmen(this, unternehmenList);
 	}
+
+	private void btnPressedRaumHinzufügen() {
+		// TODO Raum Hinzufügen
+		new GUI_Create_Raum(this);
 	
-	//Button die den Index Ermitteln und dann Löschen
+	}
+
+	// Button die den Index Ermitteln und dann Löschen
 	private void btnPressedSchülerLöschen(ActionEvent e) {
 		if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableSchüler.getSelectedRow();
@@ -287,6 +283,7 @@ public class GUI_ListView {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
 	private void btnPressedUnternehmeLöschen() {
 		if (tableUn.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableUn.getSelectedRow();
@@ -296,6 +293,7 @@ public class GUI_ListView {
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
+
 	private void btnPressedRaumLöschen() {
 		if (tableRaum.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableRaum.getSelectedRow();
@@ -306,8 +304,7 @@ public class GUI_ListView {
 		}
 	}
 
-	
-	//Löschen Remover und Refresher
+	// Löschen Remover und Refresher
 	private void removeOnPositionSchüler(int selectedRow) {
 		schülerList.remove(selectedRow);
 		refreshSchüler();
@@ -323,9 +320,9 @@ public class GUI_ListView {
 		refreshRaum();
 	}
 
-	//Import Buttons
+	// Import Buttons
 	private void btnPressedSchülerImportieren() {
-
+		schülerList.clear();
 		List<Schueler> importedStudents = myController.importStudent(this.frame);
 		for (Schueler schüler : importedStudents) {
 			addSchülerToList(schüler);
@@ -333,57 +330,59 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedUnternehmenImportieren() {
-		ArrayList<Unternehmen> unList = new ArrayList<>();
+		unternehmenList.clear();
+		List<Unternehmen> importUntList = myController.importCompany(this.frame);
 
-		for (Unternehmen unternehmen : unList) {
+		for (Unternehmen unternehmen : importUntList) {
 			addUnternehmenToList(unternehmen);
 		}
 	}
 
 	private void btnPressedRaumImportieren() {
-		ArrayList<Raum> importedRaumList = new ArrayList<>();
+		raumList.clear();
+		List<Raum> importedRaumList = myController.importRooms(this.frame);
 		for (Raum raum : importedRaumList) {
 			addRaumToList(raum);
 		}
 	}
 
-	//Export Buttons
+	// Export Buttons
 	private void btnPressedSchülerExportieren() {
 
+		myController.exportStudent(schülerList, this.frame);
 	}
 
 	private void btnPressedUnternehmenExportieren() {
 
+		myController.exportCompany(unternehmenList, this.frame);
 	}
 
 	private void btnPressedRaumExportieren() {
-
+		myController.exportRooms(raumList, this.frame);
 	}
 
-
-	//Methode to add "" to List
-	private void addSchülerToList(Schueler newSchüler) {
+	// Methode to add "" to List
+	protected void addSchülerToList(Schueler newSchüler) {
 
 		schülerList.add(newSchüler);
 
 		refreshSchüler();
 	}
 
-	private void addUnternehmenToList(Unternehmen newUnternehmen) {
+	protected void addUnternehmenToList(Unternehmen newUnternehmen) {
 		unternehmenList.add(newUnternehmen);
 
 		refreshUnternehmen();
 	}
 
-	private void addRaumToList(Raum newRaum) {
+	protected void addRaumToList(Raum newRaum) {
 
 		raumList.add(newRaum);
 
 		refreshRaum();
 	}
 
-	
-	//Refresh Methoden
+	// Refresh Methoden
 	private void refreshSchüler() {
 		TableModel modelSchüler = new StudentTableModel(schülerList);
 		tableSchüler = new JTable(modelSchüler);
@@ -405,7 +404,7 @@ public class GUI_ListView {
 		scrollPaneRaum.setViewportView(tableRaum);
 	}
 
-	//On Close Methode
+	// On Close Methode
 	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
 			List<Raum> raumList) {
 		speichernDerDatenbeimSchließen(schülerList, unternehmenList, raumList);
@@ -413,6 +412,15 @@ public class GUI_ListView {
 
 	private void speichernDerDatenbeimSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
 			List<Raum> raumList) {
+
+		int confirmation = JOptionPane.showConfirmDialog(null, "Möchten Sie die Daten vor dem Schließen speichern?",
+				"Bestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+		if (confirmation == JOptionPane.YES_OPTION) {
+			myController.closeListView(schülerList, raumList, unternehmenList);
+		} else {
+
+		}
 
 	}
 }

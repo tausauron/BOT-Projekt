@@ -7,22 +7,32 @@ import de.bwvaachen.botscheduler.calculate.WunschSlot.Status;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Unternehmen;
 
+/**
+ * Ausprägung von Schülerwünschen für den Belegungsalgorithmus
+ * 
+ * @author Max Tautenhahn
+ */
 public class Wunsch {
 	
 	private Unternehmen veranstaltung;
 	private Map<Typ,WunschSlot> slots;
 	private final int prio;
-	private boolean erfuellt = false;
+	private WunschState status;
+	private int nummer;
 	
-	
-	public Wunsch() {
-		this(null, 0);
+	public Wunsch(int nummer) {
+		initSlotMap();
+		status = WunschState.LEER;
+		this.nummer = nummer;
+		prio = 0;
 	}
 	
-	public Wunsch(Unternehmen veranstaltung, int prio) {
+	public Wunsch(int nummer, Unternehmen veranstaltung, int prio) {
+		this.nummer = nummer;
 		this.veranstaltung = veranstaltung;
 		initSlotMap();
 		this.prio = prio;
+		this.status = WunschState.UNERFUELLT;
 	}
 	
 	private void initSlotMap() {
@@ -56,11 +66,23 @@ public class Wunsch {
 		return prio;
 	}
 
-	public boolean isErfuellt() {
-		return erfuellt;
+	public WunschState getState() {
+		return status;
 	}
 	
-	public void setErfuellt(boolean erfuellt) {
-		this.erfuellt = erfuellt;
+	public int getNummer() {
+		return nummer;
+	}
+
+	private void setNummer(int nummer) {
+		this.nummer = nummer;
+	}
+
+	public void setState(WunschState state) {
+		this.status = state;
+	}
+	
+	public enum WunschState {
+		ERFUELLT, LEER, UNERFUELLT
 	}
 }

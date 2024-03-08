@@ -141,7 +141,7 @@ public class Unternehmen
 	public Map<Typ, Kurse> getKurse() {
 		return kurse;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Unternehmen{" +
@@ -155,5 +155,13 @@ public class Unternehmen
 				", aktiv=" + aktiv +
 				", kurse=" + kurse +
 				'}';
+	}
+	
+	/**
+	 * maximale Anzahl Veranstaltungen erreicht?
+	 * @return
+	 */
+	public boolean freeSlot() {
+		return (kurse.values().size() < maxVeranstaltungen);
 	}
 }

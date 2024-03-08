@@ -15,13 +15,14 @@ import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.SchuelerSlot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
+import execlLoad.ExportFile;
 import execlLoad.ImportFile;
 import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
-class TestKursplaner {
+public class TestExportStudentSchedule {
 
 	private static List<Schueler> schueler;
 	private static List<Unternehmen> unternehmen;
@@ -110,8 +111,12 @@ class TestKursplaner {
 		
 		System.out.println("Score: " + score);
 
+		ExportFile exFile = new ExportFile();
+
+		exFile.exportStudentSchedule(planer.getcSchueler(), "H:\\ExportedData.xlsx");
+		
+		
 		assertNotEquals(score, "0.0 %");
 
 	}
-
 }

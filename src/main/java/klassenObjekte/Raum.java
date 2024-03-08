@@ -1,31 +1,43 @@
 package klassenObjekte;
 
-public class Raum {
+/**
+ * 
+ * @author Martin Albertz
+ * 
+ * 
+ *  TODO Liste mit Zeitslots hinzufuegen
+ */
+public class Raum
+{
+	private String name;
+	private int kapazitaet;
 
-	String name;
-	int Kapazitaet;
 
-	public Raum(String name) {
-		this.name = name;
-		this.Kapazitaet = Kapazitaet;
-	}
-	public Raum(String name, int Kapazitaet ) {
-		this.name = name;
-		this.Kapazitaet = Kapazitaet;
-	}
+	public Raum(String name, int kapazitaet)
+	{
+		// TODO Auto-generated constructor stub
+		setKapazitaet(kapazitaet);
+		setName(name);
 
-	public String getName() {
+    }
+    
+	public String getName()
+	{
 		return name;
 	}
-	public int getKapazitaet() {
-		return Kapazitaet;
-	}
 
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
-	public void setName(int Kapazitaet) {
-		this.Kapazitaet = Kapazitaet;
+	
+	public int getKapazitaet()
+	{
+		return kapazitaet;
 	}
-
+	
+	public void setKapazitaet(int kapazitaet)
+	{
+		this.kapazitaet = kapazitaet;
+	}
 }

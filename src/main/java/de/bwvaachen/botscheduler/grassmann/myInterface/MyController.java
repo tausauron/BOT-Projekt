@@ -8,13 +8,12 @@ import javax.swing.JOptionPane;
 import de.bwvaachen.botscheduler.model.Model;
 import gui.GUI_ListView;
 import gui.GUI_Login;
+import gui.GUI_Main_Start;
 import gui.MyJFileChooser;
 import klassenObjekte.*;
 
 /**
- * 
  * @author Grassmann
- *
  */
 
 public class MyController {
@@ -34,11 +33,12 @@ public class MyController {
 		if (this.activateLogin) {
 			loginGUI = new GUI_Login(this);
 		} else {
+			new GUI_Main_Start(this);
 			this.listView = new GUI_ListView(this);
 		}
 	}
 	
-	private void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
+	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
 		this.saveAllCompanies(companies);
@@ -146,7 +146,12 @@ public class MyController {
 		String path = MyJFileChooser.getPath(frame);
 		myModal.exportCompany(path, companies);
 	}
-
+	
+	public void exportStudentSchedule(JFrame frame) {
+		String path = MyJFileChooser.getPath(frame);
+		myModal.exportSchuelerSchedule(path);
+	}
+	
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}
