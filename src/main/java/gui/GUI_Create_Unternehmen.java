@@ -31,9 +31,14 @@ public class GUI_Create_Unternehmen {
 	private JSpinner spIDNummer;
 	private List<Unternehmen> unternehmenList;
 
+	/**
+	 * 
+	 * @author Wagner_Eri
+	 *
+	 */
 	public GUI_Create_Unternehmen(GUI_ListView gui_ListView, List<Unternehmen> unternehmenList) {
 		this.gui_ListView = gui_ListView;
-		this.unternehmenList=unternehmenList;
+		this.unternehmenList = unternehmenList;
 		initialize();
 
 		cBoxFrZeit.addItem(TypSlotEnum.A);
@@ -51,6 +56,7 @@ public class GUI_Create_Unternehmen {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("removal")
 	private void initialize() {
 		frmUnternehmenHinzufgen = new JFrame();
 
@@ -86,75 +92,83 @@ public class GUI_Create_Unternehmen {
 		spMaxVeran.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 		spMaxTeilnehmer = new JSpinner();
 		spMaxTeilnehmer.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
-		
+
 		JLabel lblNummer = new JLabel("Nummer:");
-		
-		 spIDNummer = new JSpinner();
-		 spIDNummer.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+
+		spIDNummer = new JSpinner();
+		spIDNummer.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
 
 		GroupLayout groupLayout = new GroupLayout(frmUnternehmenHinzufgen.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnAbbrechen)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnHinzufügen))
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING).addGroup(groupLayout
+				.createSequentialGroup().addContainerGap()
+				.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup().addComponent(btnAbbrechen)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnHinzufügen))
 						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(lblWahl2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblWahl1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblNachname, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblVorname, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblKlasse, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-								.addComponent(lblNummer, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(spIDNummer, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-									.addComponent(cBoxFrZeit, Alignment.LEADING, 0, 93, Short.MAX_VALUE)
-									.addComponent(tfieldFachrichtung, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-									.addComponent(tfieldName, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-									.addComponent(spMaxVeran, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-									.addComponent(spMaxTeilnehmer, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)))))
-					.addGap(20))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNummer, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spIDNummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblKlasse, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tfieldName, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblVorname, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tfieldFachrichtung, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblNachname, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spMaxTeilnehmer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblWahl1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(spMaxVeran, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblWahl2, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cBoxFrZeit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnHinzufügen)
-						.addComponent(btnAbbrechen))
-					.addContainerGap())
-		);
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(lblWahl2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblWahl1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblNachname, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblVorname, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblKlasse, Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+														80, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblNummer, GroupLayout.PREFERRED_SIZE, 80,
+												GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+										.addComponent(spIDNummer, GroupLayout.PREFERRED_SIZE, 93,
+												GroupLayout.PREFERRED_SIZE)
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(cBoxFrZeit, Alignment.LEADING, 0, 93, Short.MAX_VALUE)
+												.addComponent(tfieldFachrichtung, Alignment.LEADING,
+														GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+												.addComponent(tfieldName, Alignment.LEADING, GroupLayout.DEFAULT_SIZE,
+														93, Short.MAX_VALUE)
+												.addComponent(spMaxVeran, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+												.addComponent(spMaxTeilnehmer, GroupLayout.DEFAULT_SIZE, 93,
+														Short.MAX_VALUE)))))
+				.addGap(20)));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(Alignment.TRAILING,
+				groupLayout.createSequentialGroup().addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNummer, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(spIDNummer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblKlasse, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(tfieldName, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(
+								groupLayout.createParallelGroup(Alignment.BASELINE)
+										.addComponent(lblVorname, GroupLayout.PREFERRED_SIZE, 32,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(tfieldFachrichtung, GroupLayout.PREFERRED_SIZE, 26,
+												GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNachname, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(spMaxTeilnehmer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblWahl1, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(spMaxVeran, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblWahl2, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+								.addComponent(cBoxFrZeit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+										GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnHinzufügen)
+								.addComponent(btnAbbrechen))
+						.addContainerGap()));
 		frmUnternehmenHinzufgen.getContentPane().setLayout(groupLayout);
 	}
 
@@ -163,15 +177,14 @@ public class GUI_Create_Unternehmen {
 	}
 
 	private void btnpressedHinzufügen() {
-		if (!tfieldName.getText().isEmpty() && !tfieldFachrichtung.getText().isEmpty() ) {
+		if (!tfieldName.getText().isEmpty() && !tfieldFachrichtung.getText().isEmpty()) {
 
-			if(!überPrüfeDopplung()) {
+			if (!überPrüfeDopplung()) {
 				gui_ListView.addUnternehmenToList(new Unternehmen((int) spIDNummer.getValue(), tfieldName.getText(),
-					tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
-					cBoxFrZeit.getSelectedItem().toString()));
-			frmUnternehmenHinzufgen.dispose();
+						tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
+						cBoxFrZeit.getSelectedItem().toString()));
+				frmUnternehmenHinzufgen.dispose();
 			}
-			
 
 		} else {
 			JOptionPane.showMessageDialog(null, "Ein Feld ist nicht ausgefüllt", "Fehler Leeres Feld",
@@ -181,11 +194,11 @@ public class GUI_Create_Unternehmen {
 	}
 
 	private boolean überPrüfeDopplung() {
-		List<Integer> x= new ArrayList<>();
+		List<Integer> x = new ArrayList<>();
 		for (Unternehmen unternehmen : unternehmenList) {
 			x.add(unternehmen.getFirmenID());
 		}
-		if(x.contains(spIDNummer.getValue())) {
+		if (x.contains(spIDNummer.getValue())) {
 			JOptionPane.showMessageDialog(null, "Ein Unternehmen hat die gleiche Nummer", "Doppelte Unternehme Vergabe",
 					JOptionPane.ERROR_MESSAGE);
 			return true;

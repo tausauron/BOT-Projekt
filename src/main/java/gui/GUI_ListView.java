@@ -73,6 +73,15 @@ public class GUI_ListView {
 		initialize();
 		this.frame.setVisible(true);
 	}
+	
+	public GUI_ListView(MyController myController,List<Schueler> listSchüler,List<Unternehmen> listUnternehmen,List<Raum> listRaum) {
+		this.myController = myController;
+		this.schülerList = listSchüler;
+		this.unternehmenList = listUnternehmen;
+		this.raumList = listRaum;
+		initialize();
+		this.frame.setVisible(true);
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -214,7 +223,7 @@ public class GUI_ListView {
 
 		JButton btnRaumImportieren = new JButton("Importieren");
 		btnRaumImportieren.addActionListener((e) -> btnPressedRaumImportieren());
-		
+
 		JButton btnRaumExportieren = new JButton("Exportieren");
 		btnRaumExportieren.addActionListener((e) -> btnPressedRaumExportieren());
 
@@ -263,7 +272,7 @@ public class GUI_ListView {
 
 	private void btnPressedUnternehmenhinzufügen() {
 
-		new GUI_Create_Unternehmen(this,unternehmenList);
+		new GUI_Create_Unternehmen(this, unternehmenList);
 	}
 
 	private void btnPressedRaumHinzufügen() {
