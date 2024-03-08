@@ -20,6 +20,7 @@ public class Kurse
 	private Zeitslot zeitslot;
 	
 	
+
 	public Kurse(ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);

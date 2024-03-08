@@ -64,7 +64,6 @@ public class Model implements ModelInterface{
 			String klasse) {
 		Schueler schuel = new Schueler(klasse, vorname, nachname, wuensche);
 		schueler.add(schuel);
-		
 	}
 
 
@@ -121,7 +120,6 @@ public class Model implements ModelInterface{
 	@Override
 	public List<Schueler> getAllStudents() {
 		return schueler;
-
 	}
 
 	@Override
@@ -201,7 +199,6 @@ public class Model implements ModelInterface{
 		IExport exporter = new ExportFile();
 		exporter.exportStudentSchedule(cSchueler, path);		
 	}
-
 
 	@Override
 	public Boolean checkLogin(String username, String password) {
