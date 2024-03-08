@@ -10,6 +10,11 @@ import klassenObjekte.Kurse;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
+/**
+ * Wrapperklasse un Schueler um Ergebnisse des Belegungsalgorithmus zu speichern
+ * 
+ *  @author Max Tautenhahn
+ */
 public class CalcSchueler {
 	
 	
@@ -31,21 +36,21 @@ public class CalcSchueler {
 		List<String> strWuensche = schueler.getAllWuensche();
 		
 		for(int i = 0; i < strWuensche.size()-1; i++) {
-			wuensche.add(createWunsch(unternehmen, strWuensche.get(i), strWuensche.size()-i));
+			wuensche.add(createWunsch(i + 1, unternehmen, strWuensche.get(i), strWuensche.size()-i));
 		}
 		
-		ausweichWunsch = createWunsch(unternehmen, strWuensche.get(strWuensche.size()-1), 1);
+		ausweichWunsch = createWunsch(strWuensche.size(), unternehmen, strWuensche.get(strWuensche.size()-1), 1);
 	}
 	
-	private Wunsch createWunsch(List<Unternehmen> unternehmen, String strWunsch, int prio) {
+	private Wunsch createWunsch(int nummer, List<Unternehmen> unternehmen, String strWunsch, int prio) {
 		Wunsch retVal = null;		
 
 		Unternehmen unt = findUnternehmen(strWunsch, unternehmen);
 		if(unt != null) {
-			retVal = new Wunsch(unt, prio);
+			retVal = new Wunsch(nummer, unt, prio);
 		}
 		else {
-			retVal = new Wunsch();
+			retVal = new Wunsch(nummer);
 		}	
 		return retVal;	
 	}			
@@ -88,6 +93,10 @@ public class CalcSchueler {
 
 	public List<Wunsch> getWuensche() {
 		return wuensche;
+	}
+	
+	public Wunsch getAusweichWunsch() {
+		return ausweichWunsch;
 	}
 
 

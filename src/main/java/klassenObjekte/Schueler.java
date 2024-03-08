@@ -102,4 +102,15 @@ public class Schueler
 			this.klasse = klasse;
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Schueler{" +
+				"schuelerID=" + schuelerID +
+				", vorname='" + vorname + '\'' +
+				", nachname='" + nachname + '\'' +
+				", wuensche=" + wuensche +
+				", klasse='" + klasse + '\'' +
+				'}';
+	}
 }
