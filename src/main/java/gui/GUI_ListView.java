@@ -255,20 +255,17 @@ public class GUI_ListView {
 
 	// Button Hinzufügen
 	private void btnPressedSchülerhinzufügen() {
-		// TODO
-		new GUI_Create_Schueler(this,unternehmenList);
+
+		new GUI_Create_Schueler(this, unternehmenList);
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
-		// TODO 
 
-		new GUI_Create_Unternehmen(this, unternehmenList);
+		new GUI_Create_Unternehmen(this,unternehmenList);
 	}
 
 	private void btnPressedRaumHinzufügen() {
-		// TODO Raum Hinzufügen
 		new GUI_Create_Raum(this);
-	
 	}
 
 	// Button die den Index Ermitteln und dann Löschen
