@@ -12,7 +12,7 @@ import klassenObjekte.Unternehmen;
  * Der Andere Kurs muss:
  * 1. Dann an einen anderem zeitslot stattfinden.
  * 2. Einem kleineren Raum zugewiesen werden und einfach weniger Teilnehmer nehmen.
- * 3. Man kann schauen, wie viele Personen wircklich in einer veranstaltung sind und die Aufteilung anhand dessen gestalten.
+ * 3. Man kann schauen, wie viele Personen wircklich in einer veranstaltung sind und die Aufteilung anhand dessen gestalten. <--
  * 
  * Es gibt 5 zeitslots
  * Ein Raum hat eine Kapazität
