@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import de.bwvaachen.botscheduler.model.Model;
 import gui.GUI_ListView;
 import gui.GUI_Login;
+import gui.GUI_Main_Start;
 import gui.MyJFileChooser;
 import klassenObjekte.*;
 
@@ -32,6 +33,7 @@ public class MyController {
 		if (this.activateLogin) {
 			loginGUI = new GUI_Login(this);
 		} else {
+			new GUI_Main_Start(this);
 			this.listView = new GUI_ListView(this);
 		}
 	}
