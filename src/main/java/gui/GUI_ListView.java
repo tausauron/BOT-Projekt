@@ -213,8 +213,10 @@ public class GUI_ListView {
 		btnRaumhinzufügen.addActionListener((e) -> btnPressedRaumHinzufügen());
 
 		JButton btnRaumImportieren = new JButton("Importieren");
-
+		btnRaumImportieren.addActionListener((e) -> btnPressedRaumImportieren());
+		
 		JButton btnRaumExportieren = new JButton("Exportieren");
+		btnRaumExportieren.addActionListener((e) -> btnPressedRaumExportieren());
 
 		raumListModel = new RaumTableModel(raumList);
 		tableRaum = new JTable(raumListModel);
@@ -356,7 +358,6 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedRaumExportieren() {
-
 		myController.exportRooms(raumList, this.frame);
 	}
 
