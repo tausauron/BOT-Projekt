@@ -41,7 +41,7 @@ public class MyController {
 			this.listView = new GUI_ListView(this);
 		}
 	}
-	
+
 	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
@@ -62,11 +62,11 @@ public class MyController {
 	public List<Schueler> getAllStudents() {
 		return myModal.getAllStudents();
 	}
-	
+
 	public void saveAllStudents(List<Schueler> Students) {
 		myModal.saveAllStudents(Students);
 	}
-	
+
 	public void createStudent() {
 		System.out.println("createStudent");
 	}
@@ -82,28 +82,37 @@ public class MyController {
 	public List<Schueler> importStudent(JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame);
-			return myModal.importStudent(path);
-		} catch (Exception e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				return myModal.importStudent(path);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 		// return empty list
 		return new ArrayList<Schueler>();
 	}
 
 	public void exportStudent(List<Schueler> students, JFrame frame) {
 		try {
+
 			String path = MyJFileChooser.getPath(frame);
-			myModal.exportStudent(path, students);
-		} catch (Exception e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				myModal.exportStudent(path, students);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 	}
 
 	// Room functions
 	public List<Raum> getAllRooms() {
 		return myModal.getAllRooms();
 	}
-	
+
 	public void saveAllRooms(List<Raum> rooms) {
 		myModal.saveAllRooms(rooms);
 	}
-	
+
 	public void createRoom() {
 		System.out.println("createRoom");
 	}
@@ -115,32 +124,40 @@ public class MyController {
 	public void deleteRoom() {
 		System.out.println("editRoom");
 	}
-	
+
 	public List<Raum> importRooms(JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame);
-			return myModal.importRooms(path);
-		} catch (Exception e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				return myModal.importRooms(path);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 		// return empty list
 		return new ArrayList<Raum>();
 	}
-	
+
 	public void exportRooms(List<Raum> rooms, JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame);
-			myModal.exportRooms(path, rooms);
-		} catch (FileNotFoundException e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				myModal.exportRooms(path, rooms);
+			}
+		} catch (FileNotFoundException e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	// Company functions
 	public List<Unternehmen> getAllCompanies() {
 		return myModal.getAllCompanies();
 	}
-	
+
 	public void saveAllCompanies(List<Unternehmen> companies) {
 		myModal.saveAllCompanies(companies);
 	}
-	
+
 	public void createCompany() {
 		System.out.println("createCompany");
 	}
@@ -156,7 +173,9 @@ public class MyController {
 	public List<Unternehmen> importCompany(JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame);
-			return myModal.importCompany(path);
+			if (!path.equals("")) {
+				return myModal.importCompany(path);
+			}
 		} catch (Exception e) {
 			handleEcxeption(e);
 		}
@@ -167,17 +186,25 @@ public class MyController {
 	public void exportCompany(List<Unternehmen> companies, JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame);
-			myModal.exportCompany(path, companies);
-		} catch (Exception e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				myModal.exportCompany(path, companies);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	public void exportStudentSchedule(JFrame frame) {
 		try {
 			String path = MyJFileChooser.getPath(frame, "Laufzettel.xlsx");
-			myModal.exportSchuelerSchedule(path);
-		} catch (IOException e) { handleEcxeption(e); }
+			if (!path.equals("")) {
+				myModal.exportSchuelerSchedule(path);
+			}
+		} catch (IOException e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}

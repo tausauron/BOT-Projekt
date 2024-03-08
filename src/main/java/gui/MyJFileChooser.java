@@ -24,9 +24,10 @@ public class MyJFileChooser extends JFileChooser {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Excel-Dateien (*.xls, *.xlsx)", "xls", "xlsx"));
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setSelectedFile(new File(filename));
-        fileChooser.showSaveDialog(frame);
         
-        File selectedFile = fileChooser.getSelectedFile();
+        int userSelection = fileChooser.showSaveDialog(frame);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+        	File selectedFile = fileChooser.getSelectedFile();
         if (selectedFile != null) {
         	if(selectedFile.getAbsolutePath().endsWith(".xlsx")) {
         		return selectedFile.getAbsolutePath();	
@@ -36,5 +37,9 @@ public class MyJFileChooser extends JFileChooser {
         } else {
         	throw new FileNotFoundException("Angegebene Datei wurde nicht gefunden");
         }
+        }
+		return "";
+        
+        
 	}
 }
