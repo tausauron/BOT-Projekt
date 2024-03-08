@@ -1,11 +1,9 @@
 package execlLoad;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -14,7 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.SchuelerSlot;
-import de.bwvaachen.botscheduler.calculate.Wunsch;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.*;
 
@@ -60,14 +57,6 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,14 +91,6 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -136,24 +117,33 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) {
+	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) throws FileNotFoundException, IOException {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
 			Sheet sheet = workbook.createSheet("Laufzettel");
 
+/*
+			TODO: create a sheet for each class
+			
+			
+			Set<String> uniqueKlassen = new HashSet<>();
+
+			for (CalcSchueler calcStudent : calcStudents) {
+			    String klasse = calcStudent.getSchueler().getKlasse();
+			    uniqueKlassen.add(klasse);
+			}
+
+			for (String klasse : uniqueKlassen) {
+			    System.out.println(klasse);
+			}
+
+*/
+			
 			int rowNum = 0;
 			for (CalcSchueler calcStudent : calcStudents) {
 				// Klasse
@@ -214,17 +204,6 @@ public class ExportFile implements IExport {
 			
 			// Write the workbook content to the output file
 			workbook.write(fos);
-
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
