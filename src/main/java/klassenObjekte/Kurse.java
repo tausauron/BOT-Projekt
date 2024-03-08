@@ -21,7 +21,7 @@ public class Kurse
 	
 	
 
-	public Kurse(ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(List<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);

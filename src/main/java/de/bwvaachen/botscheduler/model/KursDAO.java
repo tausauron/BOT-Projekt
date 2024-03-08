@@ -47,11 +47,11 @@ public class KursDAO {
 		this.unternehmen = unternehmen;
 	}
 
-	public char getZeitslot() {
+	public String getZeitslot() {
 		return zeitslot;
 	}
 
-	public void setZeitslot(char zeitslot) {
+	public void setZeitslot(String zeitslot) {
 		this.zeitslot = zeitslot;
 	}
 	

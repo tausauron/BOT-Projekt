@@ -8,7 +8,10 @@ import java.util.List;
 
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
+import de.bwvaachen.botscheduler.calculate.Zeitslot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
+import de.bwvaachen.botscheduler.database.DBModel;
+import de.bwvaachen.botscheduler.database.IDatabase;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ExportFile;
 import execlLoad.IExport;
@@ -25,17 +28,18 @@ import klassenObjekte.Unternehmen;
  */
 public class Model implements ModelInterface{
 	
-	List<Schueler> schueler = new ArrayList<>();
-	List<Kurse> kurse = new ArrayList<>();
-	List<Unternehmen> unternehmen = new ArrayList<>();
-	List<Raum> raeume = new ArrayList<>();
-	List<CalcSchueler> cSchueler;
+	private List<Schueler> schueler = new ArrayList<>();
+	private List<Kurse> kurse = new ArrayList<>();
+	private List<Unternehmen> unternehmen = new ArrayList<>();
+	private List<Raum> raeume = new ArrayList<>();
+	private List<CalcSchueler> cSchueler;
+	private IDatabase database;
 
-//	@Override
-//	public Boolean checkLogin(String username, String password) {
-//		// TODO Auto-generated method stub
-//		return true;
-//	}
+	
+	public Model() {
+		loadFromDB();
+	}
+	
 	
 	@Override
 	public String belegeKurse() throws IllegalStateException{
@@ -82,7 +86,7 @@ public class Model implements ModelInterface{
 	@Override
 	public void editStudent(Schueler schueler) {
 		// TODO Auto-generated method stub
-		
+		saveToDB();
 	}
 
 	@Override
@@ -95,6 +99,7 @@ public class Model implements ModelInterface{
 					cSchueler.remove(cSchuel);
 				}
 			}
+			saveToDB();
 		}catch(Exception e){
 			//do nothing
 		}
@@ -103,18 +108,20 @@ public class Model implements ModelInterface{
 	@Override
 	public void editCompany(Unternehmen unternehmen) {
 		// TODO Auto-generated method stub
-		
+		saveToDB();		
 	}
 
 	@Override
 	public void deleteCompany(Unternehmen unternehmen) {
-		this.unternehmen.remove(unternehmen);		
+		this.unternehmen.remove(unternehmen);
+		saveToDB();
 	}
 
 	@Override
 	public List<Schueler> importStudent(String absolutePath) throws IllegalArgumentException{
 		
 		schueler = ImportFile.getChoices(absolutePath);
+		saveToDB();
 		return schueler;
 	}
 
@@ -127,7 +134,7 @@ public class Model implements ModelInterface{
 	@Override
 	public void saveAllStudents(List<Schueler> students) {
 		this.schueler = students;
-		
+		saveToDB();		
 	}
 
 	@Override
@@ -143,12 +150,14 @@ public class Model implements ModelInterface{
 
 	@Override
 	public void saveAllRooms(List<Raum> rooms) {
-		this.raeume = rooms;		
+		this.raeume = rooms;
+		saveToDB();
 	}
 
 	@Override
 	public void createRoom(String name) {
-		this.raeume.add(new Raum(name, 20));		
+		this.raeume.add(new Raum(name, 20));
+		saveToDB();
 	}
 
 	@Override
@@ -159,11 +168,13 @@ public class Model implements ModelInterface{
 	@Override
 	public void deleteRoom(Raum room) {
 		this.raeume.remove(room);
+		saveToDB();
 	}
 
 	@Override
 	public List<Raum> importRooms(String path) throws IllegalArgumentException{
 		this.raeume = ImportFile.getRoom(path);
+		saveToDB();
 		return raeume;
 	}
 
@@ -180,12 +191,14 @@ public class Model implements ModelInterface{
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) {
-		this.unternehmen = companies;		
+		this.unternehmen = companies;
+		saveToDB();
 	}
 
 	@Override
 	public List<Unternehmen> importCompany(String absolutePath) throws IllegalArgumentException{
 		this.unternehmen = ImportFile.getCompany(absolutePath);
+		saveToDB();
 		return unternehmen;
 	}
 
@@ -218,4 +231,102 @@ public class Model implements ModelInterface{
 		}
 		return false;
 	}
+	
+	
+	private void saveToDB() {		
+		database.saveState(raeume, schueler, createUnternehmenDAOs(), createKursDAOs());
+	}
+	
+	
+	private List<UnternehmenDAO> createUnternehmenDAOs(){
+		List<UnternehmenDAO> retVal = new ArrayList<>();
+		
+		for(Unternehmen unt : unternehmen) {
+			retVal.add(DAOFactory.createUnternehmenDAO(unt));
+		}		
+		return retVal;
+	}
+	
+	
+	private List<KursDAO> createKursDAOs(){
+		List<KursDAO> retVal = new ArrayList<>();
+		
+		for(Kurse kurs : kurse) {
+			retVal.add(DAOFactory.createKursDAO(kurs));
+		}
+		return retVal;
+	}
+	
+	private void loadFromDB() {
+		
+		schueler = database.loadSchueler();
+		raeume = database.loadRooms();
+		
+		unternehmen = new ArrayList<>();
+		
+		for(UnternehmenDAO untDAO : database.loadUnternehmen()) {
+			unternehmen.add(new Unternehmen(untDAO.getFirmenID(),
+											untDAO.getUnternehmen(),
+											untDAO.getFachrichtung(),
+											untDAO.getMaxTeilnehmer(),
+											untDAO.getMaxVeranstaltungen(),
+											untDAO.getFruehsterZeitslot()));
+		}		
+		
+		cSchueler = new ArrayList<>();
+		
+		for(Schueler schuel : schueler) {
+			cSchueler.add(new CalcSchueler(schuel, unternehmen));
+		}
+		
+		kurse = new ArrayList<>();
+		
+		for(KursDAO kursDAO : database.loadKurse()) {
+			List<CalcSchueler> teilnehmer = new ArrayList<>();
+			
+
+			
+			for(Schueler schuel : kursDAO.getKursTeilnehmer()) {
+				teilnehmer.add(findCalcSchueler(schuel));
+			}
+			
+			Kurse kurs = new Kurse(teilnehmer, findUnternehmen(kursDAO.getUnternehmen().getFirmenID()), 
+									new Zeitslot(Typ.valueOf(kursDAO.getZeitslot())));
+			kurse.add(kurs);
+			
+			for(CalcSchueler cSchuel : kurs.getKursTeilnehmer()) {
+				cSchuel.getSlotByType(kurs.getZeitslot().getTyp()).setKurs(kurs);
+			}
+			
+			kurs.getUnternehmen().getKurse().put(kurs.getZeitslot().getTyp(), kurs);
+		}
+		
+	}
+	
+	
+	private CalcSchueler findCalcSchueler(Schueler schuel) {
+		CalcSchueler retVal = null;
+		
+		for(CalcSchueler cSchuel : cSchueler) {
+			if(schuel.equals(cSchuel.getSchueler())) {
+				retVal = cSchuel;
+				break;
+			}
+		}		
+		return retVal;
+	}
+	
+	private Unternehmen findUnternehmen(int id){
+		Unternehmen retVal = null;
+		
+		for(Unternehmen unt : unternehmen) {
+			if(unt.getFirmenID() == id) {
+				retVal = unt;
+				break;
+			}
+		}		
+		return retVal;
+	}
+		
+	
 }
