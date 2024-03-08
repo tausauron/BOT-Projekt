@@ -146,6 +146,21 @@ public class Unternehmen
 		return kurse;
 	}
 	
+	@Override
+	public String toString() {
+		return "Unternehmen{" +
+				"firmenID=" + firmenID +
+				", unternehmen='" + unternehmen + '\'' +
+				", fachrichtung='" + fachrichtung + '\'' +
+				", maxTeilnehmer=" + maxTeilnehmer +
+				", maxVeranstaltungen=" + maxVeranstaltungen +
+				", fruehsterZeitslot='" + fruehsterZeitslot + '\'' +
+				", gewichtung=" + gewichtung +
+				", aktiv=" + aktiv +
+				", kurse=" + kurse +
+				'}';
+	}
+	
 	/**
 	 * maximale Anzahl Veranstaltungen erreicht?
 	 * @return

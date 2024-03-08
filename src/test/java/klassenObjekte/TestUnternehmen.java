@@ -22,13 +22,13 @@ class TestUnternehmen {
 	
 	@Test
 	void testFreeSlot(){
-		unt.getKurse().put(Typ.A, new Kurse(1, new ArrayList<>(), unt, new Zeitslot(Typ.A)));
+		unt.getKurse().put(Typ.A, new Kurse(new ArrayList<>(), unt, new Zeitslot(Typ.A)));
 		System.out.println(unt.freeSlot());	
 		System.out.println(unt.getKurse().values().size());
 		assertEquals(unt.freeSlot(), true);	
 
-		unt.getKurse().put(Typ.B, new Kurse(1, new ArrayList<>(), unt, new Zeitslot(Typ.B)));
-		unt.getKurse().put(Typ.C, new Kurse(1, new ArrayList<>(), unt, new Zeitslot(Typ.C)));
+		unt.getKurse().put(Typ.B, new Kurse(new ArrayList<>(), unt, new Zeitslot(Typ.B)));
+		unt.getKurse().put(Typ.C, new Kurse(new ArrayList<>(), unt, new Zeitslot(Typ.C)));
 		System.out.println(unt.getKurse().values().size());
 
 		System.out.println(unt.freeSlot());

@@ -1,6 +1,10 @@
 package de.bwvaachen.botscheduler.calculate;
 
-import klassenObjekte.Kurse;
+/**
+ * Erweiterung von Zeitslot um schülerspezifische Daten
+ * 
+ * @author Max Tautenhahn
+ */
 
 public class SchuelerSlot extends Zeitslot{
 	

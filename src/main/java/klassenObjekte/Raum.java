@@ -1,7 +1,5 @@
 package klassenObjekte;
 
-
-
 /**
  * 
  * @author Martin Albertz
@@ -21,7 +19,7 @@ public class Raum
 		setKapazitaet(kapazitaet);
 		setName(name);
 
-  }
+    }
     
 	public String getName()
 	{
@@ -32,14 +30,14 @@ public class Raum
 	{
 		this.name = name;
 	}
+	
 	public int getKapazitaet()
 	{
 		return kapazitaet;
 	}
+	
 	public void setKapazitaet(int kapazitaet)
 	{
 		this.kapazitaet = kapazitaet;
 	}
-
-
 }
