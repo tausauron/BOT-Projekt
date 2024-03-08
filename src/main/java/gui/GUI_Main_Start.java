@@ -11,6 +11,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class GUI_Main_Start {
 
@@ -33,18 +34,27 @@ public class GUI_Main_Start {
 	 */
 	private void initialize() {
 		frmTitelDesProgramms = new JFrame();
-		frmTitelDesProgramms.setTitle("Titel des Programms");
-		frmTitelDesProgramms.setBounds(100, 100, 222, 300);
+		frmTitelDesProgramms.setTitle("BOT");
+		frmTitelDesProgramms.setBounds(100, 100, 222, 270);
 		frmTitelDesProgramms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btngenLösung = new JButton("Generiere");
 		btngenLösung.addActionListener((e)->btnPressedgenLösung());
+		
+		JButton btnBearbeiten = new JButton("Listen Bearbeiten");
+		btnBearbeiten.addActionListener((e)->öffneListView());
+		
+		JButton btnDatenLschen = new JButton("Daten löschen");
+		btnDatenLschen.addActionListener((e)->LöscheDateninDatenBank());
 		GroupLayout groupLayout = new GroupLayout(frmTitelDesProgramms.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+						.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnDatenLschen, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -52,12 +62,26 @@ public class GUI_Main_Start {
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(btngenLösung, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(191, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnDatenLschen, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(51, Short.MAX_VALUE))
 		);
 		frmTitelDesProgramms.getContentPane().setLayout(groupLayout);
 	}
 
+	private void öffneListView() {
+		//TODO
+	}
+
+	private void LöscheDateninDatenBank() {
+		myController.deleteStudent();
+		myController.deleteCompany();
+		myController.deleteCompany();
+	}
+
 	private void btnPressedgenLösung() {
-		
+		myController.exportStudentSchedule(frmTitelDesProgramms);
 	}
 }
