@@ -125,7 +125,7 @@ public class ImportFile {
 
            //Unternehemen-Format :Nr. 	Unternehmen	Fachrichtung	Max. Teilnehmer	Max. Veranstaltungen	Frühester Zeitpunkt
         try {
-            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Nr. ");
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Nr.");
             boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Unternehmen");
             boolean isFachrichtungCorrect = headerRow.getCell(2).getStringCellValue().equalsIgnoreCase("Fachrichtung");
             boolean isMaxTeilnehmerCorrect = headerRow.getCell(3).getStringCellValue().equalsIgnoreCase("Max. Teilnehmer");
