@@ -5,6 +5,7 @@ package de.bwvaachen.botscheduler.calculate;
  * 
  * @author Max Tautenhahn
  */
+
 public class SchuelerSlot extends Zeitslot{
 	
 	private Wunsch erfuellterWunsch;
