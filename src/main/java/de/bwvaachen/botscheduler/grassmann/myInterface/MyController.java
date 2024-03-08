@@ -37,9 +37,31 @@ public class MyController {
 		if (this.activateLogin) {
 			loginGUI = new GUI_Login(this);
 		} else {
-			this.mainStart = new GUI_Main_Start(this);
+
+			startMainGUI();
+		}
+	}
+
+	public void startListView() {
+		if (datenBankDatenExist()) {
+			this.listView=new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
+		} else {
 			this.listView = new GUI_ListView(this);
 		}
+	}
+
+	public void startMainGUI() {
+		if (datenBankDatenExist()) {
+			this.mainStart = new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
+		} else {
+			this.mainStart = new GUI_Main_Start(this);
+		}
+
+	}
+
+	private boolean datenBankDatenExist() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
@@ -51,7 +73,7 @@ public class MyController {
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			this.listView = new GUI_ListView(this);
+			startListView();
 		} else {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}

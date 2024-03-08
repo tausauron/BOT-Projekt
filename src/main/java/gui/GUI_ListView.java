@@ -102,7 +102,7 @@ public class GUI_ListView {
 		frame.setTitle("BOT");
 
 		frame.setBounds(100, 100, 752, 506);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -424,8 +424,9 @@ public class GUI_ListView {
 
 		if (confirmation == JOptionPane.YES_OPTION) {
 			myController.closeListView(schülerList, raumList, unternehmenList);
+			myController.startMainGUI();
 		} else {
-
+			myController.startMainGUI();
 		}
 
 	}
