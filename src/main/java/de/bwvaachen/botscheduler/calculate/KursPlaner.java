@@ -118,8 +118,8 @@ public class KursPlaner {
 					}
 					else {
 						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A);
-						if(typ != null) {
-							kurs = new Kurse(null, new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
+						if(typ != null) {		
+							kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
 							kurse.add(kurs);
 							wunsch.getVeranstaltung().getKurse().put(kurs.getZeitslot().getTyp(), kurs);
 							schuel.bookCourse(kurs, wunsch);

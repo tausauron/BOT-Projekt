@@ -10,6 +10,11 @@ import klassenObjekte.Kurse;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
+/**
+ * Wrapperklasse un Schueler um Ergebnisse des Belegungsalgorithmus zu speichern
+ * 
+ *  @author Max Tautenhahn
+ */
 public class CalcSchueler {
 	
 	
@@ -45,7 +50,7 @@ public class CalcSchueler {
 			retVal = new Wunsch(nummer, unt, prio);
 		}
 		else {
-			retVal = new Wunsch(nummer );
+			retVal = new Wunsch(nummer);
 		}	
 		return retVal;	
 	}			
@@ -88,6 +93,10 @@ public class CalcSchueler {
 
 	public List<Wunsch> getWuensche() {
 		return wuensche;
+	}
+	
+	public Wunsch getAusweichWunsch() {
+		return ausweichWunsch;
 	}
 
 

@@ -1,5 +1,11 @@
 package de.bwvaachen.botscheduler.calculate;
 
+/**
+ * Erweiterung von Zeitslot um schülerspezifische Daten
+ * 
+ * @author Max Tautenhahn
+ */
+
 public class SchuelerSlot extends Zeitslot{
 	
 	private Wunsch erfuellterWunsch;

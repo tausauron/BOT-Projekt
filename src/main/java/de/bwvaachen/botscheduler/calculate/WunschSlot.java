@@ -1,5 +1,10 @@
 package de.bwvaachen.botscheduler.calculate;
 
+/**
+ * Erweiterung von Zeitslot um Wunschspezifische Daten
+ * 
+ * @author Max Tautenhahn
+ */
 public class WunschSlot extends Zeitslot{
 	
 	private Status status;

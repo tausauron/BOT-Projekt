@@ -19,7 +19,7 @@ public class Raum
 		setKapazitaet(kapazitaet);
 		setName(name);
 
-  }
+    }
     
 	public String getName()
 	{
@@ -30,21 +30,14 @@ public class Raum
 	{
 		this.name = name;
 	}
+	
 	public int getKapazitaet()
 	{
 		return kapazitaet;
 	}
+	
 	public void setKapazitaet(int kapazitaet)
 	{
 		this.kapazitaet = kapazitaet;
-	}
-
-
-	public int getKapazität() {
-		return kapazitaet;
-	}
-
-	public void setKapazität(int kapazität) {
-		this.kapazitaet = kapazität;
 	}
 }

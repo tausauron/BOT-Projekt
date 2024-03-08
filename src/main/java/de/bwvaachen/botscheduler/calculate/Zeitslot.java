@@ -2,6 +2,11 @@ package de.bwvaachen.botscheduler.calculate;
 
 import klassenObjekte.Kurse;
 
+/**
+ * Beschreibung von Zeitslots für den Belegungsalgorithmus
+ * 
+ * @author Max Tautenhahn
+ */
 public class Zeitslot {
 	
 	private final Typ typ;
