@@ -112,12 +112,8 @@ public class TestExportStudentSchedule {
 		System.out.println("Score: " + score);
 
 		ExportFile exFile = new ExportFile();
-<<<<<<< HEAD
+
 		exFile.exportStudentSchedule(planer.getcSchueler(), "H:\\ExportedData.xlsx");
-=======
-		exFile.exportStudentSchedule(planer.getcSchueler(), "./target/ExportedData.xlsx");
->>>>>>> refs/heads/Sprint2
-		
 		
 		
 		assertNotEquals(score, "0.0 %");

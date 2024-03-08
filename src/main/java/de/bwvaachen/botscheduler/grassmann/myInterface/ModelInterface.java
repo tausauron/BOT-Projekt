@@ -53,15 +53,7 @@ public interface ModelInterface {
 	//Export
 	public void exportSchuelerSchedule(String path);
 	
-	//Scheduling Algorithm
-	public String belegeKurse() throws IllegalStateException;
+
 	
-	//Export
-	public void exportSchuelerSchedule(String path);
-	
-	//Scheduling Algorithm
-	public String belegeKurse() throws IllegalStateException;
-	
-	//Export
-	public void exportSchuelerSchedule(String path);
+
 }
