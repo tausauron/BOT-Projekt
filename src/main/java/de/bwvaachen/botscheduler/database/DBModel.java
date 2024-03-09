@@ -17,9 +17,10 @@ public class DBModel implements IDatabase {
 
 
     public static void main(String[] args) throws Exception {
-        DBModel db = new DBModel();
-        db.createDbModel();
+        DBModel dbModel = new DBModel();
 
+        dbModel.createDbModel();
+        System.out.println(dbModel.exitsTable("Schueler"));
 
     }
 
@@ -38,8 +39,10 @@ public class DBModel implements IDatabase {
 
         //********** Define SQL-Statements **********
 
+        String sqlDropTable =
+                "DROP TABLE IF EXISTS KursTeilnehmer, Kurs, Raum, Unternehmen, Schueler, Zeitslot;" ;
+
         String sqlCreateTblSchueler =
-                "DROP TABLE IF EXISTS Schueler;" +
                 "CREATE TABLE Schueler (" +
                 "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                 "    nachname varchar(50)," +
@@ -54,21 +57,18 @@ public class DBModel implements IDatabase {
                 ");";
 
         String sqlCreateTblUnternehmen =
-                "DROP TABLE IF EXISTS Unternehmen;" +
                 "CREATE TABLE Unternehmen (" +
                 "    firmenID int NOT NULL PRIMARY KEY," +
                 "    unternehmenName varchar(50)," +
                 "    fachrichtung varchar(200)," +
                 "    maxTeilnehmer int," +
                 "    maxVeranstaltungen int," +
-                "    fruehsterZeitSlot varchar(1) NOT NULL," +
+                "    fruehsterZeitSlot varchar(1)," +
                 "    gewichtung double," + // double als datentyp näher anschauen was notwending
                 "    aktiv boolean" +
-                "    FOREIGN KEY (fruehsterZeitSlot) REFERENCES Zeitslot(zeitslotChar)" +
                 ");";
 
         String sqlCreateTblRaum =
-                "DROP TABLE IF EXISTS Raum;" +
                 "CREATE TABLE Raum (" +
                 "    raumID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                 "    name varchar(50)," +
@@ -76,30 +76,27 @@ public class DBModel implements IDatabase {
                 ");";
 
         String sqlCreateTblKurs =
-                "DROP TABLE IF EXISTS Kurs;" +
                         "CREATE TABLE Kurs (" +
                         "kursID int NOT NULL PRIMARY KEY, " +
                         "raumID int NOT NULL, " +
                         "firmenID int NOT NULL," +
                         "fruehsterZeitslot varchar(1) NOT NULL," +
-                        "FOREIGN KEY fruehsterZeitslot REFERENCES Zeitslot(zeitslotChar)," +
-                        "FOREIGN KEY firmenID REFERENCES Unternehmen(firmenID)," +
-                        "FOREIGN KEY raum REFERENCES Raum(raumID)" +
+                        "FOREIGN KEY (fruehsterZeitslot) REFERENCES Zeitslot(zeitslotChar)," +
+                        "FOREIGN KEY (firmenID) REFERENCES Unternehmen(firmenID)," +
+                        "FOREIGN KEY (raumID) REFERENCES Raum(raumID)" +
                         ");";
 
         String sqlCreateTblKursTeilnehmer =
-                "DROP TABLE IF EXISTS KursTeilnehmer;" +
                         "CREATE TABLE KursTeilnehmer (" +
                         "kursID int NOT NULL, " +
                         "schuelerID int NOT NULL," +
-                        "FOREIGN KEY kursID REFERENCES Kurs(kursID)," +
-                        "FOREIGN KEY schuelerID REFERENCES Schueler(schuelerID)," +
+                        "FOREIGN KEY (kursID) REFERENCES Kurs(kursID)," +
+                        "FOREIGN KEY (schuelerID) REFERENCES Schueler(schuelerID)," +
                         "PRIMARY KEY (kursID, schuelerID)" +
                         ");";
 
         String sqlCreateTblZeitslot =
-                "DROP TABLE IF EXISTS Zeitslot;" +
-                        "CREATE TABLE Zeitslot (" +
+                        "CREATE TABLE IF NOT EXISTS Zeitslot (" +
                         "zeitslotChar varchar(1) NOT NULL PRIMARY KEY, " +
                         "zeitStart DATETIME," +
                         "zeitEnde DATETIME" +
@@ -108,6 +105,13 @@ public class DBModel implements IDatabase {
 
 
         //********** Execute Statements **********
+
+        Statement deletTabel = connection().createStatement();
+        deletTabel.executeUpdate(sqlDropTable);
+
+        // Statement for creating Zeitslot Table
+        Statement zeitslotTblStmnt = connection().createStatement();
+        zeitslotTblStmnt.executeUpdate(sqlCreateTblZeitslot);
 
         // Statement for creating Schuler Table
         Statement schuelerTblStmnt = connection().createStatement();
@@ -129,9 +133,8 @@ public class DBModel implements IDatabase {
         Statement kursTeilnehmerTblStmnt = connection().createStatement();
         kursTeilnehmerTblStmnt.executeUpdate(sqlCreateTblKursTeilnehmer);
 
-        // Statement for creating Zeitslot Table
-        Statement zeitslotTblStmnt = connection().createStatement();
-        zeitslotTblStmnt.executeUpdate(sqlCreateTblZeitslot);
+
+
 
         connection().close();
     }
@@ -141,123 +144,151 @@ public class DBModel implements IDatabase {
 
     // Schueler
     public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
-        connection();
-        for (Schueler schuel : schuelerList){
-            String sqlInsert = "INSERT INTO Schueler VALUES ('"+
-                    schuel.getSchuelerID() +"', " +
-                    "'"+ schuel.getNachname() + "', " +
-                    "'"+ schuel.getVorname() +"', " +
-                    "'"+ schuel.getAllWuensche().get(0) +"', " +
-                    "'"+ schuel.getAllWuensche().get(1) +"', " +
-                    "'"+ schuel.getAllWuensche().get(2) +"', " +
-                    "'"+ schuel.getAllWuensche().get(3) +"', " +
-                    "'"+ schuel.getAllWuensche().get(4) +"', " +
-                    "'"+ schuel.getAllWuensche().get(5) +"', " +
-                    "'"+ schuel.getKlasse() +"');";
+        if (schuelerList != null) {
+            connection();
+            for (Schueler schuel : schuelerList) {
+                String sqlInsert = "INSERT INTO Schueler VALUES ('" +
+                        schuel.getSchuelerID() + "', " +
+                        "'" + schuel.getNachname() + "', " +
+                        "'" + schuel.getVorname() + "', " +
+                        "'" + schuel.getAllWuensche().get(0) + "', " +
+                        "'" + schuel.getAllWuensche().get(1) + "', " +
+                        "'" + schuel.getAllWuensche().get(2) + "', " +
+                        "'" + schuel.getAllWuensche().get(3) + "', " +
+                        "'" + schuel.getAllWuensche().get(4) + "', " +
+                        "'" + schuel.getAllWuensche().get(5) + "', " +
+                        "'" + schuel.getKlasse() + "');";
 
-            String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
+                String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
 
 
-            Statement statement = connection().createStatement();
-            statement.executeUpdate(sqlInsert);
-            Statement statementGetSchlr = connection().createStatement();
-            ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
+                Statement statement = connection().createStatement();
+                statement.executeUpdate(sqlInsert);
+                Statement statementGetSchlr = connection().createStatement();
+                ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
 
-            schuel.setSchuelerID(rsSet.getInt("schuelerID"));
+                schuel.setSchuelerID(rsSet.getInt("schuelerID"));
 
+            }
+            connection().close();
         }
+    }
+
+    private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
+        boolean res = false;
+        connection();
+
+        String existsTbl = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+        Statement exitsTblstmt = connection().createStatement();
+        ResultSet resTblExists = exitsTblstmt.executeQuery(existsTbl);
+
+        while (resTblExists.next()){
+            if (tableName.equalsIgnoreCase(resTblExists.getString("TABLE_NAME"))){
+                res = true;
+            }
+        }
+
         connection().close();
+
+        return res;
     }
 
     @Override
     public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
         connection();
+
         List<Schueler> schuelerList = new ArrayList<Schueler>();
-        int schulerID;
-        String vorname, nachname, klasse;
-        List<String> wuensche = new ArrayList<String>();
+        if (exitsTable("Schueler")) {
+            int schulerID;
+            String vorname, nachname, klasse;
+            List<String> wuensche = new ArrayList<String>();
 
-        String schulerList = "SELECT * FROM Schueler;";
+            String schulerList = "SELECT * FROM Schueler;";
 
-        Statement statement = connection().createStatement();
-        ResultSet resultSet = statement.executeQuery(schulerList);
+            Statement statement = connection().createStatement();
+            ResultSet resultSet = statement.executeQuery(schulerList);
 
-        while (resultSet.next()){
-            schulerID = resultSet.getInt("schuelerID");
-            vorname = resultSet.getString("vorname");
-            nachname = resultSet.getString("nachname");
-            klasse = resultSet.getString("klasse");
-            for (int i = 0; i < 5; i++){
-                wuensche.add(i, resultSet.getString("wunsch" + i));
+            while (resultSet.next()) {
+                schulerID = resultSet.getInt("schuelerID");
+                vorname = resultSet.getString("vorname");
+                nachname = resultSet.getString("nachname");
+                klasse = resultSet.getString("klasse");
+                for (int i = 0; i < 5; i++) {
+                    wuensche.add(i, resultSet.getString("wunsch" + i));
+                }
+
+                Schueler schueler = new Schueler(klasse, vorname, nachname, wuensche);
+                schueler.setSchuelerID(schulerID);
+
+                schuelerList.add(schueler);
             }
-
-            Schueler schueler = new Schueler(klasse, vorname, nachname, wuensche);
-            schueler.setSchuelerID(schulerID);
-
-            schuelerList.add(schueler);
         }
-
 
         connection().close();
 
         return schuelerList;
+
     }
 
 
     // Unternehmen
     public void setUnternehmenData(List<Unternehmen> unternehmenList) throws SQLException, ClassNotFoundException {
-        connection();
-        for (int i = 0; i < unternehmenList.size(); i++){
-            String sqlInsert = "INSERT INTO Unternehmen VALUES ('"+
-                    unternehmenList.get(i).getFirmenID() +"', " +
-                    "'"+ unternehmenList.get(i).getUnternehmen() + "', " +
-                    "'"+ unternehmenList.get(i).getFachrichtung() +"', " +
-                    "'"+ unternehmenList.get(i).getMaxTeilnehmer() +"', " +
-                    "'"+ unternehmenList.get(i).getMaxVeranstaltungen() +"', " +
-                    "'"+ unternehmenList.get(i).getFruehesterZeitslot() +"', " +
-                    "'"+ unternehmenList.get(i).getGewichtung() +"', " +
-                    "'"+ unternehmenList.get(i).isAktiv() +"', " +
-                    "'"+ "Kurse kommt noch" +"');";
+        if (unternehmenList != null) {
+            connection();
+            for (int i = 0; i < unternehmenList.size(); i++) {
+                String sqlInsert = "INSERT INTO Unternehmen VALUES ('" +
+                        unternehmenList.get(i).getFirmenID() + "', " +
+                        "'" + unternehmenList.get(i).getUnternehmen() + "', " +
+                        "'" + unternehmenList.get(i).getFachrichtung() + "', " +
+                        "'" + unternehmenList.get(i).getMaxTeilnehmer() + "', " +
+                        "'" + unternehmenList.get(i).getMaxVeranstaltungen() + "', " +
+                        "'" + unternehmenList.get(i).getFruehesterZeitslot() + "', " +
+                        "'" + unternehmenList.get(i).getGewichtung() + "', " +
+                        "'" + unternehmenList.get(i).isAktiv() + "', " +
+                        "'" + "Kurse kommt noch" + "');";
 
-            Statement statement = connection().createStatement();
-            statement.executeUpdate(sqlInsert);
+                Statement statement = connection().createStatement();
+                statement.executeUpdate(sqlInsert);
 
+            }
+            connection().close();
         }
-        connection().close();
     }
 
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         connection();
         List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
-        int firmenID, maxVeranstaltungen, maxTeilnehmer;
-        String fruehsterZeitslot, unternehmenName, fachrichtung;
-        double gewichtung;
-        boolean aktiv;
 
-        String unternehmenListe = "SELECT * FROM Unternehmen;";
+        if (exitsTable("Unternehmen")) {
+            int firmenID, maxVeranstaltungen, maxTeilnehmer;
+            String fruehsterZeitslot, unternehmenName, fachrichtung;
+            double gewichtung;
+            boolean aktiv;
 
-        Statement statement = connection().createStatement();
-        ResultSet resultSet = statement.executeQuery(unternehmenListe);
+            String unternehmenListe = "SELECT * FROM Unternehmen;";
 
-        while (resultSet.next()){
-            firmenID = resultSet.getInt("firmenID");
-            maxTeilnehmer = resultSet.getInt("maxTeilnehmer");
-            maxVeranstaltungen = resultSet.getInt("maxVeranstaltungen");
-            unternehmenName = resultSet.getString("unternehmenName");
-            fachrichtung = resultSet.getString("fachrichtung");
-            fruehsterZeitslot = resultSet.getString("fruehsterZeitSlot");
-            gewichtung = resultSet.getDouble("gewichtung");
-            aktiv = resultSet.getBoolean("aktiv");
+            Statement statement = connection().createStatement();
+            ResultSet resultSet = statement.executeQuery(unternehmenListe);
+
+            while (resultSet.next()) {
+                firmenID = resultSet.getInt("firmenID");
+                maxTeilnehmer = resultSet.getInt("maxTeilnehmer");
+                maxVeranstaltungen = resultSet.getInt("maxVeranstaltungen");
+                unternehmenName = resultSet.getString("unternehmenName");
+                fachrichtung = resultSet.getString("fachrichtung");
+                fruehsterZeitslot = resultSet.getString("fruehsterZeitSlot");
+                gewichtung = resultSet.getDouble("gewichtung");
+                aktiv = resultSet.getBoolean("aktiv");
 
 
-            UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
-            unternehmen.setAktiv(aktiv);
-            unternehmen.setGewichtung(gewichtung);
+                UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
+                unternehmen.setAktiv(aktiv);
+                unternehmen.setGewichtung(gewichtung);
 
-            unternehmenList.add(unternehmen);
+                unternehmenList.add(unternehmen);
+            }
         }
-
 
         connection().close();
 
@@ -265,59 +296,62 @@ public class DBModel implements IDatabase {
     }
 
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
-        connection();
+        if (kurse != null) {
+            connection();
+            for (KursDAO kurseIn : kurse) {
+                String sqlInsert = "INSERT INTO Kurse VALUES (" +
+                        "'" + kurseIn.getRaum().getRaumID() + "', " +
+                        "'" + kurseIn.getUnternehmen().getFirmenID() + "', " +
+                        "'" + kurseIn.getZeitslot() + "');";
+                Statement statement = connection().createStatement();
+                statement.executeUpdate(sqlInsert);
 
-        for (KursDAO kurseIn : kurse){
-            String sqlInsert = "INSERT INTO Kurse VALUES (" +
-                    "'"+ kurseIn.getRaum().getRaumID() +"', " +
-                    "'"+ kurseIn.getUnternehmen().getFirmenID() + "', " +
-                    "'"+ kurseIn.getZeitslot() + "');";
-            Statement statement = connection().createStatement();
-            statement.executeUpdate(sqlInsert);
+                String sql_getKursID = "SELECT kursID FROM Kurs;";
+                Statement stmt_getKursID = connection().createStatement();
+                ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
+                kurseIn.setID(result.getInt("kursID"));
 
-            String sql_getKursID = "SELECT kursID FROM Kurs;";
-            Statement stmt_getKursID = connection().createStatement();
-            ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
-            kurseIn.setID(result.getInt("kursID"));
+                for (Schueler schlr : kurseIn.getKursTeilnehmer()) {
 
-            for (Schueler schlr:kurseIn.getKursTeilnehmer()) {
+                    String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
+                            "'" + schlr.getSchuelerID() + "'" +
+                            "'" + kurseIn.getID() + "');";
 
-                String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
-                        "'" + schlr.getSchuelerID() + "'" +
-                        "'" + kurseIn.getID() + "');";
-
-                Statement statementKursTeilnehmer = connection().createStatement();
-                statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
+                    Statement statementKursTeilnehmer = connection().createStatement();
+                    statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
+                }
             }
+            connection().close();
         }
-        connection().close();
     }
 
     @Override
     public List<KursDAO> loadKurse() throws SQLException, ClassNotFoundException {
         connection();
         List<KursDAO> kursDAOList = new ArrayList<KursDAO>();
-        Raum raum;
-        List<Schueler> kursTeilnehmer;
-        UnternehmenDAO unternehmen;
-        String zeitslot;
 
-        String sql_kursList = "SELECT * FROM Kurs;";
-        String sql_kursTeilnehmerList = "SELECT Schueler.schuelerID, Schueler.vorname, Schueler.nachname, Schueler.klasse, " +
-                "Schueler.wunsch0, Schueler.wunsch1, Schueler.wunsch2, Schueler.wunsch3, Schueler.wunsch4, Schueler.wunsch5" +
-                "FROM KursTeilnehmer" +
-                "RIGHT JOIN Schueler ON kursTeilnehmer.schuelerID = Schueler.schuelerID" +
-                "LEFT JOIN Kurs ON kursTeilnehmer.kursID = Kurs.kursID;";
+        if (exitsTable("Kurse")) {
+            Raum raum;
+            List<Schueler> kursTeilnehmer;
+            UnternehmenDAO unternehmen;
+            String zeitslot;
 
-        Statement statementKurs = connection().createStatement();
-        ResultSet resultSetKurs = statementKurs.executeQuery(sql_kursList);
-        Statement statementKursTeil = connection().createStatement();
-        ResultSet resultSetKursTeilnehmer = statementKursTeil.executeQuery(sql_kursTeilnehmerList);
+            String sql_kursList = "SELECT * FROM Kurs;";
+            String sql_kursTeilnehmerList = "SELECT Schueler.schuelerID, Schueler.vorname, Schueler.nachname, Schueler.klasse, " +
+                    "Schueler.wunsch0, Schueler.wunsch1, Schueler.wunsch2, Schueler.wunsch3, Schueler.wunsch4, Schueler.wunsch5" +
+                    "FROM KursTeilnehmer" +
+                    "RIGHT JOIN Schueler ON kursTeilnehmer.schuelerID = Schueler.schuelerID" +
+                    "LEFT JOIN Kurs ON kursTeilnehmer.kursID = Kurs.kursID;";
 
-        while (resultSetKursTeilnehmer.next()){
-            System.out.println(resultSetKurs.getString("vorname"));
+            Statement statementKurs = connection().createStatement();
+            ResultSet resultSetKurs = statementKurs.executeQuery(sql_kursList);
+            Statement statementKursTeil = connection().createStatement();
+            ResultSet resultSetKursTeilnehmer = statementKursTeil.executeQuery(sql_kursTeilnehmerList);
+
+            while (resultSetKursTeilnehmer.next()) {
+                System.out.println(resultSetKurs.getString("vorname"));
+            }
         }
-
         connection().close();
 
         return null;
@@ -326,44 +360,48 @@ public class DBModel implements IDatabase {
 
     // Raum
     public void setRaumData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
-        connection();
-        for (int i = 0; i < raumList.size(); i++){
-            String sqlInsert = "INSERT INTO Raum VALUES ('"+
-                    raumList.get(i).getName() +"', " +
-                    "'"+ raumList.get(i).getKapazitaet() + "'" +
-                    ");";
+        if (raumList != null) {
+            connection();
+            for (int i = 0; i < raumList.size(); i++) {
+                String sqlInsert = "INSERT INTO Raum (name, kapazitaet) VALUES (" +
+                        "'" + raumList.get(i).getName() + "', " +
+                        "'" + raumList.get(i).getKapazitaet() + "'" +
+                        ");";
 
-            Statement statement = connection().createStatement();
-            statement.executeUpdate(sqlInsert);
+                Statement statement = connection().createStatement();
+                statement.executeUpdate(sqlInsert);
 
+            }
+            connection().close();
         }
-        connection().close();
     }
 
     @Override
     public List<Raum> loadRooms() throws SQLException, ClassNotFoundException {
         connection();
         List<Raum> raumList = new ArrayList<Raum>();
-        int raumID, kapazitaet;
-        String name;
 
-        String raumListe = "SELECT * FROM Raum;";
+        if (exitsTable("Raum")) {
+            int raumID, kapazitaet;
+            String name;
 
-        Statement statement = connection().createStatement();
-        ResultSet resultSet = statement.executeQuery(raumListe);
+            String raumListe = "SELECT * FROM Raum;";
 
-        while (resultSet.next()){
-            raumID = resultSet.getInt("raumID");
-            kapazitaet = resultSet.getInt("kapazitaet");
-            name = resultSet.getString("name");
+            Statement statement = connection().createStatement();
+            ResultSet resultSet = statement.executeQuery(raumListe);
+
+            while (resultSet.next()) {
+                raumID = resultSet.getInt("raumID");
+                kapazitaet = resultSet.getInt("kapazitaet");
+                name = resultSet.getString("name");
 
 
-            Raum raum = new Raum(name, kapazitaet);
-            raum.setRaumID(raumID);
+                Raum raum = new Raum(name, kapazitaet);
+                raum.setRaumID(raumID);
 
-            raumList.add(raum);
+                raumList.add(raum);
+            }
         }
-
         connection().close();
 
         return raumList;

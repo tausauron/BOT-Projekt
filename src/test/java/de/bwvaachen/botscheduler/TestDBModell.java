@@ -2,10 +2,13 @@ package de.bwvaachen.botscheduler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.database.DBModel;
 import de.bwvaachen.botscheduler.model.KursDAO;
 import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import execlLoad.ImportFile;
+import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -17,13 +20,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
     private static List<Raum> raum;
-    private static List<KursDAO> kurse;
+    private static List<KursDAO> kurseDAO = new ArrayList<>();
     private final DBModel database = new DBModel();
 
     @BeforeAll
@@ -32,7 +36,18 @@ public class TestDBModell {
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
+
         DBModel database = new DBModel();
+
+        KursPlaner planer = new KursPlaner();
+
+        planer.belegeKurse(schueler,unternehmen,raum);
+
+        List<Kurse> kurse = planer.getKurse();
+
+        for (Kurse k : kurse){
+            kurseDAO.add()
+        }
 
         String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
         schueler = ImportFile.getChoices(path);
@@ -128,7 +143,7 @@ public class TestDBModell {
         database.setRaumData(raum);
         List<Raum> testList = database.loadRooms();
 
-        for (int i = 0; i < unternehmen.size(); i++) {
+        for (int i = 0; i < testList.size(); i++) {
             System.out.println("Raum aus DB: " + testList.get(i).getName());
             System.out.println("Raum aus Excel: " + raum.get(i).getName());
             System.out.println("----------------------------");
@@ -139,7 +154,7 @@ public class TestDBModell {
 
     @Test
     void testLoadKurse() throws SQLException, ClassNotFoundException {
-        database.saveKurse(kurse);
+        database.saveKurse(kurseDAO);
         List<KursDAO> testList = database.loadKurse();
 
         for (KursDAO kursDAO : testList){
