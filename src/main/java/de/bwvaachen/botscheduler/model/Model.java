@@ -10,7 +10,6 @@ import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.Zeitslot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
-import de.bwvaachen.botscheduler.database.DBModel;
 import de.bwvaachen.botscheduler.database.IDatabase;
 import de.bwvaachen.botscheduler.grassmann.myInterface.ModelInterface;
 import execlLoad.ExportFile;

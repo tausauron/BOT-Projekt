@@ -255,7 +255,7 @@ public class KursPlaner {
 	
 	private void removeWeakCourses() {
 		for(Typ slot : Typ.values()) {
-			List<Kurse> slotKurse = courses(slot);
+			List<Kurse> slotKurse = courses(slot, null);
 			slotKurse.sort(kursByWeight);
 			if(slotKurse.size() > raeume.size()) {
 				List<Kurse> toDelete = slotKurse.subList(raeume.size(), slotKurse.size());
@@ -364,7 +364,12 @@ public class KursPlaner {
 		if (freeSlot != null) {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
 			boolean freeRoom = freeRoom(freeSlot.getTyp()) || ignoreRooms;
-			if (kurs == null  && unt.freeSlot() && freeRoom && nextToExisting(freeSlot.getTyp(), unt)) {	
+			boolean avoidvoid = nextToExisting(freeSlot.getTyp(), unt);
+			if(hasMultiple(unt)) {
+				avoidvoid = !(courses(freeSlot.getTyp(), unt.getUnternehmen()).size() > 0);
+			}
+			
+			if (kurs == null  && unt.freeSlot() && freeRoom && avoidvoid) {	
 				retVal = freeSlot.getTyp();
 			} 
 			else  if (slot.ordinal() < Typ.values().length-1) {
@@ -530,15 +535,38 @@ public class KursPlaner {
 		return retVal;
 	}
 	
-	private List<Kurse> courses(Typ slot) {
+	private List<Kurse> courses(Typ slot, String unternehmen) {
 		List<Kurse> retVal = new ArrayList<Kurse>();
 		for(Kurse kurs : kurse) {
 			if(kurs.getZeitslot().getTyp().equals(slot)) {
-				retVal.add(kurs);
+				if(unternehmen != null) {
+					if(unternehmen.replaceAll("\\s+","").equals(kurs.getUnternehmen().getUnternehmen().replaceAll("\\s+",""))) {
+						retVal.add(kurs);
+					}
+				}else {
+					retVal.add(kurs);
+				}
+						
 			}
 		}
 		return retVal;
 	}
+	
+	public boolean hasMultiple(Unternehmen unt) {
+		boolean retVal = false;
+		int number = 0;
+		for(Unternehmen unt2 : unternehmen) {
+			if(unt2.getUnternehmen().replaceAll("\\s+","").equals(unt.getUnternehmen().replaceAll("\\s+",""))) {
+				number++;
+			}
+			if(number > 1) {
+				retVal = true;
+			}
+		}		
+		return retVal;
+	}
+	
+	
 	
 	private void simpleOutput() {
 //		for (CalcSchueler cSchuel : getcSchueler()) {
