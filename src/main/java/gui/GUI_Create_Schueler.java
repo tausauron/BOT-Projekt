@@ -37,6 +37,12 @@ public class GUI_Create_Schueler {
 	private JComboBox<String> cBoxWahl6;
 	private GUI_ListView gui_ListView;
 
+	/**
+	 * 
+	 * @author Wagner_Eri
+	 *
+	 */
+
 	public GUI_Create_Schueler(GUI_ListView gui_ListView, List<Unternehmen> listUnternehmen) {
 		this.gui_ListView = gui_ListView;
 		initialize();

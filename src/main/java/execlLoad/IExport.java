@@ -1,5 +1,7 @@
 package execlLoad;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
@@ -15,7 +17,7 @@ public interface IExport {
 	
 	void exportRoomData(List<Raum> rooms, String path);
 	
-	void exportStudentSchedule(List<CalcSchueler> cSchueler, String path);
+	void exportStudentSchedule(List<CalcSchueler> cSchueler, String path) throws FileNotFoundException, IOException;
 	
 	void exportRoomUsage(List<Unternehmen> unternehmen, String path);
 	

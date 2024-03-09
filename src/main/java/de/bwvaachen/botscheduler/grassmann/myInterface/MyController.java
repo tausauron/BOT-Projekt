@@ -1,5 +1,8 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -8,6 +11,7 @@ import javax.swing.JOptionPane;
 import de.bwvaachen.botscheduler.model.Model;
 import gui.GUI_ListView;
 import gui.GUI_Login;
+import gui.GUI_Main_Start;
 import gui.MyJFileChooser;
 import klassenObjekte.*;
 
@@ -19,6 +23,7 @@ public class MyController {
 
 	private GUI_Login loginGUI;
 	private GUI_ListView listView;
+	private GUI_Main_Start mainStart;
 	private ModelInterface myModal;
 	private boolean activateLogin = false;
 
@@ -32,10 +37,33 @@ public class MyController {
 		if (this.activateLogin) {
 			loginGUI = new GUI_Login(this);
 		} else {
+
+			startMainGUI();
+		}
+	}
+
+	public void startListView() {
+		if (datenBankDatenExist()) {
+			this.listView=new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
+		} else {
 			this.listView = new GUI_ListView(this);
 		}
 	}
-	
+
+	public void startMainGUI() {
+		if (datenBankDatenExist()) {
+			this.mainStart = new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
+		} else {
+			this.mainStart = new GUI_Main_Start(this);
+		}
+
+	}
+
+	private boolean datenBankDatenExist() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
@@ -45,7 +73,7 @@ public class MyController {
 	public void checkLogin(String username, String pwd) {
 		if (myModal.checkLogin(username, pwd)) {
 			loginGUI.close();
-			this.listView = new GUI_ListView(this);
+			startListView();
 		} else {
 			loginGUI.setlblErrorMessage("Falsche Logindaten!");
 		}
@@ -56,11 +84,11 @@ public class MyController {
 	public List<Schueler> getAllStudents() {
 		return myModal.getAllStudents();
 	}
-	
+
 	public void saveAllStudents(List<Schueler> Students) {
 		myModal.saveAllStudents(Students);
 	}
-	
+
 	public void createStudent() {
 		System.out.println("createStudent");
 	}
@@ -74,24 +102,39 @@ public class MyController {
 	}
 
 	public List<Schueler> importStudent(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importStudent(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				return myModal.importStudent(path);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
+		// return empty list
+		return new ArrayList<Schueler>();
 	}
 
 	public void exportStudent(List<Schueler> students, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportStudent(path, students);
+		try {
+
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				myModal.exportStudent(path, students);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 	}
 
 	// Room functions
 	public List<Raum> getAllRooms() {
 		return myModal.getAllRooms();
 	}
-	
+
 	public void saveAllRooms(List<Raum> rooms) {
 		myModal.saveAllRooms(rooms);
 	}
-	
+
 	public void createRoom() {
 		System.out.println("createRoom");
 	}
@@ -103,26 +146,40 @@ public class MyController {
 	public void deleteRoom() {
 		System.out.println("editRoom");
 	}
-	
+
 	public List<Raum> importRooms(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importRooms(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				return myModal.importRooms(path);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
+		// return empty list
+		return new ArrayList<Raum>();
 	}
-	
+
 	public void exportRooms(List<Raum> rooms, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportRooms(path, rooms);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				myModal.exportRooms(path, rooms);
+			}
+		} catch (FileNotFoundException e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	// Company functions
 	public List<Unternehmen> getAllCompanies() {
 		return myModal.getAllCompanies();
 	}
-	
+
 	public void saveAllCompanies(List<Unternehmen> companies) {
 		myModal.saveAllCompanies(companies);
 	}
-	
+
 	public void createCompany() {
 		System.out.println("createCompany");
 	}
@@ -136,20 +193,40 @@ public class MyController {
 	}
 
 	public List<Unternehmen> importCompany(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		return myModal.importCompany(path);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				return myModal.importCompany(path);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
+		// return empty list
+		return new ArrayList<Unternehmen>();
 	}
 
 	public void exportCompany(List<Unternehmen> companies, JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportCompany(path, companies);
+		try {
+			String path = MyJFileChooser.getPath(frame);
+			if (!path.equals("")) {
+				myModal.exportCompany(path, companies);
+			}
+		} catch (Exception e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	public void exportStudentSchedule(JFrame frame) {
-		String path = MyJFileChooser.getPath(frame);
-		myModal.exportSchuelerSchedule(path);
+		try {
+			String path = MyJFileChooser.getPath(frame, "Laufzettel.xlsx");
+			if (!path.equals("")) {
+				myModal.exportSchuelerSchedule(path);
+			}
+		} catch (IOException e) {
+			handleEcxeption(e);
+		}
 	}
-	
+
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
 	}

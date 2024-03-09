@@ -1,5 +1,7 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,5 +53,9 @@ public interface ModelInterface {
 	public String belegeKurse() throws IllegalStateException;
 	
 	//Export
-	public void exportSchuelerSchedule(String path);
+	public void exportSchuelerSchedule(String path) throws FileNotFoundException, IOException;
+	
+
+	
+
 }
