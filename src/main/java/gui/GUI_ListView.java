@@ -96,8 +96,12 @@ public class GUI_ListView {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				fensterSchließen(schülerList, unternehmenList, raumList);
-			}
+                try {
+                    fensterSchließen(schülerList, unternehmenList, raumList);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
 		});
 		frame.setTitle("BOT");
 
@@ -412,12 +416,12 @@ public class GUI_ListView {
 
 	// On Close Methode
 	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+			List<Raum> raumList) throws Exception {
 		speichernDerDatenbeimSchließen(schülerList, unternehmenList, raumList);
 	}
 
 	private void speichernDerDatenbeimSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+			List<Raum> raumList) throws Exception {
 
 		int confirmation = JOptionPane.showConfirmDialog(null, "Möchten Sie die Daten vor dem Schließen speichern?",
 				"Bestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

@@ -16,14 +16,14 @@ import klassenObjekte.Schueler;
 public interface IDatabase {
 	
 	public void saveState(List<Raum> raeume, List<Schueler> schueler,
-			List<UnternehmenDAO> unternehmen, List<KursDAO> kurse);
-	
+						  List<UnternehmenDAO> unternehmen, List<KursDAO> kurse) throws Exception;
+
 	public List<Raum> loadRooms() throws SQLException, ClassNotFoundException;
 	
 	public List<Schueler> loadSchueler() throws SQLException, ClassNotFoundException;
 	
 	public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException;
 	
-	public List<KursDAO> loadKurse() throws SQLException, ClassNotFoundException;
+	public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException;
 
 }

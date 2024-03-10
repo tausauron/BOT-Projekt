@@ -4,7 +4,6 @@ import de.bwvaachen.botscheduler.model.KursDAO;
 import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
-import klassenObjekte.Unternehmen;
 
 import java.net.URL;
 import java.sql.*;
@@ -22,6 +21,12 @@ public class DBModel implements IDatabase {
         dbModel.createDbModel();
         System.out.println(dbModel.exitsTable("Schueler"));
 
+    }
+
+    public DBModel() throws Exception {
+        if (!exitsTable("Schueler")){
+            createDbModel();
+        }
     }
 
     public Connection connection() throws ClassNotFoundException, SQLException {
@@ -77,11 +82,10 @@ public class DBModel implements IDatabase {
 
         String sqlCreateTblKurs =
                         "CREATE TABLE Kurs (" +
-                        "kursID int NOT NULL PRIMARY KEY, " +
-                        "raumID int NOT NULL, " +
-                        "firmenID int NOT NULL," +
-                        "fruehsterZeitslot varchar(1) NOT NULL," +
-                        "FOREIGN KEY (fruehsterZeitslot) REFERENCES Zeitslot(zeitslotChar)," +
+                        "kursID int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                        "raumID int, " +
+                        "firmenID int," +
+                        "zeitslot varchar(1)," +
                         "FOREIGN KEY (firmenID) REFERENCES Unternehmen(firmenID)," +
                         "FOREIGN KEY (raumID) REFERENCES Raum(raumID)" +
                         ");";
@@ -95,12 +99,6 @@ public class DBModel implements IDatabase {
                         "PRIMARY KEY (kursID, schuelerID)" +
                         ");";
 
-        String sqlCreateTblZeitslot =
-                        "CREATE TABLE IF NOT EXISTS Zeitslot (" +
-                        "zeitslotChar varchar(1) NOT NULL PRIMARY KEY, " +
-                        "zeitStart DATETIME," +
-                        "zeitEnde DATETIME" +
-                        ");";
 
 
 
@@ -108,10 +106,6 @@ public class DBModel implements IDatabase {
 
         Statement deletTabel = connection().createStatement();
         deletTabel.executeUpdate(sqlDropTable);
-
-        // Statement for creating Zeitslot Table
-        Statement zeitslotTblStmnt = connection().createStatement();
-        zeitslotTblStmnt.executeUpdate(sqlCreateTblZeitslot);
 
         // Statement for creating Schuler Table
         Statement schuelerTblStmnt = connection().createStatement();
@@ -146,9 +140,12 @@ public class DBModel implements IDatabase {
     public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
             connection();
+
+            int i = 1;
+
             for (Schueler schuel : schuelerList) {
                 String sqlInsert = "INSERT INTO Schueler VALUES ('" +
-                        schuel.getSchuelerID() + "', " +
+                        i + "', " +
                         "'" + schuel.getNachname() + "', " +
                         "'" + schuel.getVorname() + "', " +
                         "'" + schuel.getAllWuensche().get(0) + "', " +
@@ -159,16 +156,16 @@ public class DBModel implements IDatabase {
                         "'" + schuel.getAllWuensche().get(5) + "', " +
                         "'" + schuel.getKlasse() + "');";
 
-                String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
+                //String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
 
 
                 Statement statement = connection().createStatement();
                 statement.executeUpdate(sqlInsert);
-                Statement statementGetSchlr = connection().createStatement();
-                ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
+                //Statement statementGetSchlr = connection().createStatement();
+                //ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
 
-                schuel.setSchuelerID(rsSet.getInt("schuelerID"));
-
+                schuel.setSchuelerID(i);
+                i++;
             }
             connection().close();
         }
@@ -232,20 +229,19 @@ public class DBModel implements IDatabase {
 
 
     // Unternehmen
-    public void setUnternehmenData(List<Unternehmen> unternehmenList) throws SQLException, ClassNotFoundException {
+    public void setUnternehmenData(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             connection();
             for (int i = 0; i < unternehmenList.size(); i++) {
-                String sqlInsert = "INSERT INTO Unternehmen VALUES ('" +
-                        unternehmenList.get(i).getFirmenID() + "', " +
+                String sqlInsert = "INSERT INTO Unternehmen VALUES (" +
+                        unternehmenList.get(i).getFirmenID() + ", " +
                         "'" + unternehmenList.get(i).getUnternehmen() + "', " +
                         "'" + unternehmenList.get(i).getFachrichtung() + "', " +
                         "'" + unternehmenList.get(i).getMaxTeilnehmer() + "', " +
                         "'" + unternehmenList.get(i).getMaxVeranstaltungen() + "', " +
                         "'" + unternehmenList.get(i).getFruehesterZeitslot() + "', " +
                         "'" + unternehmenList.get(i).getGewichtung() + "', " +
-                        "'" + unternehmenList.get(i).isAktiv() + "', " +
-                        "'" + "Kurse kommt noch" + "');";
+                            unternehmenList.get(i).isAktiv() + ");";
 
                 Statement statement = connection().createStatement();
                 statement.executeUpdate(sqlInsert);
@@ -258,7 +254,7 @@ public class DBModel implements IDatabase {
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         connection();
-        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
+        List<de.bwvaachen.botscheduler.model.UnternehmenDAO> unternehmenList = new ArrayList<de.bwvaachen.botscheduler.model.UnternehmenDAO>();
 
         if (exitsTable("Unternehmen")) {
             int firmenID, maxVeranstaltungen, maxTeilnehmer;
@@ -282,7 +278,7 @@ public class DBModel implements IDatabase {
                 aktiv = resultSet.getBoolean("aktiv");
 
 
-                UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
+                de.bwvaachen.botscheduler.model.UnternehmenDAO unternehmen = new de.bwvaachen.botscheduler.model.UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
                 unternehmen.setAktiv(aktiv);
                 unternehmen.setGewichtung(gewichtung);
 
@@ -299,23 +295,26 @@ public class DBModel implements IDatabase {
         if (kurse != null) {
             connection();
             for (KursDAO kurseIn : kurse) {
-                String sqlInsert = "INSERT INTO Kurse VALUES (" +
-                        "'" + kurseIn.getRaum().getRaumID() + "', " +
+                String sqlInsert = "INSERT INTO Kurs (raumID, firmenID, zeitslot) VALUES (" +
+                        "NULL, " +
                         "'" + kurseIn.getUnternehmen().getFirmenID() + "', " +
                         "'" + kurseIn.getZeitslot() + "');";
                 Statement statement = connection().createStatement();
                 statement.executeUpdate(sqlInsert);
 
-                String sql_getKursID = "SELECT kursID FROM Kurs;";
+                String sql_getKursID = "SELECT MAX(kursID) FROM Kurs;";
                 Statement stmt_getKursID = connection().createStatement();
                 ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
-                kurseIn.setID(result.getInt("kursID"));
+                result.next();
+                kurseIn.setID(result.getInt(1));
+            }
 
+            for (KursDAO kurseIn : kurse) {
                 for (Schueler schlr : kurseIn.getKursTeilnehmer()) {
 
                     String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
-                            "'" + schlr.getSchuelerID() + "'" +
-                            "'" + kurseIn.getID() + "');";
+                            kurseIn.getID() + "," +
+                            schlr.getSchuelerID()+ ");";
 
                     Statement statementKursTeilnehmer = connection().createStatement();
                     statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
@@ -326,35 +325,68 @@ public class DBModel implements IDatabase {
     }
 
     @Override
-    public List<KursDAO> loadKurse() throws SQLException, ClassNotFoundException {
+    public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException {
         connection();
         List<KursDAO> kursDAOList = new ArrayList<KursDAO>();
 
-        if (exitsTable("Kurse")) {
-            Raum raum;
-            List<Schueler> kursTeilnehmer;
-            UnternehmenDAO unternehmen;
-            String zeitslot;
+        if (exitsTable("Kurs")) {
+
 
             String sql_kursList = "SELECT * FROM Kurs;";
-            String sql_kursTeilnehmerList = "SELECT Schueler.schuelerID, Schueler.vorname, Schueler.nachname, Schueler.klasse, " +
-                    "Schueler.wunsch0, Schueler.wunsch1, Schueler.wunsch2, Schueler.wunsch3, Schueler.wunsch4, Schueler.wunsch5" +
-                    "FROM KursTeilnehmer" +
-                    "RIGHT JOIN Schueler ON kursTeilnehmer.schuelerID = Schueler.schuelerID" +
-                    "LEFT JOIN Kurs ON kursTeilnehmer.kursID = Kurs.kursID;";
+            String sql_kursTeilnehmerList = "SELECT * FROM KursTeilnehmer;";
 
             Statement statementKurs = connection().createStatement();
             ResultSet resultSetKurs = statementKurs.executeQuery(sql_kursList);
             Statement statementKursTeil = connection().createStatement();
             ResultSet resultSetKursTeilnehmer = statementKursTeil.executeQuery(sql_kursTeilnehmerList);
 
-            while (resultSetKursTeilnehmer.next()) {
-                System.out.println(resultSetKurs.getString("vorname"));
+            while (resultSetKurs.next()) {
+                KursDAO kurdD = new KursDAO(findRaum(raum, resultSetKurs.getInt("raumID")),
+                        new ArrayList<>(),
+                        findUnternehmen(unternehmen, resultSetKurs.getInt("firmenID")),
+                        resultSetKurs.getString("zeitslot"));
+                kursDAOList.add(kurdD);
+                int id;
+                while (resultSetKursTeilnehmer.next()) {
+                    if (resultSetKursTeilnehmer.getInt("kursID") == resultSetKurs.getInt("kursID")) {
+                        id = resultSetKursTeilnehmer.getInt("schuelerID");
+                        kurdD.getKursTeilnehmer().add(findSchueler(schlrList, id));
+                    }
+                }
             }
         }
         connection().close();
 
-        return null;
+        return kursDAOList;
+    }
+
+
+    private Raum findRaum(List<Raum> raeume, int ID){
+        Raum res = null;
+        for (Raum r : raeume){
+            if (r.getRaumID() == ID){
+                res = r;
+            }
+        }
+        return res;
+    }
+    private Schueler findSchueler(List<Schueler> schueler, int ID){
+        Schueler res = null;
+        for (Schueler s : schueler){
+            if (s.getSchuelerID() == ID){
+                res = s;
+            }
+        }
+        return res;
+    }
+    private UnternehmenDAO findUnternehmen(List<UnternehmenDAO> unternehmen, int ID){
+        UnternehmenDAO res = null;
+        for (UnternehmenDAO u : unternehmen){
+            if (u.getFirmenID() == ID){
+                res = u;
+            }
+        }
+        return res;
     }
 
 
@@ -409,7 +441,11 @@ public class DBModel implements IDatabase {
 
 
     @Override
-    public void saveState(List<Raum> raeume, List<Schueler> schueler, List<UnternehmenDAO> unternehmen, List<KursDAO> kurse) {
-
+    public void saveState(List<Raum> raeume, List<Schueler> schueler, List<UnternehmenDAO> unternehmen, List<KursDAO> kurse) throws Exception {
+        createDbModel();
+        setRaumData(raeume);
+        setSchuelerData(schueler);
+        setUnternehmenData(unternehmen);
+        saveKurse(kurse);
     }
 }

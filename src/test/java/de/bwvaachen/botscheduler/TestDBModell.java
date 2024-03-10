@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.database.DBModel;
+import de.bwvaachen.botscheduler.model.DAOFactory;
 import de.bwvaachen.botscheduler.model.KursDAO;
 import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import execlLoad.ImportFile;
@@ -26,6 +27,7 @@ import java.util.List;
 public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
+    private static List<UnternehmenDAO> unternehmenDAO = new ArrayList<>();
     private static List<Raum> raum;
     private static List<KursDAO> kurseDAO = new ArrayList<>();
     private final DBModel database = new DBModel();
@@ -39,6 +41,14 @@ public class TestDBModell {
 
         DBModel database = new DBModel();
 
+
+        String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
+        schueler = ImportFile.getChoices(path);
+        unternehmen = ImportFile.getCompany(unternehmenListPath);
+
+        raum = ImportFile.getRoom(raumListPath);
+
+
         KursPlaner planer = new KursPlaner();
 
         planer.belegeKurse(schueler,unternehmen,raum);
@@ -46,13 +56,12 @@ public class TestDBModell {
         List<Kurse> kurse = planer.getKurse();
 
         for (Kurse k : kurse){
-            kurseDAO.add()
+            kurseDAO.add(DAOFactory.createKursDAO(k));
+        }
+        for (Unternehmen u : unternehmen){
+            unternehmenDAO.add(DAOFactory.createUnternehmenDAO(u));
         }
 
-        String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
-        schueler = ImportFile.getChoices(path);
-        unternehmen = ImportFile.getCompany(unternehmenListPath);
-        raum = ImportFile.getRoom(raumListPath);
         database.createDbModel();
     }
 
@@ -93,7 +102,7 @@ public class TestDBModell {
     @Test
     void testSetUnternehmenData() throws SQLException, ClassNotFoundException {
         Connection conn = database.connection();
-        database.setUnternehmenData(unternehmen);
+        database.setUnternehmenData(unternehmenDAO);
 
         String getRow = "SELECT unternehmenName FROM Unternehmen;";
         Statement statement = conn.createStatement();
@@ -109,8 +118,8 @@ public class TestDBModell {
 
     @Test
     void testGetUnternehmenData() throws SQLException, ClassNotFoundException {
-        database.setUnternehmenData(unternehmen);
-        List<UnternehmenDAO> testList = database.loadUnternehmen();
+        database.setUnternehmenData(unternehmenDAO);
+        List<de.bwvaachen.botscheduler.model.UnternehmenDAO> testList = database.loadUnternehmen();
 
         for (int i = 0; i < unternehmen.size(); i++) {
             System.out.println("Unternehmen aus DB: " + testList.get(i).getUnternehmen());
@@ -154,11 +163,12 @@ public class TestDBModell {
 
     @Test
     void testLoadKurse() throws SQLException, ClassNotFoundException {
+        database.setSchuelerData(schueler);
+        database.setUnternehmenData(unternehmenDAO);
+        database.setRaumData(raum);
         database.saveKurse(kurseDAO);
-        List<KursDAO> testList = database.loadKurse();
+        List<KursDAO> testList = database.loadKurse(database.loadSchueler(), database.loadRooms(), database.loadUnternehmen());
 
-        for (KursDAO kursDAO : testList){
-            System.out.println(kursDAO.getKursTeilnehmer());
-        }
+        System.out.println("fertig");
     }
 }
