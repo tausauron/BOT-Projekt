@@ -61,6 +61,20 @@ public class DBModel implements IDatabase {
                 "    klasse varchar(50)" +
                 ");";
 
+        String sqlCreateTblSchuelerInput =
+                "CREATE TABLE SchuelerInput (" +
+                        "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    nachname varchar(50)," +
+                        "    vorname varchar(50)," +
+                        "    wunsch0 varchar(50)," +
+                        "    wunsch1 varchar(50)," +
+                        "    wunsch2 varchar(50)," +
+                        "    wunsch3 varchar(50)," +
+                        "    wunsch4 varchar(50)," +
+                        "    wunsch5 varchar(50)," +
+                        "    klasse varchar(50)" +
+                        ");";
+
         String sqlCreateTblUnternehmen =
                 "CREATE TABLE Unternehmen (" +
                 "    firmenID int NOT NULL PRIMARY KEY," +
@@ -139,7 +153,7 @@ public class DBModel implements IDatabase {
     // Schueler
     public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
-            connection();
+            Connection conn = connection();
 
             int i = 1;
 
@@ -159,7 +173,7 @@ public class DBModel implements IDatabase {
                 //String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
 
 
-                Statement statement = connection().createStatement();
+                Statement statement = conn.createStatement();
                 statement.executeUpdate(sqlInsert);
                 //Statement statementGetSchlr = connection().createStatement();
                 //ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
@@ -167,7 +181,7 @@ public class DBModel implements IDatabase {
                 schuel.setSchuelerID(i);
                 i++;
             }
-            connection().close();
+            conn.close();
         }
     }
 
@@ -192,13 +206,12 @@ public class DBModel implements IDatabase {
 
     @Override
     public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
-        connection();
+        Connection conn = connection();
 
         List<Schueler> schuelerList = new ArrayList<Schueler>();
         if (exitsTable("Schueler")) {
             int schulerID;
             String vorname, nachname, klasse;
-            List<String> wuensche = new ArrayList<String>();
 
             String schulerList = "SELECT * FROM Schueler;";
 
@@ -206,11 +219,12 @@ public class DBModel implements IDatabase {
             ResultSet resultSet = statement.executeQuery(schulerList);
 
             while (resultSet.next()) {
+                List<String> wuensche = new ArrayList<String>();
                 schulerID = resultSet.getInt("schuelerID");
                 vorname = resultSet.getString("vorname");
                 nachname = resultSet.getString("nachname");
                 klasse = resultSet.getString("klasse");
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 6; i++) {
                     wuensche.add(i, resultSet.getString("wunsch" + i));
                 }
 
@@ -221,7 +235,7 @@ public class DBModel implements IDatabase {
             }
         }
 
-        connection().close();
+        conn.close();
 
         return schuelerList;
 
@@ -293,17 +307,17 @@ public class DBModel implements IDatabase {
 
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
-            connection();
+            Connection conn = connection();
             for (KursDAO kurseIn : kurse) {
                 String sqlInsert = "INSERT INTO Kurs (raumID, firmenID, zeitslot) VALUES (" +
                         "NULL, " +
                         "'" + kurseIn.getUnternehmen().getFirmenID() + "', " +
                         "'" + kurseIn.getZeitslot() + "');";
-                Statement statement = connection().createStatement();
+                Statement statement = conn.createStatement();
                 statement.executeUpdate(sqlInsert);
 
                 String sql_getKursID = "SELECT MAX(kursID) FROM Kurs;";
-                Statement stmt_getKursID = connection().createStatement();
+                Statement stmt_getKursID = conn.createStatement();
                 ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
                 result.next();
                 kurseIn.setID(result.getInt(1));
@@ -320,13 +334,13 @@ public class DBModel implements IDatabase {
                     statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
                 }
             }
-            connection().close();
+            conn.close();
         }
     }
 
     @Override
     public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException {
-        connection();
+        Connection conn = connection();
         List<KursDAO> kursDAOList = new ArrayList<KursDAO>();
 
         if (exitsTable("Kurs")) {
@@ -335,9 +349,9 @@ public class DBModel implements IDatabase {
             String sql_kursList = "SELECT * FROM Kurs;";
             String sql_kursTeilnehmerList = "SELECT * FROM KursTeilnehmer;";
 
-            Statement statementKurs = connection().createStatement();
+            Statement statementKurs = conn.createStatement();
             ResultSet resultSetKurs = statementKurs.executeQuery(sql_kursList);
-            Statement statementKursTeil = connection().createStatement();
+            Statement statementKursTeil = conn.createStatement();
             ResultSet resultSetKursTeilnehmer = statementKursTeil.executeQuery(sql_kursTeilnehmerList);
 
             while (resultSetKurs.next()) {
@@ -355,7 +369,7 @@ public class DBModel implements IDatabase {
                 }
             }
         }
-        connection().close();
+        conn.close();
 
         return kursDAOList;
     }
@@ -393,24 +407,39 @@ public class DBModel implements IDatabase {
     // Raum
     public void setRaumData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
-            connection();
+            Connection conn = connection();
             for (int i = 0; i < raumList.size(); i++) {
                 String sqlInsert = "INSERT INTO Raum (name, kapazitaet) VALUES (" +
                         "'" + raumList.get(i).getName() + "', " +
                         "'" + raumList.get(i).getKapazitaet() + "'" +
                         ");";
 
-                Statement statement = connection().createStatement();
+                Statement statement = conn.createStatement();
                 statement.executeUpdate(sqlInsert);
 
             }
-            connection().close();
+            conn.close();
         }
     }
 
     @Override
+    public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<Raum> loadSchuelerInput() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
+    public List<Raum> loadUnternehmenInput() throws SQLException, ClassNotFoundException {
+        return null;
+    }
+
+    @Override
     public List<Raum> loadRooms() throws SQLException, ClassNotFoundException {
-        connection();
+        Connection conn = connection();
         List<Raum> raumList = new ArrayList<Raum>();
 
         if (exitsTable("Raum")) {
@@ -419,7 +448,7 @@ public class DBModel implements IDatabase {
 
             String raumListe = "SELECT * FROM Raum;";
 
-            Statement statement = connection().createStatement();
+            Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(raumListe);
 
             while (resultSet.next()) {
@@ -434,7 +463,7 @@ public class DBModel implements IDatabase {
                 raumList.add(raum);
             }
         }
-        connection().close();
+        conn.close();
 
         return raumList;
     }

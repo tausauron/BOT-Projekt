@@ -14,6 +14,7 @@ import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
@@ -30,7 +31,8 @@ public class TestDBModell {
     private static List<UnternehmenDAO> unternehmenDAO = new ArrayList<>();
     private static List<Raum> raum;
     private static List<KursDAO> kurseDAO = new ArrayList<>();
-    private final DBModel database = new DBModel();
+    private static DBModel database;
+
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
@@ -39,8 +41,11 @@ public class TestDBModell {
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
 
-        DBModel database = new DBModel();
-
+        try {
+            database = new DBModel();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
         schueler = ImportFile.getChoices(path);
@@ -63,6 +68,11 @@ public class TestDBModell {
         }
 
         database.createDbModel();
+    }
+
+    @BeforeEach
+    void setBeforeTest() throws Exception {
+         database.createDbModel();
     }
 
     @Test
