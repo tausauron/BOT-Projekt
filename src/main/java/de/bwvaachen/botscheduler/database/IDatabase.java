@@ -20,8 +20,8 @@ public interface IDatabase {
 						  List<UnternehmenDAO> unternehmenInput) throws Exception;
 
 	public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException;
-	public List<Raum> loadSchuelerInput() throws SQLException, ClassNotFoundException;
-	public List<Raum> loadUnternehmenInput() throws SQLException, ClassNotFoundException;
+	public List<Schueler> loadSchuelerInput() throws SQLException, ClassNotFoundException;
+	public List<UnternehmenDAO> loadUnternehmenInput() throws SQLException, ClassNotFoundException;
 
 	public List<Raum> loadRooms() throws SQLException, ClassNotFoundException;
 	
