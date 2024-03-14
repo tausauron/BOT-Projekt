@@ -208,15 +208,29 @@ public class ExportFile implements IExport {
 	}
 
 	@Override
-	public void exportRoomUsage(List<Unternehmen> unternehmen, String path) {
-		// TODO Auto-generated method stub
+	public void exportRoomUsage(List<Unternehmen> unternehmen, String path) throws IOException {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(path)) {
+			Sheet sheet = workbook.createSheet("Raumplan");
+		}
+		
 
 	}
 
 	@Override
-	public void exportParticipants(List<Unternehmen> unternehmen, String path) {
-		// TODO Auto-generated method stub
+	public void exportParticipants(List<Unternehmen> unternehmen, String path) throws IOException {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(path)) {
+			for(Unternehmen unt : unternehmen) {
+				Sheet sheet = workbook.createSheet(unt.getFirmenID() + " " +  unt.getUnternehmen());
+				
+				
+				
+				for(Kurse kurs : unt.getKurse().values()) {
+					
+				}
+			}
+			workbook.write(fos);
 
+		}
 	}
 
 	/*

@@ -115,10 +115,16 @@ public class TestExportStudentSchedule {
 
 		ExportFile exFile = new ExportFile();
 
-		exFile.exportStudentSchedule(planer.getcSchueler(), "H:\\ExportedData.xlsx");
+		exFile.exportStudentSchedule(planer.getcSchueler(), "target/generated-test-sources/ExportedData.xlsx");
 		
 		
 		assertNotEquals(score, "0.0 %");
 
+	}
+	
+	@Test
+	void testExportParticipants() throws IOException {
+		ExportFile exFile = new ExportFile();
+		exFile.exportParticipants(unternehmen, "target/generated-test-sources/ExportedParticipants.xlsx");
 	}
 }
