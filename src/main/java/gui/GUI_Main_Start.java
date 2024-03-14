@@ -2,12 +2,15 @@ package gui;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -17,6 +20,11 @@ import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class GUI_Main_Start {
 
 	private MyController myController;
@@ -29,26 +37,15 @@ public class GUI_Main_Start {
 
 	private List<Raum> listRaum;
 
-	/**
-	 * 
-	 * @author Wagner_Eri
-	 *
-	 */
-
-	public GUI_Main_Start(MyController myController) {
-		this.myController = myController;
-		initialize();
-		this.frmStartMain.setVisible(true);
-	}
-
 	public GUI_Main_Start(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
 			List<Raum> listRaum) {
 		this.myController = myController;
-		this.listSchüler=listSchüler;
-		this.listUnternehmen=listUnternehmen;
-		this.listRaum=listRaum;
+		this.listSchüler = listSchüler;
+		this.listUnternehmen = listUnternehmen;
+		this.listRaum = listRaum;
 		initialize();
 		this.frmStartMain.setVisible(true);
+		frmStartMain.setLocationRelativeTo(null);
 	}
 
 	/**
@@ -61,11 +58,13 @@ public class GUI_Main_Start {
 				| UnsupportedLookAndFeelException e) {
 		}
 		frmStartMain = new JFrame();
+		// Center the frame
+
 		frmStartMain.setTitle("BOT");
 		frmStartMain.setBounds(100, 100, 222, 270);
 		frmStartMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JButton btngenLösung = new JButton("Generiere");
+		JButton btngenLösung = new JButton("Generieren");
 		btngenLösung.addActionListener((e) -> btnPressedgenLösung());
 
 		JButton btnBearbeiten = new JButton("Listen Bearbeiten");
@@ -74,33 +73,27 @@ public class GUI_Main_Start {
 		JButton btnDatenLschen = new JButton("Daten löschen");
 		btnDatenLschen.addActionListener((e) -> LöscheDateninDatenBank());
 		GroupLayout groupLayout = new GroupLayout(frmStartMain.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-						.addComponent(btnBearbeiten, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-						.addComponent(btnDatenLschen, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btngenLösung, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnDatenLschen, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(21, Short.MAX_VALUE))
-		);
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+								.addComponent(btnBearbeiten, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+								.addComponent(btnDatenLschen, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+						.addContainerGap()));
+		groupLayout
+				.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+								.addComponent(btngenLösung, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnDatenLschen,
+										GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(21, Short.MAX_VALUE)));
 		frmStartMain.getContentPane().setLayout(groupLayout);
-		
-			Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
-			frmStartMain.setIconImage(ui_Logo);
-	
-		
+
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmStartMain.setIconImage(ui_Logo);
+
 	}
 
 	private void öffneListView() {
@@ -109,12 +102,40 @@ public class GUI_Main_Start {
 	}
 
 	private void LöscheDateninDatenBank() {
-		myController.deleteStudent();
-		myController.deleteCompany();
-		myController.deleteCompany();
+		String[] options = { "Alle Daten", "Nur Schüler", "Nur Unternehmen", "Nur Räume", "Abbrechen" };
+		int choice = JOptionPane.showOptionDialog(null, "Wählen Sie, welche Daten Sie löschen möchten:",
+				"Lösch-Optionen", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+				options[4]);
+
+		if (choice == JOptionPane.YES_OPTION) {
+			myController.deleteStudent();
+			myController.deleteCompany();
+			myController.deleteRoom();
+
+		} else if (choice == 1) {
+			myController.deleteStudent();
+		} else if (choice == 2) {
+			myController.deleteCompany();
+		} else if (choice == 3) {
+			myController.deleteRoom();
+		}
 	}
 
 	private void btnPressedgenLösung() {
-		myController.exportStudentSchedule(frmStartMain);
+		
+		try {
+			String path = MyJFileChooser.getPathFolder(frmStartMain, "");
+			if (!path.equals("")) {
+				//TODO
+				myController.generiereLoesungen(path);
+			}
+			
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 	}
 }

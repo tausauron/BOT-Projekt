@@ -81,6 +81,7 @@ public class GUI_ListView {
 		this.raumList = listRaum;
 		initialize();
 		this.frame.setVisible(true);
+		this.frame.setLocationRelativeTo(null);
 	}
 
 	/**

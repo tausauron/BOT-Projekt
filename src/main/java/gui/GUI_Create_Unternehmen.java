@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Unternehmen;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class GUI_Create_Unternehmen {
 
@@ -47,6 +51,7 @@ public class GUI_Create_Unternehmen {
 		cBoxFrZeit.addItem(TypSlotEnum.D);
 		cBoxFrZeit.addItem(TypSlotEnum.E);
 		this.frmUnternehmenHinzufgen.setVisible(true);
+		frmUnternehmenHinzufgen.setLocationRelativeTo(null);
 	}
 
 	public enum TypSlotEnum {
@@ -59,7 +64,15 @@ public class GUI_Create_Unternehmen {
 	@SuppressWarnings("removal")
 	private void initialize() {
 		frmUnternehmenHinzufgen = new JFrame();
-
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmUnternehmenHinzufgen.setIconImage(ui_Logo);
+		
+		
 		frmUnternehmenHinzufgen.setTitle("Unternehmen Hinzufügen");
 		frmUnternehmenHinzufgen.setBounds(100, 100, 255, 310);
 		frmUnternehmenHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

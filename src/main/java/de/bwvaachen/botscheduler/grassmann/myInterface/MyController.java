@@ -45,7 +45,7 @@ public class MyController {
 
 	public void startListView() {
 		if (datenBankDatenExist()) {
-			this.listView=new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
+			this.listView = new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
 		} else {
 			this.listView = new GUI_ListView(this);
 		}
@@ -55,7 +55,7 @@ public class MyController {
 		if (datenBankDatenExist()) {
 			this.mainStart = new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
 		} else {
-			this.mainStart = new GUI_Main_Start(this);
+
 		}
 
 	}
@@ -219,7 +219,7 @@ public class MyController {
 
 	public void exportStudentSchedule(JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame, "Laufzettel.xlsx");
+			String path = MyJFileChooser.getPathExcel(frame, "Laufzettel.xlsx");
 			if (!path.equals("")) {
 				myModal.exportSchuelerSchedule(path);
 			}
@@ -230,5 +230,24 @@ public class MyController {
 
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void generiereLoesungen(String path) {
+		
+		try{
+			 String score= myModal.belegeKurse();
+			 JOptionPane.showMessageDialog(null, score);
+		}
+		catch (Exception e) {
+			handleEcxeption(e);
+			
+			// TODO: handle exception
+		}
+		
+		
+		
+		
+		
+		
 	}
 }
