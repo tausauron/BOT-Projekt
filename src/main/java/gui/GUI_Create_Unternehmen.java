@@ -208,8 +208,10 @@ public class GUI_Create_Unternehmen {
 
 	}
 
+	//Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind 
 	private boolean überPrüfeDopplung() {
 		List<Integer> x = new ArrayList<>();
+		
 		for (Unternehmen unternehmen : unternehmenList) {
 			x.add(unternehmen.getFirmenID());
 		}
