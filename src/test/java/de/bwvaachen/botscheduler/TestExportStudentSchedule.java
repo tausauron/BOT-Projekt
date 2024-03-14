@@ -2,6 +2,8 @@ package de.bwvaachen.botscheduler;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class TestExportStudentSchedule {
 
 
 	@Test
-	void testBelegeKurse() {
+	void testBelegeKurse() throws FileNotFoundException, IOException {
 		String score = "0.0 %";
 
 		score = planer.belegeKurse(schueler, unternehmen, raeume);
@@ -112,11 +114,17 @@ public class TestExportStudentSchedule {
 		System.out.println("Score: " + score);
 
 		ExportFile exFile = new ExportFile();
-		exFile.exportStudentSchedule(planer.getcSchueler(), "./target/ExportedData.xlsx");
-		
+
+		exFile.exportStudentSchedule(planer.getcSchueler(), "target/generated-test-sources/ExportedData.xlsx");
 		
 		
 		assertNotEquals(score, "0.0 %");
 
+	}
+	
+	@Test
+	void testExportParticipants() throws IOException {
+		ExportFile exFile = new ExportFile();
+		exFile.exportParticipants(unternehmen, "target/generated-test-sources/ExportedParticipants.xlsx");
 	}
 }

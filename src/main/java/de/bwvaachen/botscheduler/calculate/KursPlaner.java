@@ -25,6 +25,7 @@ public class KursPlaner {
 	private List<Unternehmen> unternehmen;
 	private List<Raum> raeume;
 
+	
 	/**
 	 * 
 	 * @param schueler Schülerliste mit Wünschen, die durch Kursbelegungen erfüllt werden sollen
@@ -32,28 +33,83 @@ public class KursPlaner {
 	 * @return Erfolgsscore als Prozentsatz vom maximal erreichbaren Score : String
 	 */
 	public String belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen, List<Raum> raeume) {
-		String score = "0.0 %";
 		
 		setcSchueler(schueler, unternehmen);
 		setKurse(new ArrayList<>());
 		setUnternehmen(unternehmen);
-		setRaeume(raeume);
-
-		for (int i = 0; i < 6; i++) {
-			runIteration();
-			score = prozentScore();
-			System.out.println(score);
-		}
+		setRaeume(raeume);	
 		
-		for (int i = 0; i < 6; i++) {
-			trySwapping();
-			score = prozentScore();
-			System.out.println(score);
-		}
 		
-		return score;		
+		System.out.println("ignore rooms and firms");
+		for (int i = 0; i < 6; i++) {
+			runIteration(true, true);
+		}
+		simpleOutput();
+		
+		System.out.println("remove weak");
+		removeWeakCourses();
+		simpleOutput();
+		
+		System.out.println("ignore rooms");
+		for (int i = 0; i < 6; i++) {
+			runIteration(true, false);
+		}
+		simpleOutput();
+		
+		System.out.println("swapping");
+		for (int i = 0; i < 6; i++) {
+			trySwapping(false);
+		}
+		simpleOutput();
+		
+		System.out.println("force swapping");
+		for (int i = 0; i < 6; i++) {
+			trySwapping(true);
+		}
+		simpleOutput();
+		
+		System.out.println("remove weak");
+		removeWeakCourses();
+		simpleOutput();
+		
+		System.out.println("normal iteration");
+		for (int i = 0; i < 6; i++) {
+			runIteration(false, false);
+		}
+		simpleOutput();
+		
+		System.out.println("swapping");
+		for (int i = 0; i < 6; i++) {
+			trySwapping(false);
+		}
+		simpleOutput();
+	
+		System.out.println("force swapping");
+		for (int i = 0; i < 6; i++) {
+			trySwapping(true);
+		}
+		simpleOutput();
+		
+		System.out.println("deleteEmpty");
+		deleteEmptyCourses();
+		simpleOutput();
+		
+		System.out.println("normal iteration");
+		for (int i = 0; i < 6; i++) {
+			runIteration(false, false);
+		}
+		simpleOutput();
+		
+		System.out.println("alternatives");
+		for (int i = 0; i < 6; i++) {
+			useAlternative();
+		}
+		simpleOutput();
+		
+		return prozentScore();		
 	}	
 
+	
 	private void initSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 
 		cSchueler = new ArrayList<>();
@@ -62,6 +118,7 @@ public class KursPlaner {
 		}
 	}
 
+	
 	private int calculateScore() {
 
 		int retVal = 0;
@@ -75,6 +132,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private int calculateMaxScore() {
 
@@ -86,6 +144,7 @@ public class KursPlaner {
 		System.out.println("MaxScore: " + retVal);
 		return retVal;
 	}
+	
 
 	public String prozentScore() {
 
@@ -96,12 +155,14 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private void setcSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 		initSchueler(schueler, unternehmen);
 	}
+	
 
-	private void runIteration() {
+	private void runIteration(boolean ignoreRooms, boolean ignoreFirms) {
 
 		for (CalcSchueler schuel : cSchueler) {
 
@@ -117,8 +178,8 @@ public class KursPlaner {
 						schuel.bookCourse(kurs, wunsch);
 					}
 					else {
-						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A);
-						if(typ != null) {
+						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A, ignoreRooms, ignoreFirms);
+						if(typ != null) {		
 							kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
 							kurse.add(kurs);
 							wunsch.getVeranstaltung().getKurse().put(kurs.getZeitslot().getTyp(), kurs);
@@ -133,7 +194,8 @@ public class KursPlaner {
 
 	}
 	
-	private void trySwapping() {
+	
+	private void trySwapping(boolean force) {
 		for (CalcSchueler schuel : cSchueler) {
 			
 			List<Wunsch> wuensche = schuel.getWuensche();
@@ -143,7 +205,7 @@ public class KursPlaner {
 
 				if (wunsch.getState() == WunschState.UNERFUELLT) {
 					
-					swapCourse(wunsch, schuel, Typ.A);
+					swapCourse(wunsch, schuel, Typ.A, force);
 					
 				}
 			}
@@ -152,7 +214,8 @@ public class KursPlaner {
 
 	}
 	
-	private void swapCourse(Wunsch wunsch, CalcSchueler schuel, Typ typ) {
+	
+	private void swapCourse(Wunsch wunsch, CalcSchueler schuel, Typ typ, boolean force) {
 		Kurse kurs = findMatchingKurs(wunsch, typ);
 		
 		if(kurs != null) {
@@ -165,12 +228,17 @@ public class KursPlaner {
 					schuel.bookCourse(kurs, wunsch);
 					schuel.bookCourse(ausweichKurs, candidate);
 				}
-				else {
+				else if(force && wunsch.getPrio() > candidate.getPrio()){
+					schuel.leaveCourse(schuel.getSlotByType(kurs.getZeitslot().getTyp()).getKurs(), candidate);
+					schuel.bookCourse(kurs, wunsch);
+				}
+				else
+				{
 					typ = kurs.getZeitslot().getTyp();
 				
 					if (typ.ordinal() < Typ.values().length-1){
 						typ = Typ.values()[typ.ordinal()+1];					
-						swapCourse(wunsch, schuel, typ);
+						swapCourse(wunsch, schuel, typ, force);
 					}					
 				}
 			}
@@ -180,6 +248,75 @@ public class KursPlaner {
 		}
 	}
 	
+	
+	private void useAlternative() {
+		for (CalcSchueler cSchuel : cSchueler) {
+			for (SchuelerSlot slot : cSchuel.getSlots()) {
+				if (slot.getKurs() == null) {
+					Wunsch wunsch = cSchuel.getAusweichWunsch();
+					if (wunsch.getState() == WunschState.UNERFUELLT) {
+						Kurse kurs = findMatchingKurs(wunsch, Typ.A);
+
+						if (kurs != null) {
+							cSchuel.bookCourse(kurs, wunsch);
+						} else {
+							swapCourse(wunsch, cSchuel, Typ.A, false);
+
+							if (slot.getKurs() == null) {
+								Typ typ = findOpenKursSlot(wunsch, cSchuel, Typ.A, false, false);
+								if (typ != null) {
+									kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
+									kurse.add(kurs);
+									wunsch.getVeranstaltung().getKurse().put(kurs.getZeitslot().getTyp(), kurs);
+									cSchuel.bookCourse(kurs, wunsch);
+								}
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+	}	
+	
+	
+	private void removeWeakCourses() {
+		for(Typ slot : Typ.values()) {
+			List<Kurse> slotKurse = courses(slot, null);
+			slotKurse.sort(kursByWeight);
+			
+			List<Kurse> toDelete = new ArrayList<Kurse>();			
+			for(Kurse kurs : slotKurse) {
+
+				Unternehmen unt = kurs.getUnternehmen();
+				if(hasMultiple(unt)) {
+					findWeakCourses(unt, slot, toDelete);
+				}
+			}
+			
+			for(Kurse delKurs : toDelete) {
+				deleteCourse(delKurs);
+				slotKurse.remove(delKurs);
+			}			
+			
+			if(slotKurse.size() > raeume.size()) {
+				toDelete = slotKurse.subList(raeume.size(), slotKurse.size());
+				for(Kurse kurs : toDelete) {
+					deleteCourse(kurs);
+				}
+			}
+		}
+	}
+	
+	private void findWeakCourses(Unternehmen unt, Typ slot, List<Kurse> toDelete){
+		List<Kurse> list = courses(slot, unt.getUnternehmen());
+		
+		if(list.size() > 1) {
+			list.sort(kursByWeight);
+			toDelete.addAll(list.subList(1, list.size()));			
+		}
+	}
+		
 
 	private Kurse existsKurs(Zeitslot slot, Wunsch wunsch) {
 		Kurse retVal = null;
@@ -193,6 +330,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private boolean kursVoll(Kurse kurs) {
 		boolean retVal = true;
@@ -206,6 +344,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private SchuelerSlot nextMatching(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		SchuelerSlot retVal = null;
@@ -222,6 +361,7 @@ public class KursPlaner {
 		}
 		return retVal;
 	}
+	
 
 	/**
 	 * Kurs finden fuer einen leeren Schuelerslot
@@ -251,6 +391,7 @@ public class KursPlaner {
 		return retVal;
 	}
 	
+	
 	private Kurse findMatchingKurs(Wunsch wunsch,  Typ start) {
 		
 		Kurse retVal = null;
@@ -268,9 +409,9 @@ public class KursPlaner {
 		}		
 		return retVal;
 	}
+		
 	
-	
-	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot) {
+	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot, boolean ignoreRooms, boolean ignoreFirms) {
 		Typ retVal = null;
 		
 		Unternehmen unt = wunsch.getVeranstaltung();
@@ -278,16 +419,23 @@ public class KursPlaner {
 		
 		if (freeSlot != null) {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
-			if (kurs == null && freeRoom(slot) && unt.freeSlot() && nextToExisting(slot, unt)) {				
+			boolean freeRoom = freeRoom(freeSlot.getTyp()) || ignoreRooms;
+			boolean avoidvoid = nextToExisting(freeSlot.getTyp(), unt);
+			if(hasMultiple(unt) && !ignoreFirms) {
+				avoidvoid = !(courses(freeSlot.getTyp(), unt.getUnternehmen()).size() > 0);
+			}
+			
+			if (kurs == null  && unt.freeSlot() && freeRoom && avoidvoid) {	
 				retVal = freeSlot.getTyp();
 			} 
 			else  if (slot.ordinal() < Typ.values().length-1) {
 				Typ typ = Typ.values()[slot.ordinal()+1];
-				retVal = findOpenKursSlot(wunsch, cSchuel, typ);
+				retVal = findOpenKursSlot(wunsch, cSchuel, typ, ignoreRooms, ignoreFirms);
 			}
 		}		
 		return retVal;
 	}
+	
 	
 	/**
 	 * hat die Veranstaltung schon einen Kurs neben diesem Slot? 
@@ -300,7 +448,7 @@ public class KursPlaner {
 		boolean retVal = false;
 		
 		
-		if(unt.getKurse().size() > 0) {
+		if(unt.getKurse().values().size() > 0) {
 			if(slot.ordinal() < Typ.values().length-1) {
 				if(unt.getKurse().get(Typ.values()[slot.ordinal()+1]) != null) {
 					retVal = true;
@@ -319,9 +467,7 @@ public class KursPlaner {
 		
 		return retVal;
 	}
-	
-	
-	
+		
 	
 	private boolean freeRoom(Typ slotTyp) {
 		int number = 0;
@@ -330,40 +476,58 @@ public class KursPlaner {
 				number++;
 			}
 		}
-		return (number <= raeume.size());		
+		return (number < raeume.size());		
 	}
-	
+		
 
 	private void setKurse(List<Kurse> kurse) {
 		this.kurse = kurse;
 	}
+	
 
 	public List<CalcSchueler> getcSchueler() {
 		return cSchueler;
 	}
+	
 
 	public List<Kurse> getKurse() {
 		return kurse;
 	}
+	
 
 	public List<Unternehmen> getUnternehmen() {
 		return unternehmen;
 	}
 	
+	
 	private void setRaeume(List<Raum> raeume) {
 		this.raeume = raeume;
 	}
+	
 
 	private void setUnternehmen(List<Unternehmen> unternehmen) {
 		this.unternehmen = unternehmen;
+	}
 		
-//		for(Unternehmen unt : unternehmen) {
-//			Map<Typ, Kurse> kurse = unt.getKurse();
-//			
-//			for(Typ typ : Typ.values()) {
-//				kurse.put(typ, null);
-//			}
-//		}
+	
+	private void deleteEmptyCourses() {
+		List<Kurse> found = new ArrayList<>();
+		for(Kurse kurs : kurse) {
+			if(kurs.getKursTeilnehmer().size() == 0) {
+				kurs.getUnternehmen().getKurse().remove(kurs.getZeitslot().getTyp());
+				found.add(kurs);
+			}
+		}
+		kurse.removeAll(found);
+	}
+	
+	
+	private void deleteCourse(Kurse kurs) {
+		for(CalcSchueler cSchuel : new ArrayList<CalcSchueler>(kurs.getKursTeilnehmer())) {
+			cSchuel.leaveCourse(kurs, cSchuel.getSlotByType(kurs.getZeitslot().getTyp()).getErfuellterWunsch());
+		}
+		kurs.getUnternehmen().getKurse().remove(kurs.getZeitslot().getTyp());
+		kurse.remove(kurs);
 	}
 	
 	
@@ -374,25 +538,122 @@ public class KursPlaner {
 			return Integer.compare(occurrence(o2), occurrence(o1));
 		}
 		
+	};
+	
+	
+	Comparator<Wunsch> wunschByPriority = new Comparator<Wunsch>() {
+		@Override
+		public int compare(Wunsch o1, Wunsch o2) {			
+			return Integer.compare(o1.getPrio(), o2.getPrio());
+		}
+	};
+	
+	Comparator<Kurse> kursByWeight = new Comparator<Kurse>() {
 		
-		private int occurrence(Wunsch wunsch) {
-			int retVal = 0;
-			
-			if(wunsch.getVeranstaltung() != null) {
-			
-				for(CalcSchueler cSchuel : cSchueler){
-					List<Wunsch> wuensche = cSchuel.getWuensche();
-					for(Wunsch w : wuensche) {
-						if(w.getVeranstaltung() != null) {
-							if(wunsch.getVeranstaltung().equals(w.getVeranstaltung())) {
-								retVal+=1;
-							}
+		@Override
+		public int compare(Kurse o1, Kurse o2) {
+			return Integer.compare(o2.weight(), o1.weight());
+		}
+	};
+	
+	
+	private int occurrence(Wunsch wunsch) {
+		int retVal = 0;
+		
+		if(wunsch.getVeranstaltung() != null && wunsch.getState().equals(WunschState.UNERFUELLT)) {
+		
+			for(CalcSchueler cSchuel : cSchueler){
+				List<Wunsch> wuensche = cSchuel.getWuensche();
+				for(Wunsch w : wuensche) {
+					if(w.getVeranstaltung() != null) {
+						if(wunsch.getVeranstaltung().equals(w.getVeranstaltung())) {
+							retVal+= w.getPrio();
 						}
 					}
 				}
 			}
-			
-			return retVal;
 		}
-	}; 
+		
+		return retVal;
+	}
+	
+	
+	private int belegteSlots() {
+		int retVal = 0;
+		for(CalcSchueler cSchuel : cSchueler) {			
+			for(SchuelerSlot slot : cSchuel.getSlots()) {
+				if(slot.getKurs() != null) {
+					retVal++;
+				}
+			}			
+		}
+		return retVal;
+	}
+	
+	
+	private List<Kurse> courses(Typ slot, String unternehmen) {
+		List<Kurse> retVal = new ArrayList<Kurse>();
+		for(Kurse kurs : kurse) {
+			if(kurs.getZeitslot().getTyp().equals(slot)) {
+				if(unternehmen != null) {
+					if(unternehmen.replaceAll("\\s+","").equals(kurs.getUnternehmen().getUnternehmen().replaceAll("\\s+",""))) {
+						retVal.add(kurs);
+					}
+				}else {
+					retVal.add(kurs);
+				}						
+			}
+		}
+		return retVal;
+	}
+	
+	
+	public boolean hasMultiple(Unternehmen unt) {
+		boolean retVal = false;
+		int number = 0;
+		for(Unternehmen unt2 : unternehmen) {
+			if(unt2.getUnternehmen().replaceAll("\\s+","").equals(unt.getUnternehmen().replaceAll("\\s+",""))) {
+				number++;
+			}
+			if(number > 1) {
+				retVal = true;
+			}
+		}		
+		return retVal;
+	}	
+	
+	
+	private void simpleOutput() {
+//		for (CalcSchueler cSchuel : getcSchueler()) {
+//
+//			String zeile = cSchuel.getSchueler().getNachname() + " | ";
+//
+//			for (SchuelerSlot slot : cSchuel.getSlots()) {
+//				Kurse kurs = slot.getKurs();
+//				if (kurs != null) {
+//					zeile += slot.getKurs().getUnternehmen().getFirmenID() + " | ";
+//				} else {
+//					zeile += "null |";
+//				}
+//			}
+//
+//			System.out.println(zeile);
+//		}
+
+		for (Unternehmen unt : getUnternehmen()) {
+			String zeile = unt.getFirmenID() + " | ";
+			for (Typ typ : Typ.values()) {
+				Kurse kurs = unt.getKurse().get(typ);
+				if (kurs != null) {
+					zeile += kurs.getKursTeilnehmer().size() + " | ";
+				} else {
+					zeile += "null | ";
+				}
+			}
+			System.out.println(zeile);
+		}
+		System.out.println(prozentScore());
+		System.out.println(belegteSlots());
+	}
+	
 }

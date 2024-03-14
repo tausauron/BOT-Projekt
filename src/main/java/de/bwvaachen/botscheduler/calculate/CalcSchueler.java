@@ -173,8 +173,12 @@ public class CalcSchueler {
 			if(wunsch.equals(erfWunsch)) {
 				wunsch.setState(WunschState.ERFUELLT);;
 			}
-		}		
+		}
+		if(ausweichWunsch.equals(erfWunsch)) {
+			ausweichWunsch.setState(WunschState.ERFUELLT);
+		}
 	}
+	
 	
 	public void leaveCourse(Kurse kurs, Wunsch erfWunsch) {
 		SchuelerSlot sSlot = getSlotByType(kurs.getZeitslot().getTyp());
@@ -192,9 +196,7 @@ public class CalcSchueler {
 			if(wunsch.equals(erfWunsch)) {
 				wunsch.setState(WunschState.UNERFUELLT);;
 			}
-		}
-		
-		
+		}		
 	}
 	
 	public SchuelerSlot getSlotByType(Typ typ){
