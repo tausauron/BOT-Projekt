@@ -281,7 +281,7 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedRaumHinzufügen() {
-		new GUI_Create_Raum(this);
+		new GUI_Create_Raum(this,this.raumList);
 	}
 
 	// Button die den Index Ermitteln und dann Löschen

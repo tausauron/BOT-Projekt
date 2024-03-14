@@ -197,6 +197,8 @@ public class GUI_Create_Unternehmen {
 						tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
 						cBoxFrZeit.getSelectedItem().toString()));
 				frmUnternehmenHinzufgen.dispose();
+			}else {
+				
 			}
 
 		} else {
@@ -206,8 +208,10 @@ public class GUI_Create_Unternehmen {
 
 	}
 
+	//Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind 
 	private boolean überPrüfeDopplung() {
 		List<Integer> x = new ArrayList<>();
+		
 		for (Unternehmen unternehmen : unternehmenList) {
 			x.add(unternehmen.getFirmenID());
 		}
