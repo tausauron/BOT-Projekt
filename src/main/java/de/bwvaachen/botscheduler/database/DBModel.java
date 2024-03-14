@@ -61,20 +61,6 @@ public class DBModel implements IDatabase {
                 "    klasse varchar(50)" +
                 ");";
 
-        String sqlCreateTblSchuelerInput =
-                "CREATE TABLE SchuelerInput (" +
-                        "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                        "    nachname varchar(50)," +
-                        "    vorname varchar(50)," +
-                        "    wunsch0 varchar(50)," +
-                        "    wunsch1 varchar(50)," +
-                        "    wunsch2 varchar(50)," +
-                        "    wunsch3 varchar(50)," +
-                        "    wunsch4 varchar(50)," +
-                        "    wunsch5 varchar(50)," +
-                        "    klasse varchar(50)" +
-                        ");";
-
         String sqlCreateTblUnternehmen =
                 "CREATE TABLE Unternehmen (" +
                 "    firmenID int NOT NULL PRIMARY KEY," +
@@ -113,7 +99,58 @@ public class DBModel implements IDatabase {
                         "PRIMARY KEY (kursID, schuelerID)" +
                         ");";
 
+        String sqlCreateTblUnternehmenInput =
+                "CREATE TABLE Unternehmen (" +
+                        "    firmenID int NOT NULL PRIMARY KEY," +
+                        "    unternehmenName varchar(50)," +
+                        "    fachrichtung varchar(200)," +
+                        "    maxTeilnehmer int," +
+                        "    maxVeranstaltungen int," +
+                        "    fruehsterZeitSlot varchar(1)," +
+                        "    gewichtung double," + // double als datentyp näher anschauen was notwending
+                        "    aktiv boolean" +
+                        ");";
 
+        String sqlCreateTblRaumInput =
+                "CREATE TABLE Raum (" +
+                        "    raumID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    name varchar(50)," +
+                        "    kapazitaet int" +
+                        ");";
+
+        String sqlCreateTblKursInput =
+                "CREATE TABLE Kurs (" +
+                        "kursID int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                        "raumID int, " +
+                        "firmenID int," +
+                        "zeitslot varchar(1)," +
+                        "FOREIGN KEY (firmenID) REFERENCES Unternehmen(firmenID)," +
+                        "FOREIGN KEY (raumID) REFERENCES Raum(raumID)" +
+                        ");";
+
+        String sqlCreateTblKursTeilnehmerInput =
+                "CREATE TABLE KursTeilnehmer (" +
+                        "kursID int NOT NULL, " +
+                        "schuelerID int NOT NULL," +
+                        "FOREIGN KEY (kursID) REFERENCES Kurs(kursID)," +
+                        "FOREIGN KEY (schuelerID) REFERENCES Schueler(schuelerID)," +
+                        "PRIMARY KEY (kursID, schuelerID)" +
+                        ");";
+
+
+        String sqlCreateTblSchuelerInput =
+                "CREATE TABLE SchuelerInput (" +
+                        "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                        "    nachname varchar(50)," +
+                        "    vorname varchar(50)," +
+                        "    wunsch0 varchar(50)," +
+                        "    wunsch1 varchar(50)," +
+                        "    wunsch2 varchar(50)," +
+                        "    wunsch3 varchar(50)," +
+                        "    wunsch4 varchar(50)," +
+                        "    wunsch5 varchar(50)," +
+                        "    klasse varchar(50)" +
+                        ");";
 
 
         //********** Execute Statements **********
@@ -142,6 +179,25 @@ public class DBModel implements IDatabase {
         kursTeilnehmerTblStmnt.executeUpdate(sqlCreateTblKursTeilnehmer);
 
 
+        // Statement for creating Schuler Table
+        Statement schuelerTblStmntInput = connection().createStatement();
+        schuelerTblStmntInput.executeUpdate(sqlCreateTblSchuelerInput);
+
+        // Statement for creating Unternehmen Table
+        Statement unternehmenTblStmntInput = connection().createStatement();
+        unternehmenTblStmntInput.executeUpdate(sqlCreateTblUnternehmenInput);
+
+        // Statement for creating Raum Table
+        Statement raumTblStmntInput = connection().createStatement();
+        raumTblStmntInput.executeUpdate(sqlCreateTblRaumInput);
+
+        // Statement for creating Kurs Table
+        Statement kursTblStmntInput = connection().createStatement();
+        kursTblStmntInput.executeUpdate(sqlCreateTblKursInput);
+
+        // Statement for creating Kurs Teilnehmer Table
+        Statement kursTeilnehmerTblStmntInput = connection().createStatement();
+        kursTeilnehmerTblStmntInput.executeUpdate(sqlCreateTblKursTeilnehmerInput);
 
 
         connection().close();
