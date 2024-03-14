@@ -35,7 +35,7 @@ public interface ModelInterface {
 	public List<Raum> getAllRooms();
 	public void saveAllRooms(List<Raum> rooms) throws Exception;
 	public void createRoom(String name) throws Exception;
-	public void editRoom(Raum room);
+	public void editRoom(Raum room) throws Exception;
 	public void deleteRoom(Raum room) throws Exception;
 	public List<Raum> importRooms(String path) throws Exception;
 	public void exportRooms(String path, List<Raum> rooms);

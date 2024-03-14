@@ -17,7 +17,7 @@ public interface IDatabase {
 	
 	public void saveState(List<Raum> raeume, List<Schueler> schueler,
 						  List<UnternehmenDAO> unternehmen, List<KursDAO> kurse, List<Raum> raeumeInput, List<Schueler> schuelerInput,
-						  List<UnternehmenDAO> unternehmenInput) throws Exception;
+						  List<UnternehmenDAO> unternehmenInput) throws SQLException, ClassNotFoundException;
 
 	public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException;
 	public List<Schueler> loadSchuelerInput() throws SQLException, ClassNotFoundException;

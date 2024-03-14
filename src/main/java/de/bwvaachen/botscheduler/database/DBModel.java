@@ -23,7 +23,8 @@ public class DBModel implements IDatabase {
 
     }
 
-    public DBModel() throws Exception {
+    public DBModel() throws SQLException, ClassNotFoundException {
+        pfad = getClass().getResource("test.mv.db");
         if (!exitsTable("Schueler")){
             createDbModel();
         }
@@ -38,7 +39,7 @@ public class DBModel implements IDatabase {
         return conn;
     }
 
-    public void createDbModel() throws Exception {
+    public void createDbModel() throws SQLException, ClassNotFoundException {
         connection();
 
 
@@ -204,10 +205,31 @@ public class DBModel implements IDatabase {
     }
 
 
+
+    // Check Tables in Database
+    private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
+        boolean res = false;
+        connection();
+
+        String existsTbl = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+        Statement exitsTblstmt = connection().createStatement();
+        ResultSet resTblExists = exitsTblstmt.executeQuery(existsTbl);
+
+        while (resTblExists.next()){
+            if (tableName.equalsIgnoreCase(resTblExists.getString("TABLE_NAME"))){
+                res = true;
+            }
+        }
+
+        connection().close();
+
+        return res;
+    }
+
     //********** GET- & SET-Methods for Database **********
 
     // Schueler
-    public void setSchuelerData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
+    public void saveSchueler(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
             Connection conn = connection();
 
@@ -239,25 +261,6 @@ public class DBModel implements IDatabase {
             }
             conn.close();
         }
-    }
-
-    private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
-        boolean res = false;
-        connection();
-
-        String existsTbl = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
-        Statement exitsTblstmt = connection().createStatement();
-        ResultSet resTblExists = exitsTblstmt.executeQuery(existsTbl);
-
-        while (resTblExists.next()){
-            if (tableName.equalsIgnoreCase(resTblExists.getString("TABLE_NAME"))){
-                res = true;
-            }
-        }
-
-        connection().close();
-
-        return res;
     }
 
     @Override
@@ -299,7 +302,7 @@ public class DBModel implements IDatabase {
 
 
     // Unternehmen
-    public void setUnternehmenData(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
+    public void saveUnternehmen(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             connection();
             for (int i = 0; i < unternehmenList.size(); i++) {
@@ -323,8 +326,8 @@ public class DBModel implements IDatabase {
 
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
-        connection();
-        List<de.bwvaachen.botscheduler.model.UnternehmenDAO> unternehmenList = new ArrayList<de.bwvaachen.botscheduler.model.UnternehmenDAO>();
+        Connection conn = connection();
+        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
 
         if (exitsTable("Unternehmen")) {
             int firmenID, maxVeranstaltungen, maxTeilnehmer;
@@ -334,7 +337,7 @@ public class DBModel implements IDatabase {
 
             String unternehmenListe = "SELECT * FROM Unternehmen;";
 
-            Statement statement = connection().createStatement();
+            Statement statement = conn.createStatement();
             ResultSet resultSet = statement.executeQuery(unternehmenListe);
 
             while (resultSet.next()) {
@@ -348,7 +351,7 @@ public class DBModel implements IDatabase {
                 aktiv = resultSet.getBoolean("aktiv");
 
 
-                de.bwvaachen.botscheduler.model.UnternehmenDAO unternehmen = new de.bwvaachen.botscheduler.model.UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
+                UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
                 unternehmen.setAktiv(aktiv);
                 unternehmen.setGewichtung(gewichtung);
 
@@ -356,11 +359,13 @@ public class DBModel implements IDatabase {
             }
         }
 
-        connection().close();
+        conn.close();
 
         return unternehmenList;
     }
 
+
+    // Kurse
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
             Connection conn = connection();
@@ -431,37 +436,8 @@ public class DBModel implements IDatabase {
     }
 
 
-    private Raum findRaum(List<Raum> raeume, int ID){
-        Raum res = null;
-        for (Raum r : raeume){
-            if (r.getRaumID() == ID){
-                res = r;
-            }
-        }
-        return res;
-    }
-    private Schueler findSchueler(List<Schueler> schueler, int ID){
-        Schueler res = null;
-        for (Schueler s : schueler){
-            if (s.getSchuelerID() == ID){
-                res = s;
-            }
-        }
-        return res;
-    }
-    private UnternehmenDAO findUnternehmen(List<UnternehmenDAO> unternehmen, int ID){
-        UnternehmenDAO res = null;
-        for (UnternehmenDAO u : unternehmen){
-            if (u.getFirmenID() == ID){
-                res = u;
-            }
-        }
-        return res;
-    }
-
-
     // Raum
-    public void setRaumData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
+    public void saveRooms(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
             for (int i = 0; i < raumList.size(); i++) {
@@ -476,21 +452,6 @@ public class DBModel implements IDatabase {
             }
             conn.close();
         }
-    }
-
-    @Override
-    public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<Raum> loadSchuelerInput() throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<Raum> loadUnternehmenInput() throws SQLException, ClassNotFoundException {
-        return null;
     }
 
     @Override
@@ -525,12 +486,222 @@ public class DBModel implements IDatabase {
     }
 
 
+    // Input Methoden
     @Override
-    public void saveState(List<Raum> raeume, List<Schueler> schueler, List<UnternehmenDAO> unternehmen, List<KursDAO> kurse) throws Exception {
+    public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
+        Connection conn = connection();
+        List<Raum> raumList = new ArrayList<Raum>();
+
+        if (exitsTable("RaumInput")) {
+            int raumID, kapazitaet;
+            String name;
+
+            String raumListe = "SELECT * FROM RaumInput;";
+
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(raumListe);
+
+            while (resultSet.next()) {
+                raumID = resultSet.getInt("raumID");
+                kapazitaet = resultSet.getInt("kapazitaet");
+                name = resultSet.getString("name");
+
+
+                Raum raum = new Raum(name, kapazitaet);
+                raum.setRaumID(raumID);
+
+                raumList.add(raum);
+            }
+        }
+        conn.close();
+
+        return raumList;
+    }
+    public void saveRoomInputData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
+        if (raumList != null) {
+            Connection conn = connection();
+            for (int i = 0; i < raumList.size(); i++) {
+                String sqlInsert = "INSERT INTO RaumInput (name, kapazitaet) VALUES (" +
+                        "'" + raumList.get(i).getName() + "', " +
+                        "'" + raumList.get(i).getKapazitaet() + "'" +
+                        ");";
+
+                Statement statement = conn.createStatement();
+                statement.executeUpdate(sqlInsert);
+
+            }
+            conn.close();
+        }
+    }
+
+
+    @Override
+    public List<Schueler> loadSchuelerInput() throws SQLException, ClassNotFoundException {
+        Connection conn = connection();
+
+        List<Schueler> schuelerList = new ArrayList<Schueler>();
+        if (exitsTable("SchuelerInput")) {
+            int schulerID;
+            String vorname, nachname, klasse;
+
+            String schulerList = "SELECT * FROM SchuelerInput;";
+
+            Statement statement = connection().createStatement();
+            ResultSet resultSet = statement.executeQuery(schulerList);
+
+            while (resultSet.next()) {
+                List<String> wuensche = new ArrayList<String>();
+                schulerID = resultSet.getInt("schuelerID");
+                vorname = resultSet.getString("vorname");
+                nachname = resultSet.getString("nachname");
+                klasse = resultSet.getString("klasse");
+                for (int i = 0; i < 6; i++) {
+                    wuensche.add(i, resultSet.getString("wunsch" + i));
+                }
+
+                Schueler schueler = new Schueler(klasse, vorname, nachname, wuensche);
+                schueler.setSchuelerID(schulerID);
+
+                schuelerList.add(schueler);
+            }
+        }
+
+        conn.close();
+
+        return schuelerList;
+    }
+    public void saveSchuelerInputData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
+        if (schuelerList != null) {
+            Connection conn = connection();
+
+            int i = 1;
+
+            for (Schueler schuel : schuelerList) {
+                String sqlInsert = "INSERT INTO SchuelerInput VALUES ('" +
+                        i + "', " +
+                        "'" + schuel.getNachname() + "', " +
+                        "'" + schuel.getVorname() + "', " +
+                        "'" + schuel.getAllWuensche().get(0) + "', " +
+                        "'" + schuel.getAllWuensche().get(1) + "', " +
+                        "'" + schuel.getAllWuensche().get(2) + "', " +
+                        "'" + schuel.getAllWuensche().get(3) + "', " +
+                        "'" + schuel.getAllWuensche().get(4) + "', " +
+                        "'" + schuel.getAllWuensche().get(5) + "', " +
+                        "'" + schuel.getKlasse() + "');";
+
+                Statement statement = conn.createStatement();
+                statement.executeUpdate(sqlInsert);
+
+                schuel.setSchuelerID(i);
+                i++;
+            }
+            conn.close();
+        }
+    }
+
+    @Override
+    public List<UnternehmenDAO> loadUnternehmenInput() throws SQLException, ClassNotFoundException {
+        Connection conn = connection();
+        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
+
+        if (exitsTable("UnternehmenInput")) {
+            int firmenID, maxVeranstaltungen, maxTeilnehmer;
+            String fruehsterZeitslot, unternehmenName, fachrichtung;
+            double gewichtung;
+            boolean aktiv;
+
+            String unternehmenListe = "SELECT * FROM UnternehmenInput;";
+
+            Statement statement = conn.createStatement();
+            ResultSet resultSet = statement.executeQuery(unternehmenListe);
+
+            while (resultSet.next()) {
+                firmenID = resultSet.getInt("firmenID");
+                maxTeilnehmer = resultSet.getInt("maxTeilnehmer");
+                maxVeranstaltungen = resultSet.getInt("maxVeranstaltungen");
+                unternehmenName = resultSet.getString("unternehmenName");
+                fachrichtung = resultSet.getString("fachrichtung");
+                fruehsterZeitslot = resultSet.getString("fruehsterZeitSlot");
+                gewichtung = resultSet.getDouble("gewichtung");
+                aktiv = resultSet.getBoolean("aktiv");
+
+
+                UnternehmenDAO unternehmen = new UnternehmenDAO(firmenID, unternehmenName, fachrichtung, maxTeilnehmer, maxVeranstaltungen, fruehsterZeitslot);
+                unternehmen.setAktiv(aktiv);
+                unternehmen.setGewichtung(gewichtung);
+
+                unternehmenList.add(unternehmen);
+            }
+        }
+
+        conn.close();
+
+        return unternehmenList;
+    }
+    public void saveUnternehmenInputData(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
+        if (unternehmenList != null) {
+            Connection conn = connection();
+            for (int i = 0; i < unternehmenList.size(); i++) {
+                String sqlInsert = "INSERT INTO UnternehmenInput VALUES (" +
+                              unternehmenList.get(i).getFirmenID() + ", " +
+                        "'" + unternehmenList.get(i).getUnternehmen() + "', " +
+                        "'" + unternehmenList.get(i).getFachrichtung() + "', " +
+                        "'" + unternehmenList.get(i).getMaxTeilnehmer() + "', " +
+                        "'" + unternehmenList.get(i).getMaxVeranstaltungen() + "', " +
+                        "'" + unternehmenList.get(i).getFruehesterZeitslot() + "', " +
+                        "'" + unternehmenList.get(i).getGewichtung() + "', " +
+                              unternehmenList.get(i).isAktiv() + ");";
+
+                Statement statement = conn.createStatement();
+                statement.executeUpdate(sqlInsert);
+
+            }
+            conn.close();
+        }
+    }
+
+
+
+    // Find Methoden
+    private Raum findRaum(List<Raum> raeume, int ID){
+        Raum res = null;
+        for (Raum r : raeume){
+            if (r.getRaumID() == ID){
+                res = r;
+            }
+        }
+        return res;
+    }
+    private Schueler findSchueler(List<Schueler> schueler, int ID){
+        Schueler res = null;
+        for (Schueler s : schueler){
+            if (s.getSchuelerID() == ID){
+                res = s;
+            }
+        }
+        return res;
+    }
+    private UnternehmenDAO findUnternehmen(List<UnternehmenDAO> unternehmen, int ID){
+        UnternehmenDAO res = null;
+        for (UnternehmenDAO u : unternehmen){
+            if (u.getFirmenID() == ID){
+                res = u;
+            }
+        }
+        return res;
+    }
+
+
+    @Override
+    public void saveState(List<Raum> raeume, List<Schueler> schueler, List<UnternehmenDAO> unternehmen, List<KursDAO> kurse,
+                          List<Raum> raeumeInput, List<Schueler> schuelerInput, List<UnternehmenDAO> unternehmenInput) throws SQLException, ClassNotFoundException {
         createDbModel();
-        setRaumData(raeume);
-        setSchuelerData(schueler);
-        setUnternehmenData(unternehmen);
+        saveRooms(raeume);
+        saveSchueler(schueler);
+        saveUnternehmen(unternehmen);
         saveKurse(kurse);
+        saveSchuelerInputData(schuelerInput);
+        saveRoomInputData(raeumeInput);
+        saveUnternehmenInputData(unternehmenInput);
     }
 }
