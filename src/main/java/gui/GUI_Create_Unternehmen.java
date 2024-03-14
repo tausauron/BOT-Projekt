@@ -21,6 +21,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class GUI_Create_Unternehmen {
 
 	private JFrame frmUnternehmenHinzufgen;
@@ -35,11 +40,6 @@ public class GUI_Create_Unternehmen {
 	private JSpinner spIDNummer;
 	private List<Unternehmen> unternehmenList;
 
-	/**
-	 * 
-	 * @author Wagner_Eri
-	 *
-	 */
 	public GUI_Create_Unternehmen(GUI_ListView gui_ListView, List<Unternehmen> unternehmenList) {
 		this.gui_ListView = gui_ListView;
 		this.unternehmenList = unternehmenList;
@@ -71,8 +71,7 @@ public class GUI_Create_Unternehmen {
 		}
 		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
 		frmUnternehmenHinzufgen.setIconImage(ui_Logo);
-		
-		
+
 		frmUnternehmenHinzufgen.setTitle("Unternehmen Hinzufügen");
 		frmUnternehmenHinzufgen.setBounds(100, 100, 255, 310);
 		frmUnternehmenHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -197,8 +196,8 @@ public class GUI_Create_Unternehmen {
 						tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
 						cBoxFrZeit.getSelectedItem().toString()));
 				frmUnternehmenHinzufgen.dispose();
-			}else {
-				
+			} else {
+
 			}
 
 		} else {
@@ -208,10 +207,10 @@ public class GUI_Create_Unternehmen {
 
 	}
 
-	//Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind 
+	// Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind
 	private boolean überPrüfeDopplung() {
 		List<Integer> x = new ArrayList<>();
-		
+
 		for (Unternehmen unternehmen : unternehmenList) {
 			x.add(unternehmen.getFirmenID());
 		}

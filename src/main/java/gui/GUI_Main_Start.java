@@ -39,9 +39,6 @@ public class GUI_Main_Start {
 		frmStartMain.setLocationRelativeTo(null);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
