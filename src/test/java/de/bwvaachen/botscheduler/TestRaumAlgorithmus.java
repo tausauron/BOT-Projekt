@@ -3,14 +3,16 @@ package de.bwvaachen.botscheduler;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-
+import de.bwvaachen.botscheduler.RaumAlgorithm.RaumAlgorithmus;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import execlLoad.ImportFile;
+import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
@@ -27,6 +29,8 @@ class TestRaumAlgorithmus
 	private static List<Unternehmen> unternehmen;
 	private static KursPlaner planer;
 	private static List<Raum> raeume;
+	private static List<Kurse> kursListe;
+	RaumAlgorithmus algo;
 	
 	@BeforeAll
 	static void fillListen() throws URISyntaxException
@@ -39,14 +43,17 @@ class TestRaumAlgorithmus
 
 		String roomPath = TestRaumAlgorithmus.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
 		raeume = ImportFile.getRoom(roomPath); //Holt sich die Raeume und packt diese in eine ArrayList
-		System.out.println(roomPath);
 
+		planer = new KursPlaner();
+		planer.belegeKurse(schueler, unternehmen, raeume);
+		kursListe=(planer.getKurse()); //fuellt die Kursliste
 	}
 
 	@Test
 	void test()
 	{
-		fail();
+		algo = new RaumAlgorithmus();
+		algo.verteileVeranstaltungenAufRaeume(kursListe, raeume);
 
 	}
 
