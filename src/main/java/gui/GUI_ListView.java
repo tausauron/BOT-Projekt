@@ -73,6 +73,15 @@ public class GUI_ListView {
 		initialize();
 		this.frame.setVisible(true);
 	}
+	
+	public GUI_ListView(MyController myController,List<Schueler> listSchüler,List<Unternehmen> listUnternehmen,List<Raum> listRaum) {
+		this.myController = myController;
+		this.schülerList = listSchüler;
+		this.unternehmenList = listUnternehmen;
+		this.raumList = listRaum;
+		initialize();
+		this.frame.setVisible(true);
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -87,13 +96,17 @@ public class GUI_ListView {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				fensterSchließen(schülerList, unternehmenList, raumList);
-			}
+                try {
+                    fensterSchließen(schülerList, unternehmenList, raumList);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
 		});
 		frame.setTitle("BOT");
 
 		frame.setBounds(100, 100, 752, 506);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -214,7 +227,7 @@ public class GUI_ListView {
 
 		JButton btnRaumImportieren = new JButton("Importieren");
 		btnRaumImportieren.addActionListener((e) -> btnPressedRaumImportieren());
-		
+
 		JButton btnRaumExportieren = new JButton("Exportieren");
 		btnRaumExportieren.addActionListener((e) -> btnPressedRaumExportieren());
 
@@ -257,20 +270,17 @@ public class GUI_ListView {
 
 	// Button Hinzufügen
 	private void btnPressedSchülerhinzufügen() {
-		// TODO
-		new GUI_Create_Schueler(this,unternehmenList);
+
+		new GUI_Create_Schueler(this, unternehmenList);
 	}
 
 	private void btnPressedUnternehmenhinzufügen() {
-		// TODO 
 
 		new GUI_Create_Unternehmen(this, unternehmenList);
 	}
 
 	private void btnPressedRaumHinzufügen() {
-		// TODO Raum Hinzufügen
 		new GUI_Create_Raum(this);
-	
 	}
 
 	// Button die den Index Ermitteln und dann Löschen
@@ -406,20 +416,21 @@ public class GUI_ListView {
 
 	// On Close Methode
 	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+			List<Raum> raumList) throws Exception {
 		speichernDerDatenbeimSchließen(schülerList, unternehmenList, raumList);
 	}
 
 	private void speichernDerDatenbeimSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+			List<Raum> raumList) throws Exception {
 
 		int confirmation = JOptionPane.showConfirmDialog(null, "Möchten Sie die Daten vor dem Schließen speichern?",
 				"Bestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (confirmation == JOptionPane.YES_OPTION) {
 			myController.closeListView(schülerList, raumList, unternehmenList);
+			myController.startMainGUI();
 		} else {
-
+			myController.startMainGUI();
 		}
 
 	}

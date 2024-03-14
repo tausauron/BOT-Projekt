@@ -21,7 +21,7 @@ public class Kurse
 	
 	
 
-	public Kurse(ArrayList<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
+	public Kurse(List<CalcSchueler> kursTeilnehmer, Unternehmen unternehmen, Zeitslot zeitslot)
 	{
 		setRaum(raum);
 		setKursTeilnehmer(kursTeilnehmer);
@@ -84,5 +84,13 @@ public class Kurse
 	{
 		pruefeNullEingabe(zeitslot, "Der Zeitslot, in welchem der Kurs stattfindet");
 		this.zeitslot = zeitslot;
+	}
+	
+	public int weight() {
+		int retVal = 0;
+		for(CalcSchueler cSchuel : kursTeilnehmer) {
+			retVal += cSchuel.getSlotByType(getZeitslot().getTyp()).getErfuellterWunsch().getPrio();
+		}
+		return retVal;
 	}
 }

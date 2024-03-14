@@ -163,5 +163,5 @@ public class Unternehmen
 	 */
 	public boolean freeSlot() {
 		return (kurse.values().size() < maxVeranstaltungen);
-	}
+	}	
 }

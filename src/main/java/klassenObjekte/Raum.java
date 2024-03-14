@@ -1,14 +1,9 @@
 package klassenObjekte;
 
-/**
- * 
- * @author Martin Albertz
- * 
- * 
- *  TODO Liste mit Zeitslots hinzufuegen
- */
+
 public class Raum
 {
+	private int raumID;
 	private String name;
 	private int kapazitaet;
 
@@ -18,9 +13,8 @@ public class Raum
 		// TODO Auto-generated constructor stub
 		setKapazitaet(kapazitaet);
 		setName(name);
-
     }
-    
+
 	public String getName()
 	{
 		return name;
@@ -30,14 +24,23 @@ public class Raum
 	{
 		this.name = name;
 	}
-	
+
 	public int getKapazitaet()
 	{
 		return kapazitaet;
 	}
-	
+
 	public void setKapazitaet(int kapazitaet)
 	{
 		this.kapazitaet = kapazitaet;
 	}
+	public int getRaumID() {
+		return raumID;
+	}
+
+	public void setRaumID(int raumID) {
+		this.raumID = raumID;
+	}
+
+
 }
