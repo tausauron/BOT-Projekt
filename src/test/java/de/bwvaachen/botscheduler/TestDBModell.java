@@ -78,7 +78,7 @@ public class TestDBModell {
     @Test
     void testSetSchuelerData() throws SQLException, ClassNotFoundException {
         Connection conn = database.connection();
-        database.setSchuelerData(schueler);
+        database.saveSchueler(schueler);
 
         String getRow = "SELECT nachname,wunsch1,wunsch2,wunsch3 FROM Schueler;";
         String getRowCount = "SELECT COUNT(nachname) FROM Schueler;";
@@ -100,7 +100,7 @@ public class TestDBModell {
 
     @Test
     void testGetSchuelerData() throws SQLException, ClassNotFoundException {
-        database.setSchuelerData(schueler);
+        database.saveSchueler(schueler);
         List<Schueler> testList = database.loadSchueler();
 
         for (int i = 0; i < schueler.size(); i++) {
@@ -112,7 +112,7 @@ public class TestDBModell {
     @Test
     void testSetUnternehmenData() throws SQLException, ClassNotFoundException {
         Connection conn = database.connection();
-        database.setUnternehmenData(unternehmenDAO);
+        database.saveUnternehmen(unternehmenDAO);
 
         String getRow = "SELECT unternehmenName FROM Unternehmen;";
         Statement statement = conn.createStatement();
@@ -128,7 +128,7 @@ public class TestDBModell {
 
     @Test
     void testGetUnternehmenData() throws SQLException, ClassNotFoundException {
-        database.setUnternehmenData(unternehmenDAO);
+        database.saveUnternehmen(unternehmenDAO);
         List<de.bwvaachen.botscheduler.model.UnternehmenDAO> testList = database.loadUnternehmen();
 
         for (int i = 0; i < unternehmen.size(); i++) {
@@ -143,7 +143,7 @@ public class TestDBModell {
     @Test
     void testSetRaumData() throws SQLException, ClassNotFoundException {
         Connection conn = database.connection();
-        database.setRaumData(raum);
+        database.saveRooms(raum);
 
         String getRow = "SELECT name FROM Raum;";
         Statement statement = conn.createStatement();
@@ -159,7 +159,7 @@ public class TestDBModell {
 
     @Test
     void testGetRaumData() throws SQLException, ClassNotFoundException {
-        database.setRaumData(raum);
+        database.saveRooms(raum);
         List<Raum> testList = database.loadRooms();
 
         for (int i = 0; i < testList.size(); i++) {
@@ -173,9 +173,9 @@ public class TestDBModell {
 
     @Test
     void testLoadKurse() throws SQLException, ClassNotFoundException {
-        database.setSchuelerData(schueler);
-        database.setUnternehmenData(unternehmenDAO);
-        database.setRaumData(raum);
+        database.saveSchueler(schueler);
+        database.saveUnternehmen(unternehmenDAO);
+        database.saveRooms(raum);
         database.saveKurse(kurseDAO);
         List<KursDAO> testList = database.loadKurse(database.loadSchueler(), database.loadRooms(), database.loadUnternehmen());
 
