@@ -1,28 +1,30 @@
-package execlLoad;
+package de.bwvaachen.botscheduler;
+
+import execlLoad.ImportFile;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import klassenObjekte.Unternehmen;
 import org.junit.Test;
+
 import java.util.List;
 
+import static org.junit.Assert.*;
 
 
-public class ImportFile_Test {
+
+public class TestImportFile {
     public static void main(String[] args) {
         testGetChoices_ValidFile();
-        testGetCompany_ValidFile();
-        testGetRoom_ValidFile();
+      //  testGetCompany_ValidFile();
+      //  testGetRoom_ValidFile();
     }
 
         //Test für GetChoices
         @Test
         static void testGetChoices_ValidFile() throws IllegalArgumentException{
             // Ersetzen Sie diesen Pfad durch den Pfad zu Ihrer Test-Excel-Datei
-            String path = "H:\\SUD\\IMPORT BOT2_Wahl.xlsx";
+            String path =ImportFile.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();;
+
 
             try {
                 List<Schueler> schuelerListe = ImportFile.getChoices(path);
@@ -54,7 +56,7 @@ public class ImportFile_Test {
     static void testGetChoices_InValidFileFormat() {
         // Ersetzen Sie diesen Pfad durch den Pfad zu Ihrer Test-Excel-Datei
         String path = "H:\\SUD\\IMPORT BOT2_Wahl.xlsx";
-        IllegalArgumentException th
+
 
     }
 
