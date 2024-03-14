@@ -24,7 +24,6 @@ public class DBModel implements IDatabase {
     }
 
     public DBModel() throws SQLException, ClassNotFoundException {
-        pfad = getClass().getResource("test.mv.db");
         if (!exitsTable("Schueler")){
             createDbModel();
         }
@@ -40,13 +39,13 @@ public class DBModel implements IDatabase {
     }
 
     public void createDbModel() throws SQLException, ClassNotFoundException {
-        connection();
+        Connection conn = connection();
 
 
         //********** Define SQL-Statements **********
 
         String sqlDropTable =
-                "DROP TABLE IF EXISTS KursTeilnehmer, Kurs, Raum, Unternehmen, Schueler, Zeitslot, RaumInput, UnternehemnIput, SchuelerInput;" ;
+                "DROP TABLE IF EXISTS KursTeilnehmer, Kurs, Raum, Unternehmen, Schueler, Zeitslot, RaumInput, UnternehmenInput, SchuelerInput;" ;
 
         String sqlCreateTblSchueler =
                 "CREATE TABLE Schueler (" +
@@ -101,7 +100,7 @@ public class DBModel implements IDatabase {
                         ");";
 
         String sqlCreateTblUnternehmenInput =
-                "CREATE TABLE UnternehmenInput (" +
+                        "CREATE TABLE UnternehmenInput (" +
                         "    firmenID int NOT NULL PRIMARY KEY," +
                         "    unternehmenName varchar(50)," +
                         "    fachrichtung varchar(200)," +
@@ -113,7 +112,7 @@ public class DBModel implements IDatabase {
                         ");";
 
         String sqlCreateTblRaumInput =
-                "CREATE TABLE RaumInput (" +
+                        "CREATE TABLE RaumInput (" +
                         "    raumID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                         "    name varchar(50)," +
                         "    kapazitaet int" +
@@ -121,7 +120,7 @@ public class DBModel implements IDatabase {
 
 
         String sqlCreateTblSchuelerInput =
-                "CREATE TABLE SchuelerInput (" +
+                        "CREATE TABLE SchuelerInput (" +
                         "    schuelerID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                         "    nachname varchar(50)," +
                         "    vorname varchar(50)," +
@@ -137,44 +136,44 @@ public class DBModel implements IDatabase {
 
         //********** Execute Statements **********
 
-        Statement deletTabel = connection().createStatement();
+        Statement deletTabel = conn.createStatement();
         deletTabel.executeUpdate(sqlDropTable);
 
         // Statement for creating Schuler Table
-        Statement schuelerTblStmnt = connection().createStatement();
+        Statement schuelerTblStmnt = conn.createStatement();
         schuelerTblStmnt.executeUpdate(sqlCreateTblSchueler);
 
         // Statement for creating Unternehmen Table
-        Statement unternehmenTblStmnt = connection().createStatement();
+        Statement unternehmenTblStmnt = conn.createStatement();
         unternehmenTblStmnt.executeUpdate(sqlCreateTblUnternehmen);
 
         // Statement for creating Raum Table
-        Statement raumTblStmnt = connection().createStatement();
+        Statement raumTblStmnt = conn.createStatement();
         raumTblStmnt.executeUpdate(sqlCreateTblRaum);
 
         // Statement for creating Kurs Table
-        Statement kursTblStmnt = connection().createStatement();
+        Statement kursTblStmnt = conn.createStatement();
         kursTblStmnt.executeUpdate(sqlCreateTblKurs);
 
         // Statement for creating Kurs Teilnehmer Table
-        Statement kursTeilnehmerTblStmnt = connection().createStatement();
+        Statement kursTeilnehmerTblStmnt = conn.createStatement();
         kursTeilnehmerTblStmnt.executeUpdate(sqlCreateTblKursTeilnehmer);
 
 
-        // Statement for creating Schuler Table
-        Statement schuelerTblStmntInput = connection().createStatement();
+        // Statement for creating SchulerInput Table
+        Statement schuelerTblStmntInput = conn.createStatement();
         schuelerTblStmntInput.executeUpdate(sqlCreateTblSchuelerInput);
 
-        // Statement for creating Unternehmen Table
-        Statement unternehmenTblStmntInput = connection().createStatement();
+        // Statement for creating UnternehmenInput Table
+        Statement unternehmenTblStmntInput = conn.createStatement();
         unternehmenTblStmntInput.executeUpdate(sqlCreateTblUnternehmenInput);
 
-        // Statement for creating Raum Table
-        Statement raumTblStmntInput = connection().createStatement();
+        // Statement for creating RaumInput Table
+        Statement raumTblStmntInput = conn.createStatement();
         raumTblStmntInput.executeUpdate(sqlCreateTblRaumInput);
 
 
-        connection().close();
+        conn.close();
     }
 
 
