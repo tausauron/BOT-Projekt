@@ -11,6 +11,10 @@ import klassenObjekte.Schueler;
  * @author Max Tautenhahn
  */
 public class KursDAO {
+	private int ID;
+
+
+
 	private Raum raum;
 	private List<Schueler> kursTeilnehmer;
 	private UnternehmenDAO unternehmen;
@@ -54,8 +58,14 @@ public class KursDAO {
 	public void setZeitslot(String zeitslot) {
 		this.zeitslot = zeitslot;
 	}
-	
-	
+
+	public int getID() {
+		return ID;
+	}
+
+	public void setID(int ID) {
+		this.ID = ID;
+	}
 	
 	
 

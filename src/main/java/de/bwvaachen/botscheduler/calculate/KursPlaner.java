@@ -25,6 +25,7 @@ public class KursPlaner {
 	private List<Unternehmen> unternehmen;
 	private List<Raum> raeume;
 
+	
 	/**
 	 * 
 	 * @param schueler Schülerliste mit Wünschen, die durch Kursbelegungen erfüllt werden sollen
@@ -36,11 +37,22 @@ public class KursPlaner {
 		setcSchueler(schueler, unternehmen);
 		setKurse(new ArrayList<>());
 		setUnternehmen(unternehmen);
-		setRaeume(raeume);
-
+		setRaeume(raeume);	
+		
+		
+		System.out.println("ignore rooms and firms");
+		for (int i = 0; i < 6; i++) {
+			runIteration(true, true);
+		}
+		simpleOutput();
+		
+		System.out.println("remove weak");
+		removeWeakCourses();
+		simpleOutput();
+		
 		System.out.println("ignore rooms");
 		for (int i = 0; i < 6; i++) {
-			runIteration(true);
+			runIteration(true, false);
 		}
 		simpleOutput();
 		
@@ -50,13 +62,19 @@ public class KursPlaner {
 		}
 		simpleOutput();
 		
+		System.out.println("force swapping");
+		for (int i = 0; i < 6; i++) {
+			trySwapping(true);
+		}
+		simpleOutput();
+		
 		System.out.println("remove weak");
 		removeWeakCourses();
 		simpleOutput();
 		
 		System.out.println("normal iteration");
 		for (int i = 0; i < 6; i++) {
-			runIteration(false);
+			runIteration(false, false);
 		}
 		simpleOutput();
 		
@@ -78,7 +96,7 @@ public class KursPlaner {
 		
 		System.out.println("normal iteration");
 		for (int i = 0; i < 6; i++) {
-			runIteration(false);
+			runIteration(false, false);
 		}
 		simpleOutput();
 		
@@ -91,6 +109,7 @@ public class KursPlaner {
 		return prozentScore()+ ", " + belegteSlots();		
 	}	
 
+	
 	private void initSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 
 		cSchueler = new ArrayList<>();
@@ -99,6 +118,7 @@ public class KursPlaner {
 		}
 	}
 
+	
 	private int calculateScore() {
 
 		int retVal = 0;
@@ -112,6 +132,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private int calculateMaxScore() {
 
@@ -123,6 +144,7 @@ public class KursPlaner {
 		System.out.println("MaxScore: " + retVal);
 		return retVal;
 	}
+	
 
 	public String prozentScore() {
 
@@ -133,12 +155,14 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private void setcSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 		initSchueler(schueler, unternehmen);
 	}
+	
 
-	private void runIteration(boolean ignoreRooms) {
+	private void runIteration(boolean ignoreRooms, boolean ignoreFirms) {
 
 		for (CalcSchueler schuel : cSchueler) {
 
@@ -154,7 +178,7 @@ public class KursPlaner {
 						schuel.bookCourse(kurs, wunsch);
 					}
 					else {
-						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A, ignoreRooms);
+						Typ typ = findOpenKursSlot(wunsch, schuel, Typ.A, ignoreRooms, ignoreFirms);
 						if(typ != null) {		
 							kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
 							kurse.add(kurs);
@@ -169,6 +193,7 @@ public class KursPlaner {
 		}
 
 	}
+	
 	
 	private void trySwapping(boolean force) {
 		for (CalcSchueler schuel : cSchueler) {
@@ -188,6 +213,7 @@ public class KursPlaner {
 		}
 
 	}
+	
 	
 	private void swapCourse(Wunsch wunsch, CalcSchueler schuel, Typ typ, boolean force) {
 		Kurse kurs = findMatchingKurs(wunsch, typ);
@@ -237,7 +263,7 @@ public class KursPlaner {
 							swapCourse(wunsch, cSchuel, Typ.A, false);
 
 							if (slot.getKurs() == null) {
-								Typ typ = findOpenKursSlot(wunsch, cSchuel, Typ.A, false);
+								Typ typ = findOpenKursSlot(wunsch, cSchuel, Typ.A, false, false);
 								if (typ != null) {
 									kurs = new Kurse(new ArrayList<>(), wunsch.getVeranstaltung(), new Zeitslot(typ));
 									kurse.add(kurs);
@@ -253,18 +279,44 @@ public class KursPlaner {
 		}
 	}	
 	
+	
 	private void removeWeakCourses() {
 		for(Typ slot : Typ.values()) {
 			List<Kurse> slotKurse = courses(slot, null);
 			slotKurse.sort(kursByWeight);
+			
+			List<Kurse> toDelete = new ArrayList<Kurse>();			
+			for(Kurse kurs : slotKurse) {
+
+				Unternehmen unt = kurs.getUnternehmen();
+				if(hasMultiple(unt)) {
+					findWeakCourses(unt, slot, toDelete);
+				}
+			}
+			
+			for(Kurse delKurs : toDelete) {
+				deleteCourse(delKurs);
+				slotKurse.remove(delKurs);
+			}			
+			
 			if(slotKurse.size() > raeume.size()) {
-				List<Kurse> toDelete = slotKurse.subList(raeume.size(), slotKurse.size());
+				toDelete = slotKurse.subList(raeume.size(), slotKurse.size());
 				for(Kurse kurs : toDelete) {
 					deleteCourse(kurs);
 				}
 			}
 		}
 	}
+	
+	private void findWeakCourses(Unternehmen unt, Typ slot, List<Kurse> toDelete){
+		List<Kurse> list = courses(slot, unt.getUnternehmen());
+		
+		if(list.size() > 1) {
+			list.sort(kursByWeight);
+			toDelete.addAll(list.subList(1, list.size()));			
+		}
+	}
+		
 
 	private Kurse existsKurs(Zeitslot slot, Wunsch wunsch) {
 		Kurse retVal = null;
@@ -278,6 +330,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private boolean kursVoll(Kurse kurs) {
 		boolean retVal = true;
@@ -291,6 +344,7 @@ public class KursPlaner {
 
 		return retVal;
 	}
+	
 
 	private SchuelerSlot nextMatching(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		SchuelerSlot retVal = null;
@@ -307,6 +361,7 @@ public class KursPlaner {
 		}
 		return retVal;
 	}
+	
 
 	/**
 	 * Kurs finden fuer einen leeren Schuelerslot
@@ -336,6 +391,7 @@ public class KursPlaner {
 		return retVal;
 	}
 	
+	
 	private Kurse findMatchingKurs(Wunsch wunsch,  Typ start) {
 		
 		Kurse retVal = null;
@@ -353,9 +409,9 @@ public class KursPlaner {
 		}		
 		return retVal;
 	}
+		
 	
-	
-	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot, boolean ignoreRooms) {
+	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot, boolean ignoreRooms, boolean ignoreFirms) {
 		Typ retVal = null;
 		
 		Unternehmen unt = wunsch.getVeranstaltung();
@@ -365,7 +421,7 @@ public class KursPlaner {
 			Kurse kurs = unt.getKurse().get(freeSlot.getTyp());
 			boolean freeRoom = freeRoom(freeSlot.getTyp()) || ignoreRooms;
 			boolean avoidvoid = nextToExisting(freeSlot.getTyp(), unt);
-			if(hasMultiple(unt)) {
+			if(hasMultiple(unt) && !ignoreFirms) {
 				avoidvoid = !(courses(freeSlot.getTyp(), unt.getUnternehmen()).size() > 0);
 			}
 			
@@ -374,11 +430,12 @@ public class KursPlaner {
 			} 
 			else  if (slot.ordinal() < Typ.values().length-1) {
 				Typ typ = Typ.values()[slot.ordinal()+1];
-				retVal = findOpenKursSlot(wunsch, cSchuel, typ, ignoreRooms);
+				retVal = findOpenKursSlot(wunsch, cSchuel, typ, ignoreRooms, ignoreFirms);
 			}
 		}		
 		return retVal;
 	}
+	
 	
 	/**
 	 * hat die Veranstaltung schon einen Kurs neben diesem Slot? 
@@ -410,9 +467,7 @@ public class KursPlaner {
 		
 		return retVal;
 	}
-	
-	
-	
+		
 	
 	private boolean freeRoom(Typ slotTyp) {
 		int number = 0;
@@ -423,39 +478,37 @@ public class KursPlaner {
 		}
 		return (number < raeume.size());		
 	}
-	
+		
 
 	private void setKurse(List<Kurse> kurse) {
 		this.kurse = kurse;
 	}
+	
 
 	public List<CalcSchueler> getcSchueler() {
 		return cSchueler;
 	}
+	
 
 	public List<Kurse> getKurse() {
 		return kurse;
 	}
+	
 
 	public List<Unternehmen> getUnternehmen() {
 		return unternehmen;
 	}
 	
+	
 	private void setRaeume(List<Raum> raeume) {
 		this.raeume = raeume;
 	}
+	
 
 	private void setUnternehmen(List<Unternehmen> unternehmen) {
 		this.unternehmen = unternehmen;
-		
-//		for(Unternehmen unt : unternehmen) {
-//			Map<Typ, Kurse> kurse = unt.getKurse();
-//			
-//			for(Typ typ : Typ.values()) {
-//				kurse.put(typ, null);
-//			}
-//		}
 	}
+		
 	
 	private void deleteEmptyCourses() {
 		List<Kurse> found = new ArrayList<>();
@@ -467,6 +520,7 @@ public class KursPlaner {
 		}
 		kurse.removeAll(found);
 	}
+	
 	
 	private void deleteCourse(Kurse kurs) {
 		for(CalcSchueler cSchuel : new ArrayList<CalcSchueler>(kurs.getKursTeilnehmer())) {
@@ -485,6 +539,7 @@ public class KursPlaner {
 		}
 		
 	};
+	
 	
 	Comparator<Wunsch> wunschByPriority = new Comparator<Wunsch>() {
 		@Override
@@ -535,6 +590,7 @@ public class KursPlaner {
 		return retVal;
 	}
 	
+	
 	private List<Kurse> courses(Typ slot, String unternehmen) {
 		List<Kurse> retVal = new ArrayList<Kurse>();
 		for(Kurse kurs : kurse) {
@@ -545,12 +601,12 @@ public class KursPlaner {
 					}
 				}else {
 					retVal.add(kurs);
-				}
-						
+				}						
 			}
 		}
 		return retVal;
 	}
+	
 	
 	public boolean hasMultiple(Unternehmen unt) {
 		boolean retVal = false;
@@ -564,8 +620,7 @@ public class KursPlaner {
 			}
 		}		
 		return retVal;
-	}
-	
+	}	
 	
 	
 	private void simpleOutput() {

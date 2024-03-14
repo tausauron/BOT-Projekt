@@ -2,6 +2,7 @@ package de.bwvaachen.botscheduler.grassmann.myInterface;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class MyController {
 	private ModelInterface myModal;
 	private boolean activateLogin = false;
 
-	public MyController(boolean activateLogin) {
+	public MyController(boolean activateLogin) throws Exception {
 		this.activateLogin = activateLogin;
 		this.myModal = new Model();
 		start();
@@ -64,7 +65,7 @@ public class MyController {
 		return true;
 	}
 
-	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) {
+	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) throws Exception {
 		this.saveAllStudents(students);
 		this.saveAllRooms(rooms);
 		this.saveAllCompanies(companies);
@@ -85,7 +86,7 @@ public class MyController {
 		return myModal.getAllStudents();
 	}
 
-	public void saveAllStudents(List<Schueler> Students) {
+	public void saveAllStudents(List<Schueler> Students) throws Exception {
 		myModal.saveAllStudents(Students);
 	}
 
@@ -131,7 +132,7 @@ public class MyController {
 		return myModal.getAllRooms();
 	}
 
-	public void saveAllRooms(List<Raum> rooms) {
+	public void saveAllRooms(List<Raum> rooms) throws Exception {
 		myModal.saveAllRooms(rooms);
 	}
 
@@ -176,7 +177,7 @@ public class MyController {
 		return myModal.getAllCompanies();
 	}
 
-	public void saveAllCompanies(List<Unternehmen> companies) {
+	public void saveAllCompanies(List<Unternehmen> companies) throws Exception {
 		myModal.saveAllCompanies(companies);
 	}
 
