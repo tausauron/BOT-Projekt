@@ -184,9 +184,9 @@ public class DBModel implements IDatabase {
     //***** Check Tables in Database *****
 
     /**
-     *
-     * @param tableName
-     * @return
+     * Prüft ob eine bestimmte Tabelle in der Datenbank existiert
+     * @param tableName name der Tabelle die geprüft werden soll
+     * @return ein bool wert der aussagt ob es die Tabelle in der Datenbank existiert
      * @throws SQLException
      * @throws ClassNotFoundException
      */
@@ -211,7 +211,15 @@ public class DBModel implements IDatabase {
 
     //***** GET- & SET-Methods for Database *****
 
+
     //********** Schueler **********
+
+    /**
+     * Speichert eine Liste von Schüler in der Datenbank. Diese Liste kann auch nur einen oder keinen Eintrag haben
+     * @param schuelerList
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void saveSchueler(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
             Connection conn = connection();
@@ -241,6 +249,13 @@ public class DBModel implements IDatabase {
         }
     }
 
+    /**
+     * Es werden Schüler aus der Datenbank geladen. Aus den gespeicherten Informationen aus der Datenbnak werden
+     * Schülerobjekte zusammengebaut und in eine Liste gepackt
+     * @return Eine Liste von Schülern
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     @Override
     public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
         Connection conn = connection();
@@ -280,6 +295,13 @@ public class DBModel implements IDatabase {
 
 
     //********** Unternehmen **********
+
+    /**
+     * Es wird eine Liste von Unternehmen in der Datenbank gespeichert. Diese Liste kann auch nur einen oder keinen Eintrag haben
+     * @param unternehmenList
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void saveUnternehmen(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             Connection conn = connection();
