@@ -2,10 +2,12 @@ package de.bwvaachen.botscheduler.model;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bwvaachen.botscheduler.RaumAlgorithm.RaumAlgorithmus;
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.Zeitslot;
@@ -27,6 +29,10 @@ import klassenObjekte.Unternehmen;
  * @author Max Tautenhahn
  */
 public class Model implements ModelInterface {
+	
+	private static final String LAUFZETTEL = "Laufzettel.xlsx";
+	private static final String RAUMPLAN = "Raumplan.xlsx";
+	private static final String ANWESENHEIT = "Anwesenheitsliste.xlsx";	
 
 	private List<Schueler> schuelerInput = new ArrayList<>();
 	private List<Kurse> kurse = new ArrayList<>();
@@ -44,7 +50,7 @@ public class Model implements ModelInterface {
 	@Override
 	public String belegeKurse() throws IllegalStateException {
 
-		unternehmen = new ArrayList<>(unternehmenInput);
+		unternehmen = copyUnternehmenInput();
 		raeume = new ArrayList<>(raeumeInput);
 		cSchueler = new ArrayList<>();
 		kurse = new ArrayList<>();
@@ -65,6 +71,9 @@ public class Model implements ModelInterface {
 		String score = planer.belegeKurse(schuelerInput, unternehmen, raeume);
 		kurse = planer.getKurse();
 		cSchueler = planer.getcSchueler();
+		
+		RaumAlgorithmus raumAlg = new RaumAlgorithmus();
+		raumAlg.verteileVeranstaltungenAufRaeume(kurse, raeume);
 
 		return score;
 	}
@@ -153,13 +162,18 @@ public class Model implements ModelInterface {
 	}
 
 	@Override
-	public void exportSchuelerSchedule(String path) throws FileNotFoundException, IOException {
+	public void exportLoesung(String path) throws FileNotFoundException, IOException {
 		IExport exporter = new ExportFile();
+		String schuelerSchedulePath = Path.of(path, LAUFZETTEL).toString();
+		String roomPlanPath = Path.of(path, RAUMPLAN).toString();
+		String attendencePath = Path.of(path, ANWESENHEIT).toString();
 
 		if (cSchueler.size() == 0) {
 			throw new IllegalStateException("Noch keine Kursbelegung kalkuliert.");
 		}
-		exporter.exportStudentSchedule(cSchueler, path);
+		exporter.exportStudentSchedule(cSchueler, schuelerSchedulePath);
+		exporter.exportRoomUsage(unternehmen, roomPlanPath);
+		exporter.exportParticipants(unternehmen, attendencePath);
 	}
 
 	@Override
@@ -301,5 +315,19 @@ public class Model implements ModelInterface {
 	public void deleteAllCompanies() throws Exception {
 		this.unternehmenInput = new ArrayList<Unternehmen>();
 		saveToDB();
+	}
+	
+	private List<Unternehmen> copyUnternehmenInput(){
+		List<Unternehmen> retVal = new ArrayList<>();
+		
+		for(Unternehmen unt : unternehmenInput) {
+			retVal.add(new Unternehmen(unt.getFirmenID(),
+					unt.getUnternehmen(),
+					unt.getFachrichtung(),
+					unt.getMaxTeilnehmer(),
+					unt.getMaxVeranstaltungen(),
+					unt.getFruehesterZeitslot()));
+		}		
+		return retVal;
 	}
 }

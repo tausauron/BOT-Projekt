@@ -232,7 +232,7 @@ public class MyController {
 
 		try {
 			String score = myModal.belegeKurse();
-			myModal.exportSchuelerSchedule(path + "\\BOT-Laufzettel.xlsx");
+			myModal.exportLoesung(path);
 			JOptionPane.showMessageDialog(null, score);
 		} catch (Exception e) {
 			handleEcxeption(e);
