@@ -46,7 +46,7 @@ public class DBModel implements IDatabase {
         //********** Define SQL-Statements **********
 
         String sqlDropTable =
-                "DROP TABLE IF EXISTS KursTeilnehmer, Kurs, Raum, Unternehmen, Schueler, Zeitslot;" ;
+                "DROP TABLE IF EXISTS KursTeilnehmer, Kurs, Raum, Unternehmen, Schueler, Zeitslot, RaumInput, UnternehemnIput, SchuelerInput;" ;
 
         String sqlCreateTblSchueler =
                 "CREATE TABLE Schueler (" +
@@ -101,7 +101,7 @@ public class DBModel implements IDatabase {
                         ");";
 
         String sqlCreateTblUnternehmenInput =
-                "CREATE TABLE Unternehmen (" +
+                "CREATE TABLE UnternehmenInput (" +
                         "    firmenID int NOT NULL PRIMARY KEY," +
                         "    unternehmenName varchar(50)," +
                         "    fachrichtung varchar(200)," +
@@ -113,29 +113,10 @@ public class DBModel implements IDatabase {
                         ");";
 
         String sqlCreateTblRaumInput =
-                "CREATE TABLE Raum (" +
+                "CREATE TABLE RaumInput (" +
                         "    raumID int NOT NULL AUTO_INCREMENT PRIMARY KEY," +
                         "    name varchar(50)," +
                         "    kapazitaet int" +
-                        ");";
-
-        String sqlCreateTblKursInput =
-                "CREATE TABLE Kurs (" +
-                        "kursID int NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                        "raumID int, " +
-                        "firmenID int," +
-                        "zeitslot varchar(1)," +
-                        "FOREIGN KEY (firmenID) REFERENCES Unternehmen(firmenID)," +
-                        "FOREIGN KEY (raumID) REFERENCES Raum(raumID)" +
-                        ");";
-
-        String sqlCreateTblKursTeilnehmerInput =
-                "CREATE TABLE KursTeilnehmer (" +
-                        "kursID int NOT NULL, " +
-                        "schuelerID int NOT NULL," +
-                        "FOREIGN KEY (kursID) REFERENCES Kurs(kursID)," +
-                        "FOREIGN KEY (schuelerID) REFERENCES Schueler(schuelerID)," +
-                        "PRIMARY KEY (kursID, schuelerID)" +
                         ");";
 
 
@@ -191,14 +172,6 @@ public class DBModel implements IDatabase {
         // Statement for creating Raum Table
         Statement raumTblStmntInput = connection().createStatement();
         raumTblStmntInput.executeUpdate(sqlCreateTblRaumInput);
-
-        // Statement for creating Kurs Table
-        Statement kursTblStmntInput = connection().createStatement();
-        kursTblStmntInput.executeUpdate(sqlCreateTblKursInput);
-
-        // Statement for creating Kurs Teilnehmer Table
-        Statement kursTeilnehmerTblStmntInput = connection().createStatement();
-        kursTeilnehmerTblStmntInput.executeUpdate(sqlCreateTblKursTeilnehmerInput);
 
 
         connection().close();
