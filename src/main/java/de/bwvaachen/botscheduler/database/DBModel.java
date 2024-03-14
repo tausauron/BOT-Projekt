@@ -177,8 +177,7 @@ public class DBModel implements IDatabase {
     }
 
 
-
-    // Check Tables in Database
+    //***** Check Tables in Database *****
     private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
         boolean res = false;
         connection();
@@ -198,9 +197,9 @@ public class DBModel implements IDatabase {
         return res;
     }
 
-    //********** GET- & SET-Methods for Database **********
+    //***** GET- & SET-Methods for Database *****
 
-    // Schueler
+    //********** Schueler **********
     public void saveSchueler(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
             Connection conn = connection();
@@ -273,7 +272,7 @@ public class DBModel implements IDatabase {
     }
 
 
-    // Unternehmen
+    //********** Unternehmen **********
     public void saveUnternehmen(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             connection();
@@ -337,7 +336,7 @@ public class DBModel implements IDatabase {
     }
 
 
-    // Kurse
+    //********** Kurse **********
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
             Connection conn = connection();
@@ -354,17 +353,16 @@ public class DBModel implements IDatabase {
                 ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
                 result.next();
                 kurseIn.setID(result.getInt(1));
-            }
 
-            for (KursDAO kurseIn : kurse) {
                 for (Schueler schlr : kurseIn.getKursTeilnehmer()) {
 
                     String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
                             kurseIn.getID() + "," +
-                            schlr.getSchuelerID()+ ");";
+                            schlr.getSchuelerID() + ");";
 
-                    Statement statementKursTeilnehmer = connection().createStatement();
+                    Statement statementKursTeilnehmer = conn.createStatement();
                     statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
+
                 }
             }
             conn.close();
@@ -408,7 +406,7 @@ public class DBModel implements IDatabase {
     }
 
 
-    // Raum
+    //********** Raum **********
     public void saveRooms(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
@@ -458,7 +456,8 @@ public class DBModel implements IDatabase {
     }
 
 
-    // Input Methoden
+    //***** Input Methoden *****
+    //********** Rooms **********
     @Override
     public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -506,7 +505,7 @@ public class DBModel implements IDatabase {
         }
     }
 
-
+    //********** Schueler **********
     @Override
     public List<Schueler> loadSchuelerInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -571,6 +570,7 @@ public class DBModel implements IDatabase {
         }
     }
 
+    //********** Unternehmen **********
     @Override
     public List<UnternehmenDAO> loadUnternehmenInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -634,7 +634,7 @@ public class DBModel implements IDatabase {
 
 
 
-    // Find Methoden
+    //******* Find Methoden *******
     private Raum findRaum(List<Raum> raeume, int ID){
         Raum res = null;
         for (Raum r : raeume){
