@@ -8,12 +8,11 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
 import klassenObjekte.Raum;
@@ -31,18 +30,10 @@ public class GUI_Main_Start {
 
 	private JFrame frmStartMain;
 
-	private List<Schueler> listSchüler;
-
-	private List<Unternehmen> listUnternehmen;
-
-	private List<Raum> listRaum;
-
 	public GUI_Main_Start(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
 			List<Raum> listRaum) {
 		this.myController = myController;
-		this.listSchüler = listSchüler;
-		this.listUnternehmen = listUnternehmen;
-		this.listRaum = listRaum;
+
 		initialize();
 		this.frmStartMain.setVisible(true);
 		frmStartMain.setLocationRelativeTo(null);
@@ -108,35 +99,33 @@ public class GUI_Main_Start {
 				options[4]);
 
 		if (choice == JOptionPane.YES_OPTION) {
-			myController.deleteStudent();
-			myController.deleteCompany();
-			myController.deleteRoom();
+			myController.deleteAllStudent();
+			myController.deleteAllCompany();
+			myController.deleteAllRoom();
 
 		} else if (choice == 1) {
-			myController.deleteStudent();
+			myController.deleteAllStudent();
 		} else if (choice == 2) {
-			myController.deleteCompany();
+			myController.deleteAllCompany();
 		} else if (choice == 3) {
-			myController.deleteRoom();
+			myController.deleteAllRoom();
 		}
 	}
 
 	private void btnPressedgenLösung() {
-		
+
 		try {
 			String path = MyJFileChooser.getPathFolder(frmStartMain, "");
 			if (!path.equals("")) {
-				//TODO
+				// TODO
 				myController.generiereLoesungen(path);
-				
+
 			}
-			
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		
 	}
 }
