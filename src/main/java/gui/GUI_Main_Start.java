@@ -128,6 +128,7 @@ public class GUI_Main_Start {
 			if (!path.equals("")) {
 				//TODO
 				myController.generiereLoesungen(path);
+				
 			}
 			
 

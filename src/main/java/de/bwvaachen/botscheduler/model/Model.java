@@ -46,6 +46,8 @@ public class Model implements ModelInterface{
 	
 	@Override
 	public String belegeKurse() throws IllegalStateException{
+		unternehmen = new ArrayList<>(unternehmenInput);
+		raeume = new ArrayList<>(raeumeInput);
 		
 		if(schuelerInput.size()==0) {
 			throw new IllegalStateException("Keine Schülerliste geladen!");
@@ -59,8 +61,7 @@ public class Model implements ModelInterface{
 			throw new IllegalStateException("Keine Raumliste geladen!");
 		}
 		
-		unternehmen = new ArrayList<>(unternehmenInput);
-		raeume = new ArrayList<>(raeumeInput);
+		
 		
 		KursPlaner planer = new KursPlaner();
 		String score = planer.belegeKurse(schuelerInput, unternehmen, raeume);
@@ -190,7 +191,6 @@ public class Model implements ModelInterface{
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) throws Exception {
-		kurse = new ArrayList<>();
 		this.unternehmenInput = companies;
 		saveToDB();
 	}
@@ -271,7 +271,7 @@ public class Model implements ModelInterface{
 		raeume = database.loadRooms();		
 		unternehmen = new ArrayList<>();
 
-		/*List<UnternehmenDAO> unternehmenInputDAOs = database.loadUnternehmenInput();
+		List<UnternehmenDAO> unternehmenInputDAOs = database.loadUnternehmenInput();
 		for(UnternehmenDAO untDAO : unternehmenInputDAOs) {
 			unternehmenInput.add(new Unternehmen(untDAO.getFirmenID(),
 											untDAO.getUnternehmen(),
@@ -279,7 +279,7 @@ public class Model implements ModelInterface{
 											untDAO.getMaxTeilnehmer(),
 											untDAO.getMaxVeranstaltungen(),
 											untDAO.getFruehesterZeitslot()));
-		}*/
+		}
 		
 		List<UnternehmenDAO> unternehmenDAOS = database.loadUnternehmen();
 		for(UnternehmenDAO untDAO : unternehmenDAOS) {

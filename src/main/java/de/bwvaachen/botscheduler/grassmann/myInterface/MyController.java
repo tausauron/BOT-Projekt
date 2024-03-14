@@ -217,16 +217,7 @@ public class MyController {
 		}
 	}
 
-	public void exportStudentSchedule(JFrame frame) {
-		try {
-			String path = MyJFileChooser.getPathExcel(frame, "Laufzettel.xlsx");
-			if (!path.equals("")) {
-				myModal.exportSchuelerSchedule(path);
-			}
-		} catch (IOException e) {
-			handleEcxeption(e);
-		}
-	}
+
 
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
@@ -236,6 +227,7 @@ public class MyController {
 		
 		try{
 			 String score= myModal.belegeKurse();
+			 myModal.exportSchuelerSchedule(path+"\\BOT-Laufzettel.xlsx");
 			 JOptionPane.showMessageDialog(null, score);
 		}
 		catch (Exception e) {
