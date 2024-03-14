@@ -353,17 +353,16 @@ public class DBModel implements IDatabase {
                 ResultSet result = stmt_getKursID.executeQuery(sql_getKursID);
                 result.next();
                 kurseIn.setID(result.getInt(1));
-            }
 
-            for (KursDAO kurseIn : kurse) {
                 for (Schueler schlr : kurseIn.getKursTeilnehmer()) {
 
                     String sqlInsertTeilnehmer = "INSERT INTO KursTeilnehmer VALUES (" +
                             kurseIn.getID() + "," +
-                            schlr.getSchuelerID()+ ");";
+                            schlr.getSchuelerID() + ");";
 
-                    Statement statementKursTeilnehmer = connection().createStatement();
+                    Statement statementKursTeilnehmer = conn.createStatement();
                     statementKursTeilnehmer.executeUpdate(sqlInsertTeilnehmer);
+
                 }
             }
             conn.close();
