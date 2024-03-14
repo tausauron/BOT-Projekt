@@ -1,5 +1,8 @@
 package gui;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -8,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Raum;
@@ -20,7 +25,7 @@ import klassenObjekte.Raum;
 
 public class GUI_Create_Raum {
 
-	private JFrame frmSchlerHinzufgen;
+	private JFrame frmCreateRoom;
 	private JTextField tfieldName;
 	private GUI_ListView gui_ListView;
 	private JSpinner spKapaz;
@@ -28,7 +33,8 @@ public class GUI_Create_Raum {
 	public GUI_Create_Raum(GUI_ListView gui_ListView) {
 		this.gui_ListView = gui_ListView;
 		initialize();
-		this.frmSchlerHinzufgen.setVisible(true);
+		this.frmCreateRoom.setVisible(true);
+		frmCreateRoom.setLocationRelativeTo(null);
 
 	}
 
@@ -36,11 +42,18 @@ public class GUI_Create_Raum {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmSchlerHinzufgen = new JFrame();
+		frmCreateRoom = new JFrame();
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmCreateRoom.setIconImage(ui_Logo);
 
-		frmSchlerHinzufgen.setTitle("Raum Hinzufügen");
-		frmSchlerHinzufgen.setBounds(100, 100, 255, 175);
-		frmSchlerHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmCreateRoom.setTitle("Raum Hinzufügen");
+		frmCreateRoom.setBounds(100, 100, 255, 175);
+		frmCreateRoom.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JLabel lblKlasse = new JLabel("Name:");
 
@@ -56,7 +69,7 @@ public class GUI_Create_Raum {
 		btnAbbrechen.addActionListener((e) -> btnPressedAbbrechen());
 
 		spKapaz = new JSpinner();
-		GroupLayout groupLayout = new GroupLayout(frmSchlerHinzufgen.getContentPane());
+		GroupLayout groupLayout = new GroupLayout(frmCreateRoom.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -88,11 +101,11 @@ public class GUI_Create_Raum {
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnHinzufügen)
 								.addComponent(btnAbbrechen))
 						.addContainerGap(21, Short.MAX_VALUE)));
-		frmSchlerHinzufgen.getContentPane().setLayout(groupLayout);
+		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
 	private void btnPressedAbbrechen() {
-		frmSchlerHinzufgen.dispose();
+		frmCreateRoom.dispose();
 
 	}
 
@@ -100,7 +113,7 @@ public class GUI_Create_Raum {
 
 		if (!tfieldName.getText().isEmpty()) {
 			gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
-			frmSchlerHinzufgen.dispose();
+			frmCreateRoom.dispose();
 		} else {
 			JOptionPane.showMessageDialog(null, "Feld: Name ist leer", "Fehler Leeres Feld", JOptionPane.ERROR_MESSAGE);
 		}

@@ -106,7 +106,7 @@ public class KursPlaner {
 		}
 		simpleOutput();
 		
-		return prozentScore()+ ", " + belegteSlots();		
+		return prozentScore();		
 	}	
 
 	
