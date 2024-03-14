@@ -101,7 +101,7 @@ public class MyController {
 
 	public List<Schueler> importStudent(JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelImport(frame,"BOT_Import_Schüler");
 			if (!path.equals("")) {
 				return myModal.importStudent(path);
 			}
@@ -115,7 +115,7 @@ public class MyController {
 	public void exportStudent(List<Schueler> students, JFrame frame) {
 		try {
 
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelExport(frame,"BOT_Export_Schüler");
 			if (!path.equals("")) {
 				myModal.exportStudent(path, students);
 			}
@@ -152,7 +152,7 @@ public class MyController {
 
 	public List<Raum> importRooms(JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelImport(frame,"BOT_Import_Räume");
 			if (!path.equals("")) {
 				return myModal.importRooms(path);
 			}
@@ -165,7 +165,7 @@ public class MyController {
 
 	public void exportRooms(List<Raum> rooms, JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelExport(frame,"BOT_Export_Räume");
 			if (!path.equals("")) {
 				myModal.exportRooms(path, rooms);
 			}
@@ -202,7 +202,7 @@ public class MyController {
 
 	public List<Unternehmen> importCompany(JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelImport(frame,"BOT_Import_Unternehmen");
 			if (!path.equals("")) {
 				return myModal.importCompany(path);
 			}
@@ -215,7 +215,7 @@ public class MyController {
 
 	public void exportCompany(List<Unternehmen> companies, JFrame frame) {
 		try {
-			String path = MyJFileChooser.getPath(frame);
+			String path = MyJFileChooser.getPathExcelExport(frame, "BOT_Export_Unternehmen");
 			if (!path.equals("")) {
 				myModal.exportCompany(path, companies);
 			}
@@ -233,7 +233,7 @@ public class MyController {
 		try {
 			String score = myModal.belegeKurse();
 			myModal.exportSchuelerSchedule(path + "\\BOT-Laufzettel.xlsx");
-			JOptionPane.showMessageDialog(null, score);
+			JOptionPane.showMessageDialog(null, "Der Erreichte Punkte Wert ist: "+score, "Punkte Ergebnis:", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			handleEcxeption(e);
 

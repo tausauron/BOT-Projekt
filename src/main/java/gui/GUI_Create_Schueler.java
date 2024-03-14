@@ -75,8 +75,7 @@ public class GUI_Create_Schueler {
 		}
 		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
 		frmCreateSchueler.setIconImage(ui_Logo);
-		
-		
+
 		frmCreateSchueler.setTitle("Schüler Hinzufügen");
 		frmCreateSchueler.setBounds(100, 100, 255, 443);
 		frmCreateSchueler.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -236,14 +235,19 @@ public class GUI_Create_Schueler {
 			String[] splittedChoose = string.split("-");
 			listofWishes.add(splittedChoose[0]);
 		}
-		if (!gleicheZahlenPrüfen(listofWishes) && !tfieldKlasse.getText().isEmpty()
-				&& !tfieldVorname.getText().isEmpty() && !tfieldNachname.getText().isEmpty()) {
-			gui_ListView.addSchülerToList(new Schueler(tfieldKlasse.getText(), tfieldVorname.getText(),
-					tfieldNachname.getText(), listofWishes));
-			frmCreateSchueler.dispose();
+		if (!tfieldKlasse.getText().isEmpty() && !tfieldVorname.getText().isEmpty()
+				&& !tfieldNachname.getText().isEmpty()) {
+
+			if (!gleicheZahlenPrüfen(listofWishes)) {
+				gui_ListView.addSchülerToList(new Schueler(tfieldKlasse.getText(), tfieldVorname.getText(),
+						tfieldNachname.getText(), listofWishes));
+				frmCreateSchueler.dispose();
+			} else {
+
+			}
 
 		} else {
-			JOptionPane.showMessageDialog(null, "Feld: Vorname oder Nachname ist leer", "Fehler Leeres Feld",
+			JOptionPane.showMessageDialog(null, "Feld: Klasse,Vorname oder Nachname ist leer", "Fehler Leeres Feld",
 					JOptionPane.ERROR_MESSAGE);
 		}
 
@@ -256,7 +260,7 @@ public class GUI_Create_Schueler {
 		for (String wish : listofWishes) {
 
 			if (checkList.contains(wish)) {
-				JOptionPane.showMessageDialog(null, "Fehler Sie haben den Wunsch " + wish + " doppelt ausgewählt",
+				JOptionPane.showMessageDialog(null, "Fehler Sie haben den Wunsch: " + wish + " mehrfach ausgewählt",
 						"Doppelte Auswahl Fehler", JOptionPane.ERROR_MESSAGE);
 				return true;
 			} else {
