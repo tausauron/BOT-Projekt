@@ -104,14 +104,17 @@ public class GUI_Create_Raum {
 		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
+	//Damit nicht alles geschlossen wird
 	private void btnPressedAbbrechen() {
 		frmCreateRoom.dispose();
 
 	}
 
+	//Btn um ein Raum zu erstellen aus dem Inhalt der Felder
 	private void btnpressedHinzufügen() {
 
 		if (!tfieldName.getText().isEmpty()) {
+			
 			gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
 			frmCreateRoom.dispose();
 		} else {

@@ -197,6 +197,8 @@ public class GUI_Create_Unternehmen {
 						tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
 						cBoxFrZeit.getSelectedItem().toString()));
 				frmUnternehmenHinzufgen.dispose();
+			}else {
+				
 			}
 
 		} else {
