@@ -13,10 +13,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class MyJFileChooser extends JFileChooser {
 	
 	public static String getPath(JFrame frame) throws FileNotFoundException {
-		return getPath(frame, "");	
+		return getPathExcel(frame, "");	
 	}
 	
-	public static String getPath(JFrame frame, String filename) throws FileNotFoundException {
+	public static String getPathExcel(JFrame frame, String filename) throws FileNotFoundException {
 		try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); } 
 		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) { }
 
@@ -41,5 +41,24 @@ public class MyJFileChooser extends JFileChooser {
 		return "";
         
         
+	}
+	public static String getPathFolder(JFrame frame, String foldername) throws FileNotFoundException {
+	    try { UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); } 
+	    catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) { }
+
+	    JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+	    fileChooser.setSelectedFile(new File(foldername));
+	    
+	    int userSelection = fileChooser.showSaveDialog(frame);
+	    if (userSelection == JFileChooser.APPROVE_OPTION) {
+	        File selectedFolder = fileChooser.getSelectedFile();
+	        if (selectedFolder != null) {
+	            return selectedFolder.getAbsolutePath();
+	        } else {
+	            throw new FileNotFoundException("Angegebener Ordner wurde nicht gefunden");
+	        }
+	    }
+	    return "";
 	}
 }

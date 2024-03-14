@@ -1,8 +1,6 @@
 package de.bwvaachen.botscheduler.grassmann.myInterface;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,9 @@ import gui.GUI_ListView;
 import gui.GUI_Login;
 import gui.GUI_Main_Start;
 import gui.MyJFileChooser;
-import klassenObjekte.*;
+import klassenObjekte.Raum;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * @author Grassmann
@@ -45,7 +45,7 @@ public class MyController {
 
 	public void startListView() {
 		if (datenBankDatenExist()) {
-			this.listView=new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
+			this.listView = new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
 		} else {
 			this.listView = new GUI_ListView(this);
 		}
@@ -55,7 +55,7 @@ public class MyController {
 		if (datenBankDatenExist()) {
 			this.mainStart = new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
 		} else {
-			this.mainStart = new GUI_Main_Start(this);
+
 		}
 
 	}
@@ -90,16 +90,13 @@ public class MyController {
 		myModal.saveAllStudents(Students);
 	}
 
-	public void createStudent() {
-		System.out.println("createStudent");
-	}
-
-	public void editStudent() {
-		System.out.println("editStudent");
-	}
-
-	public void deleteStudent() {
-		System.out.println("editStudent");
+	public void deleteAllStudent() {
+		try {
+			myModal.deleteAllStudent();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Schueler> importStudent(JFrame frame) {
@@ -144,8 +141,13 @@ public class MyController {
 		System.out.println("editRoom");
 	}
 
-	public void deleteRoom() {
-		System.out.println("editRoom");
+	public void deleteAllRoom() {
+		try {
+			myModal.deleteAllRooms();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Raum> importRooms(JFrame frame) {
@@ -189,8 +191,13 @@ public class MyController {
 		System.out.println("editCompany");
 	}
 
-	public void deleteCompany() {
-		System.out.println("editCompany");
+	public void deleteAllCompany() {
+		try {
+			myModal.deleteAllCompanies();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public List<Unternehmen> importCompany(JFrame frame) {
@@ -217,18 +224,21 @@ public class MyController {
 		}
 	}
 
-	public void exportStudentSchedule(JFrame frame) {
-		try {
-			String path = MyJFileChooser.getPath(frame, "Laufzettel.xlsx");
-			if (!path.equals("")) {
-				myModal.exportSchuelerSchedule(path);
-			}
-		} catch (IOException e) {
-			handleEcxeption(e);
-		}
-	}
-
 	private static void handleEcxeption(Throwable e) {
 		JOptionPane.showMessageDialog(new JFrame(), e.getMessage(), e.getClass().toString(), JOptionPane.ERROR_MESSAGE);
+	}
+
+	public void generiereLoesungen(String path) {
+
+		try {
+			String score = myModal.belegeKurse();
+			myModal.exportSchuelerSchedule(path + "\\BOT-Laufzettel.xlsx");
+			JOptionPane.showMessageDialog(null, score);
+		} catch (Exception e) {
+			handleEcxeption(e);
+
+			// TODO: handle exception
+		}
+
 	}
 }
