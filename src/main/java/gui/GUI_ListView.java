@@ -310,13 +310,23 @@ public class GUI_ListView {
 	 * @param e
 	 */
 	private void btnPressedSchülerLöschen(ActionEvent e) {
-		if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
-			int selectedRow = tableSchüler.getSelectedRow();
-			removeOnPositionSchüler(selectedRow);
-		} else {
-			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Schüler aus.", "Keine Auswahl",
-					JOptionPane.WARNING_MESSAGE);
-		}
+	    if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
+	        int selectedRow = tableSchüler.getSelectedRow();
+
+	        // Show a confirmation dialog
+	        int response = JOptionPane.showConfirmDialog(frame,
+	            "Soll der ausgewählte Schüler wirklich gelöscht werden?",
+	            "Schüler löschen",
+	            JOptionPane.YES_NO_OPTION);
+
+	        if (response == JOptionPane.YES_OPTION) {
+	            // User clicked "Yes", so delete the student
+	            removeOnPositionSchüler(selectedRow);
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Schüler aus.", "Keine Auswahl",
+	                JOptionPane.WARNING_MESSAGE);
+	    }
 	}
 
 	/**
@@ -327,7 +337,16 @@ public class GUI_ListView {
 	private void btnPressedUnternehmeLöschen() {
 		if (tableUn.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableUn.getSelectedRow();
-			removeOnPositionUnternehmen(selectedRow);
+
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame,
+					"Soll das ausgewählte Unternehmen wirklich gelöscht werden?", "Unternehmen löschen",
+					JOptionPane.YES_NO_OPTION);
+
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the company
+				removeOnPositionUnternehmen(selectedRow);
+			}
 		} else {
 			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie ein Unternehmen aus.", "Keine Auswahl",
 					JOptionPane.WARNING_MESSAGE);
@@ -342,7 +361,15 @@ public class GUI_ListView {
 	private void btnPressedRaumLöschen() {
 		if (tableRaum.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableRaum.getSelectedRow();
-			removeOnPositionRaum(selectedRow);
+
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame, "Soll der ausgewählte Raum wirklich gelöscht werden?",
+					"Raum löschen", JOptionPane.YES_NO_OPTION);
+
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the room
+				removeOnPositionRaum(selectedRow);
+			}
 		} else {
 			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Raum aus.", "Keine Auswahl",
 					JOptionPane.WARNING_MESSAGE);
