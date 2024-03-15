@@ -11,13 +11,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * 
- * @author Wagner_Eri Grassman_Dus
+ * @author Wagner_Eri, Grassman_Dus
  *
  */
 
 @SuppressWarnings("serial")
 public class MyJFileChooser extends JFileChooser {
 
+	/**
+	 * Erhalt vom Pfad einer Excel Datei
+	 * 
+	 * @param frame    Für das Look and Feel
+	 * @param filename "Name der Datei wie sie in der Suche angezeigt werden soll"
+	 * @return Pfad der Erhalten wird bei keiner Auswahl kommt "" zurück
+	 * @throws FileNotFoundException
+	 */
 	public static String getPathExcel(JFrame frame, String filename) throws FileNotFoundException {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -47,6 +55,14 @@ public class MyJFileChooser extends JFileChooser {
 
 	}
 
+	/**
+	 * Erhalt vom Pfad einer Ordners
+	 * 
+	 * @param frame    Für das Look and Feel
+	 * @param filename "Name des Ordners wie sie in der Suche angezeigt werden soll"
+	 * @return Pfad vom Ordner, "" wenn kein Pfad gewählt wurde
+	 * @throws FileNotFoundException
+	 */
 	public static String getPathFolder(JFrame frame, String foldername) throws FileNotFoundException {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -70,6 +86,14 @@ public class MyJFileChooser extends JFileChooser {
 		return "";
 	}
 
+	/**
+	 * Pfad von Excel Datei mit Titel Import
+	 * 
+	 * @param frame    Für das Look and Feel
+	 * @param filename "Name des Ordners wie sie in der Suche angezeigt werden soll"
+	 * @return Pfad vom Ordner, "" wenn kein Pfad gewählt wurde
+	 * @throws FileNotFoundException
+	 */
 	public static String getPathExcelImport(JFrame frame, String filename) throws FileNotFoundException {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -99,6 +123,14 @@ public class MyJFileChooser extends JFileChooser {
 		return "";
 	}
 
+	/**
+	 * Pfad von Excel Datei mit Titel Export
+	 * 
+	 * @param frame    Für das Look and Feel
+	 * @param filename "Name des Ordners wie sie in der Suche angezeigt werden soll"
+	 * @return Pfad vom Ordner, "" wenn kein Pfad gewählt wurde
+	 * @throws FileNotFoundException
+	 */
 	public static String getPathExcelExport(JFrame frame, String filename) throws FileNotFoundException {
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

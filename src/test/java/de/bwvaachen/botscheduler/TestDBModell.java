@@ -36,7 +36,7 @@ public class TestDBModell {
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
-        URL dbPfad = DBModel.class.getResource("test.mv.db");
+        URL dbPfad = DBModel.class.getResource("BOT-Database.db");
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();

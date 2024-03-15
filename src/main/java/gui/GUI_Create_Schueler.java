@@ -19,6 +19,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
+
 /**
  * 
  * @author Wagner_Eri
@@ -45,8 +46,14 @@ public class GUI_Create_Schueler {
 	private JComboBox<String> cBoxWahl6;
 	private GUI_ListView gui_ListView;
 
-
-
+	/**
+	 * Konstruktor
+	 * 
+	 * @param gui_ListView    Übergabe um Methode addSchülerToList(new
+	 *                        Schueler(tfieldKlasse.getText(),
+	 *                        tfieldVorname.getText()); zu nutzen.
+	 * @param listUnternehmen Übergabe damit die Schüler eine Auswahl hat
+	 */
 	public GUI_Create_Schueler(GUI_ListView gui_ListView, List<Unternehmen> listUnternehmen) {
 		this.gui_ListView = gui_ListView;
 		initialize();
@@ -220,11 +227,17 @@ public class GUI_Create_Schueler {
 		frmCreateSchueler.getContentPane().setLayout(groupLayout);
 	}
 
+	/**
+	 * Methode damit das Frame nicht geschlossen sondern dispoxe wird.
+	 */
 	private void btnPressedAbbrechen() {
 		frmCreateSchueler.dispose();
 
 	}
 
+	/**
+	 * Beim Hinzufügen werden alle Felder geprüft und es wird der Oberfläche ein Schüler geschickt
+	 */
 	private void btnpressedHinzufügen() {
 		List<String> listofChoosedWishes = List.of(cBoxWahl1.getSelectedItem().toString(),
 				cBoxWahl2.getSelectedItem().toString(), cBoxWahl3.getSelectedItem().toString(),
@@ -253,6 +266,11 @@ public class GUI_Create_Schueler {
 
 	}
 
+	/**
+	 * Es wird vergliechen ob die gewählten Wünsche doppelt vergeben sind
+	 * @param listofWishes Liste der Wünsche die geprüft werden soll
+	 * @return True: Wenn ein Wunsch doppelt vergeben ist, False: Wenn es einen Wunsch nicht doppelt gibt
+	 */
 	private boolean gleicheZahlenPrüfen(List<String> listofWishes) {
 
 		List<String> checkList = new ArrayList<>();
