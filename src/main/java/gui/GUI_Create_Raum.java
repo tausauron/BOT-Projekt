@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -11,9 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Raum;
 
@@ -29,9 +31,11 @@ public class GUI_Create_Raum {
 	private JTextField tfieldName;
 	private GUI_ListView gui_ListView;
 	private JSpinner spKapaz;
+	private List<Raum> raumList;
 
-	public GUI_Create_Raum(GUI_ListView gui_ListView) {
+	public GUI_Create_Raum(GUI_ListView gui_ListView, List<Raum> raumList) {
 		this.gui_ListView = gui_ListView;
+		this.raumList = raumList;
 		initialize();
 		this.frmCreateRoom.setVisible(true);
 		frmCreateRoom.setLocationRelativeTo(null);
@@ -104,20 +108,40 @@ public class GUI_Create_Raum {
 		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
+	// Damit nicht alles geschlossen wird
 	private void btnPressedAbbrechen() {
 		frmCreateRoom.dispose();
 
 	}
 
+	// Btn um ein Raum zu erstellen aus dem Inhalt der Felder
 	private void btnpressedHinzufügen() {
 
 		if (!tfieldName.getText().isEmpty()) {
-			gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
-			frmCreateRoom.dispose();
+
+			if (!doppelteRaumVergabe()) {
+				gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
+				frmCreateRoom.dispose();
+			}
+
 		} else {
 			JOptionPane.showMessageDialog(null, "Feld: Name ist leer", "Fehler Leeres Feld", JOptionPane.ERROR_MESSAGE);
 		}
 
+	}
+
+	private boolean doppelteRaumVergabe() {
+		List<String> x = new ArrayList<>();
+
+		for (Raum raum : raumList) {
+			x.add(raum.getName());
+		}
+		if (x.contains(tfieldName.getText())) {
+			JOptionPane.showMessageDialog(null, "Ein Raum hat den gleichen Namen", "Gleiche Namen",
+					JOptionPane.ERROR_MESSAGE);
+			return true;
+		}
+		return false;
 	}
 
 }

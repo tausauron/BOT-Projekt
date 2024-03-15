@@ -53,18 +53,6 @@ public class GUI_ListView {
 	private JTable tableUn;
 	private JTable tableRaum;
 
-	/**
-	 * Create the application.
-	 */
-
-	/*
-	 * public GUI_ListView(List<Schueler> schüler, List<Unternehmen> unternehmen,
-	 * List<Raum> räume, MyController myController) {
-	 * 
-	 * this.schülerList = schüler; this.unternehmenList = unternehmen; this.raumList
-	 * = räume; initialize(); this.frame.setVisible(true); }
-	 */
-
 	public GUI_ListView(MyController myController) {
 		this.myController = myController;
 		this.schülerList = new ArrayList<Schueler>();
@@ -73,8 +61,9 @@ public class GUI_ListView {
 		initialize();
 		this.frame.setVisible(true);
 	}
-	
-	public GUI_ListView(MyController myController,List<Schueler> listSchüler,List<Unternehmen> listUnternehmen,List<Raum> listRaum) {
+
+	public GUI_ListView(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
+			List<Raum> listRaum) {
 		this.myController = myController;
 		this.schülerList = listSchüler;
 		this.unternehmenList = listUnternehmen;
@@ -97,12 +86,12 @@ public class GUI_ListView {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-                try {
-                    fensterSchließen(schülerList, unternehmenList, raumList);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
+				try {
+					fensterSchließen(schülerList, unternehmenList, raumList);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
 		});
 		frame.setTitle("BOT");
 
@@ -281,7 +270,7 @@ public class GUI_ListView {
 	}
 
 	private void btnPressedRaumHinzufügen() {
-		new GUI_Create_Raum(this);
+		new GUI_Create_Raum(this, this.raumList);
 	}
 
 	// Button die den Index Ermitteln und dann Löschen
@@ -416,8 +405,8 @@ public class GUI_ListView {
 	}
 
 	// On Close Methode
-	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) throws Exception {
+	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList, List<Raum> raumList)
+			throws Exception {
 		speichernDerDatenbeimSchließen(schülerList, unternehmenList, raumList);
 	}
 
