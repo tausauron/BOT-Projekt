@@ -9,6 +9,7 @@ import klassenObjekte.*;
  * @author Wagner_Eri
  *
  */
+
 //Ein Model um ein Tabelle in der View Scrollpane Darzustellen
 @SuppressWarnings("serial")
 public class StudentTableModel extends AbstractTableModel {
