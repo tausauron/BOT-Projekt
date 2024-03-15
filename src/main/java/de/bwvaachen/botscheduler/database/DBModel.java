@@ -21,13 +21,15 @@ public class DBModel implements IDatabase {
     }
 
     /**
-     * Strellt die Connection her zu der Datenbank dessen Pfad bereits in dem Attribut 'pfad' bespeichert werden muss
+     * Stellt die Connection her zu der Datenbank dessen Pfad bereits in dem Attribut 'pfad' gespeichert werden muss,
      * das heißt die Datenbank-Datei muss es bereits geben.
      * @return Die Connection die aufgebaut wird, wird zurückgegeben
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @throws ClassNotFoundException die Methode 'Class.forName' sucht nach dem Driver und wenn er sie nicht findet,
+     * wird eine ClassNotFoundException geworfen
+     * @throws SQLException Es wird eine Connection zu der Datenbank aufgebaut mit der 'DriverManager.getConnection' Methode,
+     * die eine SQLException wirft, wenn die Connection nicht aufgebaut werden konnte.
      */
-    public Connection connection() throws ClassNotFoundException, SQLException {
+    public Connection connection() throws SQLException, ClassNotFoundException {
         assert pfad != null;
         String dbPfad = pfad.getPath().replaceFirst("/","");
 
@@ -38,9 +40,11 @@ public class DBModel implements IDatabase {
 
     /**
      * Es werden die nötigen SQL Scripte in Strings gespeichert die in der nacheinander als Statements abgeschickt werden
-     * Dafür wird eine Connection aufgebaut um die Statements auf die Datenbank abfeuern zu können
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * dafür wird eine Connection aufgebaut um die Statements auf die Datenbank abfeuern zu können
+     * @throws SQLException Um das Modell zu erstellen, muss erste eine Connection zu der Datenbank geben. Am anfang wird
+     * diese Connection hergestellt und wenn es nicht funktioniert hat, wird die SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     public void createDbModel() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -184,11 +188,13 @@ public class DBModel implements IDatabase {
     //***** Check Tables in Database *****
 
     /**
-     * Prüft ob eine bestimmte Tabelle in der Datenbank existiert
+     * Prüft, ob eine bestimmte Tabelle in der Datenbank existiert
      * @param tableName name der Tabelle die geprüft werden soll
-     * @return ein bool wert der aussagt ob es die Tabelle in der Datenbank existiert
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * @return ein bool wert der aussagt, ob es die Tabelle in der Datenbank existiert
+     * @throws SQLException Um prüfen zu können, ob es eine Tabelle existiert, muss eine Connection zu der Datenbank
+     * bestehen. Wenn diese Connection nicht hergestellt werden kann, wird die Exception geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
         boolean res = false;
