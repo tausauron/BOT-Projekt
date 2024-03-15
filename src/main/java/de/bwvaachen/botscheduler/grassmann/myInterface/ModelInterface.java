@@ -47,7 +47,7 @@ public interface ModelInterface {
 	public String belegeKurse() throws IllegalStateException;
 	
 	//Export
-	public void exportSchuelerSchedule(String path) throws FileNotFoundException, IOException;
+	public void exportLoesung(String path) throws FileNotFoundException, IOException;
 	
 
 	

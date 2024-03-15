@@ -19,8 +19,8 @@ public interface IExport {
 	
 	void exportStudentSchedule(List<CalcSchueler> cSchueler, String path) throws FileNotFoundException, IOException;
 	
-	void exportRoomUsage(List<Unternehmen> unternehmen, String path);
+	void exportRoomUsage(List<Unternehmen> unternehmen, String path) throws FileNotFoundException, IOException;
 	
-	void exportParticipants(List<Unternehmen> unternehmen, String path);
+	void exportParticipants(List<Unternehmen> unternehmen, String path) throws FileNotFoundException, IOException;
 
 }

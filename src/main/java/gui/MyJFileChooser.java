@@ -9,6 +9,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * 
+ * @author Wagner_Eri Grassman_Dus
+ *
+ */
+
 @SuppressWarnings("serial")
 public class MyJFileChooser extends JFileChooser {
 
