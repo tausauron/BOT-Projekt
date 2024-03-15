@@ -21,6 +21,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class GUI_Create_Unternehmen {
 
 	private JFrame frmUnternehmenHinzufgen;
@@ -36,9 +41,11 @@ public class GUI_Create_Unternehmen {
 	private List<Unternehmen> unternehmenList;
 
 	/**
+	 * Konstruktor um ein Unternehmen hinzuzufügen
 	 * 
-	 * @author Wagner_Eri
-	 *
+	 * @param gui_ListView    Übergabe um addUnterhnehmen zu nutzen
+	 * @param unternehmenList Damit geprüft werden kann, ob es gleiche Unternehmen
+	 *                        gibt mir der gleichen Nummer
 	 */
 	public GUI_Create_Unternehmen(GUI_ListView gui_ListView, List<Unternehmen> unternehmenList) {
 		this.gui_ListView = gui_ListView;
@@ -54,6 +61,12 @@ public class GUI_Create_Unternehmen {
 		frmUnternehmenHinzufgen.setLocationRelativeTo(null);
 	}
 
+	/**
+	 * Enums für ZeitSlots
+	 * 
+	 * @author Wagner_Eri
+	 *
+	 */
 	public enum TypSlotEnum {
 		A, B, C, D, E
 	}
@@ -71,8 +84,7 @@ public class GUI_Create_Unternehmen {
 		}
 		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
 		frmUnternehmenHinzufgen.setIconImage(ui_Logo);
-		
-		
+
 		frmUnternehmenHinzufgen.setTitle("Unternehmen Hinzufügen");
 		frmUnternehmenHinzufgen.setBounds(100, 100, 255, 310);
 		frmUnternehmenHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -185,20 +197,26 @@ public class GUI_Create_Unternehmen {
 		frmUnternehmenHinzufgen.getContentPane().setLayout(groupLayout);
 	}
 
+	/**
+	 * Methode damit Frame Dispose und nicht Closed werden
+	 */
 	private void btnPressedAbbrechen() {
 		frmUnternehmenHinzufgen.dispose();
 	}
 
+	/**
+	 * Button um einen Unternehmen der Oberfläche hinzuzufügen
+	 */
 	private void btnpressedHinzufügen() {
 		if (!tfieldName.getText().isEmpty() && !tfieldFachrichtung.getText().isEmpty()) {
 
-			if (!überPrüfeDopplung()) {
+			if (!überPrüfeDopplung(unternehmenList)) {
 				gui_ListView.addUnternehmenToList(new Unternehmen((int) spIDNummer.getValue(), tfieldName.getText(),
 						tfieldFachrichtung.getText(), (int) spMaxTeilnehmer.getValue(), (int) spMaxVeran.getValue(),
 						cBoxFrZeit.getSelectedItem().toString()));
 				frmUnternehmenHinzufgen.dispose();
-			}else {
-				
+			} else {
+
 			}
 
 		} else {
@@ -208,10 +226,16 @@ public class GUI_Create_Unternehmen {
 
 	}
 
-	//Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind 
-	private boolean überPrüfeDopplung() {
+	/**
+	 * Dopplung Prüfung damit Unternehmen Nummer nicht doppelt vorhanden sind
+	 * 
+	 * @param unternehmenList Liste die 
+	 * @return True: Wenn es eine gleiche nummer gibt False: Wenn es keine Dopplung
+	 *         gibt
+	 */
+	private boolean überPrüfeDopplung(List<Unternehmen> unternehmenList) {
 		List<Integer> x = new ArrayList<>();
-		
+
 		for (Unternehmen unternehmen : unternehmenList) {
 			x.add(unternehmen.getFirmenID());
 		}

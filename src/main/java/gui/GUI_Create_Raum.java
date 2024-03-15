@@ -13,12 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Raum;
-import klassenObjekte.Unternehmen;
 
 /**
  * 
@@ -34,9 +33,16 @@ public class GUI_Create_Raum {
 	private JSpinner spKapaz;
 	private List<Raum> raumList;
 
+	/**
+	 * Konstruktor, initialisiert GUI
+	 * 
+	 * @param gui_ListView Nötig um addRaumToList(new Raum(tfieldName.getText(),
+	 *                     (int) spKapaz.getValue())); aufzurufen
+	 * @param raumList     Zum Überprüfen von doppelten Namen
+	 */
 	public GUI_Create_Raum(GUI_ListView gui_ListView, List<Raum> raumList) {
 		this.gui_ListView = gui_ListView;
-		this.raumList=raumList;
+		this.raumList = raumList;
 		initialize();
 		this.frmCreateRoom.setVisible(true);
 		frmCreateRoom.setLocationRelativeTo(null);
@@ -109,31 +115,39 @@ public class GUI_Create_Raum {
 		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
-	//Damit nicht alles geschlossen wird
+	/**
+	 * Damit nicht alles geschlossen wird wird Dispose benutzt
+	 */
 	private void btnPressedAbbrechen() {
 		frmCreateRoom.dispose();
 
 	}
 
-	//Btn um ein Raum zu erstellen aus dem Inhalt der Felder
+	/**
+	 * Btn um ein Raum zu erstellen aus dem Inhalt der Felder
+	 */
 	private void btnpressedHinzufügen() {
 
 		if (!tfieldName.getText().isEmpty()) {
-			
-			if(!doppelteRaumVergabe()) {
+
+			if (!doppelteRaumVergabe()) {
 				gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
-			frmCreateRoom.dispose();
+				frmCreateRoom.dispose();
 			}
-			
+
 		} else {
 			JOptionPane.showMessageDialog(null, "Feld: Name ist leer", "Fehler Leeres Feld", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
 
+	/**
+	 * Zum Überprüfen ob der Raum schon in der Liste Existiert
+	 * @return True: wenn ein Raum einen gleichen Namen hat, False: wenn ein Raum nicht doppelt vergeben ist
+	 */
 	private boolean doppelteRaumVergabe() {
-	List<String> x = new ArrayList<>();
-	
+		List<String> x = new ArrayList<>();
+
 		for (Raum raum : raumList) {
 			x.add(raum.getName());
 		}
