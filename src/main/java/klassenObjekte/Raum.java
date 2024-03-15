@@ -1,6 +1,10 @@
 package klassenObjekte;
 
-
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class Raum
 {
 	private int raumID;

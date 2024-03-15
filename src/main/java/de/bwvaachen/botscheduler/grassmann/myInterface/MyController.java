@@ -232,7 +232,7 @@ public class MyController {
 
 		try {
 			String score = myModal.belegeKurse();
-			myModal.exportLoesung(path + "\\BOT-Laufzettel.xlsx");
+			myModal.exportLoesung(path);
 			JOptionPane.showMessageDialog(null, "Der Erreichte Punkte Wert ist: "+score, "Punkte Ergebnis:", JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			handleEcxeption(e);
