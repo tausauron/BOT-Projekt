@@ -33,6 +33,13 @@ public class GUI_Create_Raum {
 	private JSpinner spKapaz;
 	private List<Raum> raumList;
 
+	/**
+	 * Konstruktor, initialisiert GUI
+	 * 
+	 * @param gui_ListView Nötig um addRaumToList(new Raum(tfieldName.getText(),
+	 *                     (int) spKapaz.getValue())); aufzurufen
+	 * @param raumList     Zum Überprüfen von doppelten Namen
+	 */
 	public GUI_Create_Raum(GUI_ListView gui_ListView, List<Raum> raumList) {
 		this.gui_ListView = gui_ListView;
 		this.raumList = raumList;
@@ -108,13 +115,17 @@ public class GUI_Create_Raum {
 		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
-	// Damit nicht alles geschlossen wird
+	/**
+	 * Damit nicht alles geschlossen wird wird Dispose benutzt
+	 */
 	private void btnPressedAbbrechen() {
 		frmCreateRoom.dispose();
 
 	}
 
-	// Btn um ein Raum zu erstellen aus dem Inhalt der Felder
+	/**
+	 * Btn um ein Raum zu erstellen aus dem Inhalt der Felder
+	 */
 	private void btnpressedHinzufügen() {
 
 		if (!tfieldName.getText().isEmpty()) {
@@ -130,6 +141,10 @@ public class GUI_Create_Raum {
 
 	}
 
+	/**
+	 * Zum Überprüfen ob der Raum schon in der Liste Existiert
+	 * @return True: wenn ein Raum einen gleichen Namen hat, False: wenn ein Raum nicht doppelt vergeben ist
+	 */
 	private boolean doppelteRaumVergabe() {
 		List<String> x = new ArrayList<>();
 
