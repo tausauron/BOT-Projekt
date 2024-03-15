@@ -12,7 +12,16 @@ import java.util.List;
 
 
 public class DBModel implements IDatabase {
-    private final URL pfad = getClass().getResource("BOT-Database.db");
+    private URL pfad = getClass().getResource("test.mv.db");
+
+
+    public static void main(String[] args) throws Exception {
+        DBModel dbModel = new DBModel();
+
+        dbModel.createDbModel();
+        System.out.println(dbModel.exitsTable("Schueler"));
+
+    }
 
     public DBModel() throws SQLException, ClassNotFoundException {
         if (!exitsTable("Schueler")){
@@ -20,28 +29,15 @@ public class DBModel implements IDatabase {
         }
     }
 
-    /**
-     * Strellt die Connection her zu der Datenbank dessen Pfad bereits in dem Attribut 'pfad' bespeichert werden muss
-     * das heißt die Datenbank-Datei muss es bereits geben.
-     * @return Die Connection die aufgebaut wird, wird zurückgegeben
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
     public Connection connection() throws ClassNotFoundException, SQLException {
-        assert pfad != null;
-        String dbPfad = pfad.getPath().replaceFirst("/","");
+        String dbPfad = pfad.getPath().toString().replaceFirst("/","");
 
         Class.forName("org.h2.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:h2:" + dbPfad, "sa", "");
 
-        return DriverManager.getConnection("jdbc:h2:" + dbPfad, "sa", "");
+        return conn;
     }
 
-    /**
-     * Es werden die nötigen SQL Scripte in Strings gespeichert die in der nacheinander als Statements abgeschickt werden
-     * Dafür wird eine Connection aufgebaut um die Statements auf die Datenbank abfeuern zu können
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
     public void createDbModel() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
 
@@ -182,20 +178,12 @@ public class DBModel implements IDatabase {
 
 
     //***** Check Tables in Database *****
-
-    /**
-     *
-     * @param tableName
-     * @return
-     * @throws SQLException
-     * @throws ClassNotFoundException
-     */
     private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
         boolean res = false;
-        Connection conn = connection();
+        connection();
 
         String existsTbl = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
-        Statement exitsTblstmt = conn.createStatement();
+        Statement exitsTblstmt = connection().createStatement();
         ResultSet resTblExists = exitsTblstmt.executeQuery(existsTbl);
 
         while (resTblExists.next()){
@@ -204,7 +192,7 @@ public class DBModel implements IDatabase {
             }
         }
 
-        conn.close();
+        connection().close();
 
         return res;
     }
@@ -231,8 +219,13 @@ public class DBModel implements IDatabase {
                         "'" + schuel.getAllWuensche().get(5) + "', " +
                         "'" + schuel.getKlasse() + "');";
 
+                //String sql_getSchlrID = "SELECT schuelerID FROM Schueler;";
+
+
                 Statement statement = conn.createStatement();
                 statement.executeUpdate(sqlInsert);
+                //Statement statementGetSchlr = connection().createStatement();
+                //ResultSet rsSet = statementGetSchlr.executeQuery(sql_getSchlrID);
 
                 schuel.setSchuelerID(i);
                 i++;
@@ -245,18 +238,18 @@ public class DBModel implements IDatabase {
     public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
         Connection conn = connection();
 
-        List<Schueler> schuelerList = new ArrayList<>();
+        List<Schueler> schuelerList = new ArrayList<Schueler>();
         if (exitsTable("Schueler")) {
             int schulerID;
             String vorname, nachname, klasse;
 
             String schulerList = "SELECT * FROM Schueler;";
 
-            Statement statement = conn.createStatement();
+            Statement statement = connection().createStatement();
             ResultSet resultSet = statement.executeQuery(schulerList);
 
             while (resultSet.next()) {
-                List<String> wuensche = new ArrayList<>();
+                List<String> wuensche = new ArrayList<String>();
                 schulerID = resultSet.getInt("schuelerID");
                 vorname = resultSet.getString("vorname");
                 nachname = resultSet.getString("nachname");
@@ -282,30 +275,30 @@ public class DBModel implements IDatabase {
     //********** Unternehmen **********
     public void saveUnternehmen(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
-            Connection conn = connection();
-            for (UnternehmenDAO unternehmenDAO : unternehmenList) {
+            connection();
+            for (int i = 0; i < unternehmenList.size(); i++) {
                 String sqlInsert = "INSERT INTO Unternehmen VALUES (" +
-                        unternehmenDAO.getFirmenID() + ", " +
-                        "'" + unternehmenDAO.getUnternehmen() + "', " +
-                        "'" + unternehmenDAO.getFachrichtung() + "', " +
-                        "'" + unternehmenDAO.getMaxTeilnehmer() + "', " +
-                        "'" + unternehmenDAO.getMaxVeranstaltungen() + "', " +
-                        "'" + unternehmenDAO.getFruehesterZeitslot() + "', " +
-                        "'" + unternehmenDAO.getGewichtung() + "', " +
-                        unternehmenDAO.isAktiv() + ");";
+                        unternehmenList.get(i).getFirmenID() + ", " +
+                        "'" + unternehmenList.get(i).getUnternehmen() + "', " +
+                        "'" + unternehmenList.get(i).getFachrichtung() + "', " +
+                        "'" + unternehmenList.get(i).getMaxTeilnehmer() + "', " +
+                        "'" + unternehmenList.get(i).getMaxVeranstaltungen() + "', " +
+                        "'" + unternehmenList.get(i).getFruehesterZeitslot() + "', " +
+                        "'" + unternehmenList.get(i).getGewichtung() + "', " +
+                            unternehmenList.get(i).isAktiv() + ");";
 
-                Statement statement = conn.createStatement();
+                Statement statement = connection().createStatement();
                 statement.executeUpdate(sqlInsert);
 
             }
-            conn.close();
+            connection().close();
         }
     }
 
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
-        List<UnternehmenDAO> unternehmenList = new ArrayList<>();
+        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
 
         if (exitsTable("Unternehmen")) {
             int firmenID, maxVeranstaltungen, maxTeilnehmer;
@@ -379,7 +372,7 @@ public class DBModel implements IDatabase {
     @Override
     public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException {
         Connection conn = connection();
-        List<KursDAO> kursDAOList = new ArrayList<>();
+        List<KursDAO> kursDAOList = new ArrayList<KursDAO>();
 
         if (exitsTable("Kurs")) {
 
@@ -417,10 +410,10 @@ public class DBModel implements IDatabase {
     public void saveRooms(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
-            for (Raum raum : raumList) {
+            for (int i = 0; i < raumList.size(); i++) {
                 String sqlInsert = "INSERT INTO Raum (name, kapazitaet) VALUES (" +
-                        "'" + raum.getName() + "', " +
-                        "'" + raum.getKapazitaet() + "'" +
+                        "'" + raumList.get(i).getName() + "', " +
+                        "'" + raumList.get(i).getKapazitaet() + "'" +
                         ");";
 
                 Statement statement = conn.createStatement();
@@ -434,7 +427,7 @@ public class DBModel implements IDatabase {
     @Override
     public List<Raum> loadRooms() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
-        List<Raum> raumList = new ArrayList<>();
+        List<Raum> raumList = new ArrayList<Raum>();
 
         if (exitsTable("Raum")) {
             int raumID, kapazitaet;
@@ -468,7 +461,7 @@ public class DBModel implements IDatabase {
     @Override
     public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
-        List<Raum> raumList = new ArrayList<>();
+        List<Raum> raumList = new ArrayList<Raum>();
 
         if (exitsTable("RaumInput")) {
             int raumID, kapazitaet;
@@ -498,10 +491,10 @@ public class DBModel implements IDatabase {
     public void saveRoomInputData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
-            for (Raum raum : raumList) {
+            for (int i = 0; i < raumList.size(); i++) {
                 String sqlInsert = "INSERT INTO RaumInput (name, kapazitaet) VALUES (" +
-                        "'" + raum.getName() + "', " +
-                        "'" + raum.getKapazitaet() + "'" +
+                        "'" + raumList.get(i).getName() + "', " +
+                        "'" + raumList.get(i).getKapazitaet() + "'" +
                         ");";
 
                 Statement statement = conn.createStatement();
@@ -517,18 +510,18 @@ public class DBModel implements IDatabase {
     public List<Schueler> loadSchuelerInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
 
-        List<Schueler> schuelerList = new ArrayList<>();
+        List<Schueler> schuelerList = new ArrayList<Schueler>();
         if (exitsTable("SchuelerInput")) {
             int schulerID;
             String vorname, nachname, klasse;
 
             String schulerList = "SELECT * FROM SchuelerInput;";
 
-            Statement statement = conn.createStatement();
+            Statement statement = connection().createStatement();
             ResultSet resultSet = statement.executeQuery(schulerList);
 
             while (resultSet.next()) {
-                List<String> wuensche = new ArrayList<>();
+                List<String> wuensche = new ArrayList<String>();
                 schulerID = resultSet.getInt("schuelerID");
                 vorname = resultSet.getString("vorname");
                 nachname = resultSet.getString("nachname");
@@ -581,7 +574,7 @@ public class DBModel implements IDatabase {
     @Override
     public List<UnternehmenDAO> loadUnternehmenInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
-        List<UnternehmenDAO> unternehmenList = new ArrayList<>();
+        List<UnternehmenDAO> unternehmenList = new ArrayList<UnternehmenDAO>();
 
         if (exitsTable("UnternehmenInput")) {
             int firmenID, maxVeranstaltungen, maxTeilnehmer;
@@ -620,16 +613,16 @@ public class DBModel implements IDatabase {
     public void saveUnternehmenInputData(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             Connection conn = connection();
-            for (UnternehmenDAO unternehmenDAO : unternehmenList) {
+            for (int i = 0; i < unternehmenList.size(); i++) {
                 String sqlInsert = "INSERT INTO UnternehmenInput VALUES (" +
-                        unternehmenDAO.getFirmenID() + ", " +
-                        "'" + unternehmenDAO.getUnternehmen() + "', " +
-                        "'" + unternehmenDAO.getFachrichtung() + "', " +
-                        "'" + unternehmenDAO.getMaxTeilnehmer() + "', " +
-                        "'" + unternehmenDAO.getMaxVeranstaltungen() + "', " +
-                        "'" + unternehmenDAO.getFruehesterZeitslot() + "', " +
-                        "'" + unternehmenDAO.getGewichtung() + "', " +
-                        unternehmenDAO.isAktiv() + ");";
+                              unternehmenList.get(i).getFirmenID() + ", " +
+                        "'" + unternehmenList.get(i).getUnternehmen() + "', " +
+                        "'" + unternehmenList.get(i).getFachrichtung() + "', " +
+                        "'" + unternehmenList.get(i).getMaxTeilnehmer() + "', " +
+                        "'" + unternehmenList.get(i).getMaxVeranstaltungen() + "', " +
+                        "'" + unternehmenList.get(i).getFruehesterZeitslot() + "', " +
+                        "'" + unternehmenList.get(i).getGewichtung() + "', " +
+                              unternehmenList.get(i).isAktiv() + ");";
 
                 Statement statement = conn.createStatement();
                 statement.executeUpdate(sqlInsert);
