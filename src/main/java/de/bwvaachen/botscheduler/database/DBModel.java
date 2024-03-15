@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class DBModel implements IDatabase {
-    private URL pfad = getClass().getResource("test.mv.db");
+    private URL pfad = getClass().getResource("BOT-Database.db");
 
 
     public static void main(String[] args) throws Exception {
