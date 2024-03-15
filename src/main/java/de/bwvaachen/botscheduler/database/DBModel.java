@@ -221,10 +221,12 @@ public class DBModel implements IDatabase {
     //********** Schueler **********
 
     /**
-     * Speichert eine Liste von Schüler in der Datenbank. Diese Liste kann auch nur einen oder keinen Eintrag haben
-     * @param schuelerList
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * Speichert eine Liste von Schüler in der Datenbank. Diese Liste kann auch nur einen oder keinen Eintrag haben.
+     * @param schuelerList Liste von Schueler Objekten die in die Datenbank gespeichert werden soll
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     public void saveSchueler(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
@@ -258,12 +260,14 @@ public class DBModel implements IDatabase {
     /**
      * Es werden Schüler aus der Datenbank geladen. Aus den gespeicherten Informationen aus der Datenbnak werden
      * Schülerobjekte zusammengebaut und in eine Liste gepackt
-     * @return Eine Liste von Schülern
-     * @throws ClassNotFoundException
-     * @throws SQLException
+     * @return Eine Liste von Schülern 'List<Schueler>'
+     * @throws SQLException zum Laden von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     @Override
-    public List<Schueler> loadSchueler() throws ClassNotFoundException, SQLException {
+    public List<Schueler> loadSchueler() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
 
         List<Schueler> schuelerList = new ArrayList<>();
@@ -305,8 +309,10 @@ public class DBModel implements IDatabase {
     /**
      * Es wird eine Liste von Unternehmen in der Datenbank gespeichert. Diese Liste kann auch nur einen oder keinen Eintrag haben
      * @param unternehmenList
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     public void saveUnternehmen(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
@@ -330,6 +336,14 @@ public class DBModel implements IDatabase {
         }
     }
 
+    /**
+     * Es werden die Unternehmen die in der Datenbank gespeichert werden, geladen und als eine Liste zurückgegeben.
+     * @return alle in der Datenbank gespeicherten Unternehmen als Liste 'List<UnternehmenDAO>
+     * @throws SQLException zum Laden von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -372,6 +386,13 @@ public class DBModel implements IDatabase {
 
 
     //********** Kurse **********
+
+    /**
+     * Speichert eine Liste von KursDAO Objekten in der Datenbank. Diese Liste kann
+     * @param kurse
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
             Connection conn = connection();
