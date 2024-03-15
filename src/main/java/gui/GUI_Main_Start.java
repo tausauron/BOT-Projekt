@@ -30,6 +30,14 @@ public class GUI_Main_Start {
 
 	private JFrame frmStartMain;
 
+	/**
+	 * Erste Oberfläche die Generieren, Liste Bearbeiten, Daten Löschen Anzeigt
+	 * 
+	 * @param myController    Damit alle Methoden genutzt werden können
+	 * @param listSchüler     Liste von der DB
+	 * @param listUnternehmen Liste von der DB
+	 * @param listRaum        Liste von der DB
+	 */
 	public GUI_Main_Start(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
 			List<Raum> listRaum) {
 		this.myController = myController;
@@ -84,11 +92,18 @@ public class GUI_Main_Start {
 
 	}
 
+	/**
+	 * Das ListView wird geöffnet und main Window dispose
+	 */
 	private void öffneListView() {
 		myController.startListView();
 		frmStartMain.dispose();
 	}
 
+	/**
+	 * Wird mit einer Auswahl gestellt welche Daten gelöscht werden sollen aus der
+	 * DB und Listen Anzeige
+	 */
 	private void LöscheDateninDatenBank() {
 		String[] options = { "Alle Daten", "Nur Schüler", "Nur Unternehmen", "Nur Räume", "Abbrechen" };
 		int choice = JOptionPane.showOptionDialog(null, "Wählen Sie, welche Daten Sie löschen möchten:",
@@ -109,6 +124,10 @@ public class GUI_Main_Start {
 		}
 	}
 
+	/**
+	 * Der Allgorithmus läuft durch, es wird ein Ordner gewählt in der die Dateien
+	 * Exportiert werden soll
+	 */
 	private void btnPressedgenLösung() {
 
 		try {

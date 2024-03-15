@@ -198,7 +198,7 @@ public class GUI_Create_Unternehmen {
 	}
 
 	/**
-	 * Methode damit Frame Dispose und nicht Closed
+	 * Methode damit Frame Dispose und nicht Closed werden
 	 */
 	private void btnPressedAbbrechen() {
 		frmUnternehmenHinzufgen.dispose();
