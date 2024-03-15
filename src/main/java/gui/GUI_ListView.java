@@ -44,14 +44,17 @@ public class GUI_ListView {
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
 	private TableModel raumListModel;
-	private List<Schueler> schülerList;
-	private List<Unternehmen> unternehmenList;
-	private List<Raum> raumList;
+	private List<Schueler> schülerList= new ArrayList<>();
+	private List<Unternehmen> unternehmenList= new ArrayList<>();
+	private List<Raum> raumList= new ArrayList<>();
 	private MyController myController;
 
 	private JTable tableSchüler;
 	private JTable tableUn;
 	private JTable tableRaum;
+	private List<Unternehmen> oldunternehmenList= new ArrayList<>();
+	private List<Raum> oldraumList = new ArrayList<>();
+	private List<Schueler> oldschülerList = new ArrayList<>();
 
 	/**
 	 * Konstruktor ohne Liste übergabe/ Wird die oberfläch gestartet die eine Liste
@@ -59,14 +62,17 @@ public class GUI_ListView {
 	 * 
 	 * @param myController Übergabe damit Schnittstelle benutzt werden können
 	 */
-	public GUI_ListView(MyController myController) {
+	/*public GUI_ListView(MyController myController) {
 		this.myController = myController;
 		this.schülerList = new ArrayList<Schueler>();
 		this.unternehmenList = new ArrayList<Unternehmen>();
 		this.raumList = new ArrayList<Raum>();
+		this.oldschülerList=new ArrayList<Schueler>();
+		this.oldunternehmenList=new ArrayList<Unternehmen>();
+		this.oldraumList=new ArrayList<Raum>();
 		initialize();
 		this.frame.setVisible(true);
-	}
+	}*/
 
 	/**
 	 * Konstruktor mit Liste übergabe/ Wird die oberfläch gestartet die eine Liste
@@ -79,10 +85,17 @@ public class GUI_ListView {
 	 */
 	public GUI_ListView(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
 			List<Raum> listRaum) {
+		//TODO Fehler speichern
+		
+		this.oldschülerList=listSchüler;
+		this.oldunternehmenList=listUnternehmen;
+		this.oldraumList=listRaum;
 		this.myController = myController;
 		this.schülerList = listSchüler;
 		this.unternehmenList = listUnternehmen;
 		this.raumList = listRaum;
+		
+		
 		initialize();
 		this.frame.setVisible(true);
 		this.frame.setLocationRelativeTo(null);
@@ -310,29 +323,27 @@ public class GUI_ListView {
 	 * @param e
 	 */
 	private void btnPressedSchülerLöschen(ActionEvent e) {
-	    if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
-	        int selectedRow = tableSchüler.getSelectedRow();
+		if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
+			int selectedRow = tableSchüler.getSelectedRow();
 
-	        // Show a confirmation dialog
-	        int response = JOptionPane.showConfirmDialog(frame,
-	            "Soll der ausgewählte Schüler wirklich gelöscht werden?",
-	            "Schüler löschen",
-	            JOptionPane.YES_NO_OPTION);
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame,
+					"Soll der ausgewählte Schüler wirklich gelöscht werden?", "Schüler löschen",
+					JOptionPane.YES_NO_OPTION);
 
-	        if (response == JOptionPane.YES_OPTION) {
-	            // User clicked "Yes", so delete the student
-	            removeOnPositionSchüler(selectedRow);
-	        }
-	    } else {
-	        JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Schüler aus.", "Keine Auswahl",
-	                JOptionPane.WARNING_MESSAGE);
-	    }
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the student
+				removeOnPositionSchüler(selectedRow);
+			}
+		} else {
+			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Schüler aus.", "Keine Auswahl",
+					JOptionPane.WARNING_MESSAGE);
+		}
 	}
 
 	/**
 	 * Button die den Index Ermittelt und dann den Unternehmen löscht
 	 * 
-	 * @param e
 	 */
 	private void btnPressedUnternehmeLöschen() {
 		if (tableUn.getSelectedRow() != -1) { // Check if a row is selected
@@ -356,7 +367,6 @@ public class GUI_ListView {
 	/**
 	 * Button die den Index Ermittelt und dann den Raum löscht
 	 * 
-	 * @param e
 	 */
 	private void btnPressedRaumLöschen() {
 		if (tableRaum.getSelectedRow() != -1) { // Check if a row is selected
@@ -553,6 +563,7 @@ public class GUI_ListView {
 			myController.closeListView(schülerList, raumList, unternehmenList);
 			myController.startMainGUI();
 		} else {
+			myController.closeListView(oldschülerList, oldraumList, oldunternehmenList);
 			myController.startMainGUI();
 		}
 
