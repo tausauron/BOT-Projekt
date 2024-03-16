@@ -1,8 +1,5 @@
 package de.bwvaachen.botscheduler;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.database.DBModel;
 import de.bwvaachen.botscheduler.model.DAOFactory;
@@ -17,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,18 +23,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestDBModell {
     private static List<Schueler> schueler;
     private static List<Unternehmen> unternehmen;
-    private static List<UnternehmenDAO> unternehmenDAO = new ArrayList<>();
+    private static final List<UnternehmenDAO> unternehmenDAO = new ArrayList<>();
     private static List<Raum> raum;
-    private static List<KursDAO> kurseDAO = new ArrayList<>();
+    private static final List<KursDAO> kurseDAO = new ArrayList<>();
     private static DBModel database;
 
 
     @BeforeAll
-    static void setUpBeforeClass() throws Exception {
-        URL dbPfad = DBModel.class.getResource("test.mv.db");
+    static void setUpBeforeClass() throws SQLException, ClassNotFoundException, URISyntaxException {
+        URL dbPfad = DBModel.class.getResource("BOT-Database.db");
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();

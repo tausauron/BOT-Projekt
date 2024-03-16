@@ -25,7 +25,7 @@ public class MyController {
 	private GUI_Login loginGUI;
 	private GUI_ListView listView;
 	private GUI_Main_Start mainStart;
-	private ModelInterface myModal;
+	private Model myModal;
 	private boolean activateLogin = false;
 
 	public MyController(boolean activateLogin) throws Exception {
@@ -44,26 +44,19 @@ public class MyController {
 	}
 
 	public void startListView() {
-		if (datenBankDatenExist()) {
+		
 			this.listView = new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
-		} else {
-			this.listView = new GUI_ListView(this);
-		}
+		
 	}
 
 	public void startMainGUI() {
-		if (datenBankDatenExist()) {
+		
 			this.mainStart = new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
-		} else {
-
-		}
+		
 
 	}
 
-	private boolean datenBankDatenExist() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	
 
 	public void closeListView(List<Schueler> students, List<Raum> rooms, List<Unternehmen> companies) throws Exception {
 		this.saveAllStudents(students);
