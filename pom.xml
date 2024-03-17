@@ -64,7 +64,7 @@
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.5.2</version>
 				<configuration>
-					<!-- put your configurations here -->
+					<outputFile>${basedir}/target/${artifactId}-${version}/${artifactId}-${version}.jar</outputFile>
 				</configuration>
 				<executions>
 					<execution>
@@ -92,7 +92,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target</outputDirectory>
+							<outputDirectory>${basedir}/target/${artifactId}-${version}</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${basedir}</directory>
@@ -112,14 +112,6 @@
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.3.0</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>3.1.1</version>
 			</plugin>
 		</plugins>
 	</build>
