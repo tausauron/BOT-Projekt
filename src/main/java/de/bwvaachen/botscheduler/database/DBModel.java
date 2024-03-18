@@ -5,16 +5,22 @@ import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class DBModel implements IDatabase {
-    private final URL pfad = getClass().getResource("BOT-Database.db");
+    private final String pfad;
 
-    public DBModel() throws SQLException, ClassNotFoundException {
+
+
+    public DBModel(String pfad) throws SQLException, ClassNotFoundException, URISyntaxException {
+        this.pfad = pfad;
+        //Path p = Path.of(pfad.getPath(), "data", "Database");
         if (!exitsTable("Schueler")){
             createDbModel();
         }
@@ -30,12 +36,11 @@ public class DBModel implements IDatabase {
      * die eine SQLException wirft, wenn die Connection nicht aufgebaut werden konnte.
      */
     public Connection connection() throws SQLException, ClassNotFoundException {
-        assert pfad != null;
-        String dbPfad = pfad.getPath().replaceFirst("/","");
+        //String dbPfad = pfad.getPath().replaceFirst("/","");
 
         Class.forName("org.h2.Driver");
 
-        return DriverManager.getConnection("jdbc:h2:" + dbPfad, "sa", "");
+        return DriverManager.getConnection("jdbc:h2:" + pfad, "sa", "");
     }
 
     /**

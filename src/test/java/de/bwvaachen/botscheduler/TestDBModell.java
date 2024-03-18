@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,18 +38,21 @@ public class TestDBModell {
 
     @BeforeAll
     static void setUpBeforeClass() throws SQLException, ClassNotFoundException, URISyntaxException {
-        URL dbPfad = DBModel.class.getResource("BOT-Database.db");
+        //URL dbPfad = DBModel.class.getResource("BOT-Database.db");
+        //Path p = Path.of(pfad.getPath(), "data", "Database");
         String path = TestDBModell.class.getResource("IMPORT BOT2_Wahl.xlsx").toURI().getPath();
         String unternehmenListPath = TestDBModell.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI().getPath();
         String raumListPath = TestDBModell.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
 
+        Path pAth = Paths.get("target/generated-test-sources/BOT-Database").toAbsolutePath();
+
         try {
-            database = new DBModel();
+            database = new DBModel(pAth.toString());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
+        //String stringDbPfad = dbPfad.getPath().toString().replaceFirst("/","");
         schueler = ImportFile.getChoices(path);
         unternehmen = ImportFile.getCompany(unternehmenListPath);
 
