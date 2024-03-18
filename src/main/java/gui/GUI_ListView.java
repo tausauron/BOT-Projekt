@@ -563,7 +563,6 @@ public class GUI_ListView {
 			myController.closeListView(schülerList, raumList, unternehmenList);
 			myController.startMainGUI();
 		} else {
-			myController.closeListView(oldschülerList, oldraumList, oldunternehmenList);
 			myController.startMainGUI();
 		}
 

@@ -3,6 +3,7 @@ package de.bwvaachen.botscheduler.model;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +42,12 @@ public class Model implements ModelInterface {
 	private List<Raum> raeume = new ArrayList<>();
 	private List<Raum> raeumeInput = new ArrayList<>();
 	private List<CalcSchueler> cSchueler = new ArrayList<>();
-	private IDatabase database = new DBModel();
+	private final IDatabase database;
 
 	public Model() throws Exception {
+		Path pfad = Path.of(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+		Path p = Paths.get(pfad.toString(),"..", "data", "BOT-Database");
+		database = new DBModel(p.toString());
 		loadFromDB();
 	}
 
@@ -89,13 +93,13 @@ public class Model implements ModelInterface {
 
 	@Override
 	public List<Schueler> getAllStudents() {
-		return schuelerInput;
+		return new ArrayList<>(schuelerInput);
 	}
 	
 
 	@Override
 	public void saveAllStudents(List<Schueler> students) throws Exception {
-		this.schuelerInput = students;
+		this.schuelerInput = new ArrayList<>(students);
 		saveToDB();
 	}
 	
@@ -109,13 +113,13 @@ public class Model implements ModelInterface {
 
 	@Override
 	public List<Raum> getAllRooms() {
-		return raeumeInput;
+		return new ArrayList<>(raeumeInput);
 	}
 	
 
 	@Override
 	public void saveAllRooms(List<Raum> rooms) throws Exception {
-		this.raeumeInput = rooms;
+		this.raeumeInput = new ArrayList<>(rooms);
 		saveToDB();
 	}
 	
@@ -136,13 +140,13 @@ public class Model implements ModelInterface {
 
 	@Override
 	public List<Unternehmen> getAllCompanies() {
-		return unternehmenInput;
+		return new ArrayList<>(unternehmenInput);
 	}
 	
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) throws Exception {
-		this.unternehmenInput = companies;
+		this.unternehmenInput = new ArrayList<>(companies);
 		saveToDB();
 	}
 	
