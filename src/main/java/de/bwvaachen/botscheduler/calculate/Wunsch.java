@@ -8,7 +8,7 @@ import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Unternehmen;
 
 /**
- * Ausprägung von Schülerwünschen für den Belegungsalgorithmus
+ * Auspraegung von Schuelerwuenschen für den Belegungsalgorithmus
  * 
  * @author Max Tautenhahn
  */
@@ -20,6 +20,10 @@ public class Wunsch {
 	private WunschState status;
 	private int nummer;
 	
+	/**
+	 * Konstruktor fuer leeren Wunsch
+	 * @param nummer Wunschnummer
+	 */
 	public Wunsch(int nummer) {
 		initSlotMap();
 		status = WunschState.LEER;
@@ -35,6 +39,10 @@ public class Wunsch {
 		this.status = WunschState.UNERFUELLT;
 	}
 	
+	/**
+	 * initialisiert die Map der Zeitslots unter Beruecksichtung des fruehesten Zeitslots
+	 * und der maximalen Anzahl Veranstaltungen
+	 */
 	private void initSlotMap() {
 		slots=new HashMap<>();
 		
@@ -54,6 +62,8 @@ public class Wunsch {
 		}		
 	}
 
+	//Getter Setter
+	
 	public Unternehmen getVeranstaltung() {
 		return veranstaltung;
 	}
@@ -73,15 +83,15 @@ public class Wunsch {
 	public int getNummer() {
 		return nummer;
 	}
-
-	private void setNummer(int nummer) {
-		this.nummer = nummer;
-	}
-
+	
 	public void setState(WunschState state) {
 		this.status = state;
 	}
 	
+	
+	/**
+	 * Enum zur Definition gueltiger Zustaende eines Wunsches
+	 */
 	public enum WunschState {
 		ERFUELLT, LEER, UNERFUELLT
 	}

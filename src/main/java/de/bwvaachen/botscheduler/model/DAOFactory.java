@@ -24,6 +24,7 @@ public class DAOFactory {
 				unternehmen.getFruehesterZeitslot());
 	}
 	
+	
 	public static KursDAO createKursDAO(Kurse kurs) {
 		
 		List<Schueler> teilnehmer = new ArrayList<>();
@@ -36,10 +37,6 @@ public class DAOFactory {
 				teilnehmer,
 				createUnternehmenDAO(kurs.getUnternehmen()),
 				kurs.getZeitslot().getTyp().name());
-	}
-	
-	
-	
-	
+	}	
 
 }

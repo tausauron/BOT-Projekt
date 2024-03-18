@@ -14,10 +14,15 @@ public class WunschSlot extends Zeitslot{
 		this.status = status;
 	}
 	
+	/**
+	 * Enum zur Definition gueltiger Zustände eines Wunsch-Zeitslots
+	 */
 	public enum Status {
 		GEBLOCKT, FREI, BELEGT;
 	}
 	
+	
+	//Getter Setter
 	public Status getStatus() {
 		return status;
 	}

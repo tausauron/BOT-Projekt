@@ -13,20 +13,32 @@ import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
 /**
- * Klasse, die die Kurse belegt
+ * Klasse, die die Kurse belegt.<br />
+ * <br />
+ * Benutzung: Kursplaner instanzieren, die Methode "belegeKurse(params)" aufrufen.<br />
+ * <br />
+ * Mit "getKurse()" die erzeugte Kursliste abrufen.<br />
+ *  Mit "getcSchueler()" kann man erweiterte Schuelerobjekte abrufen, die Informationen über 
+ * belegte Kurse auf ihren Zeitslots enthalten.<br />
+ * Den uebergebenen Unternehmensobjekten werden auch Zeitslots mit Kursobjekten angehaengt (praktisch fuer Reporte).
  * 
- * @author tautenhahn_max
+ * @author Max Tautenhahn
  *
  */
 public class KursPlaner {
 
+	//Instanzvariablen
 	private List<Kurse> kurse;
 	private List<CalcSchueler> cSchueler;
 	private List<Unternehmen> unternehmen;
 	private List<Raum> raeume;
+	private boolean debug = false;
 
 	
 	/**
+	 * Erzeugt Kurse und belegt diese mit Schuelern. 
+	 * Es kommen verschiedene Strategien zum Einsatz und es wird geprueft, ob dadurch der 
+	 * Erfolgsscore noch steigt. 
 	 * 
 	 * @param schueler Schülerliste mit Wünschen, die durch Kursbelegungen erfüllt werden sollen
 	 * @param unternehmen Liste von Unternehmen, die eigentlich eine Liste von Veranstaltungen ist
@@ -34,118 +46,101 @@ public class KursPlaner {
 	 */
 	public String belegeKurse(List<Schueler> schueler, List<Unternehmen> unternehmen, List<Raum> raeume) {
 		
-		setcSchueler(schueler, unternehmen);
-		setKurse(new ArrayList<>());
-		setUnternehmen(unternehmen);
-		setRaeume(raeume);	
+		initSchueler(schueler, unternehmen);
+		this.kurse = new ArrayList<>();
+		this.unternehmen = unternehmen;
+		this.raeume = raeume;	
+		int score = 0;
 		
-		
-		System.out.println("ignore rooms and firms");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			runIteration(true, true);
-		}
-		simpleOutput();
-		
-		System.out.println("remove weak");
+		}while(score<calculateScore());
+		simpleOutput("ignore rooms and firms");
+
 		removeWeakCourses();
-		simpleOutput();
+		simpleOutput("remove weak");
 		
-		System.out.println("ignore rooms");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			runIteration(true, false);
-		}
-		simpleOutput();
-		
-		System.out.println("swapping");
-		for (int i = 0; i < 6; i++) {
+		}while(score<calculateScore());
+		simpleOutput("ignore rooms");
+
+			
+		do {
+			score = calculateScore();
 			trySwapping(false);
-		}
-		simpleOutput();
-		
-		System.out.println("force swapping");
-		for (int i = 0; i < 6; i++) {
+		}while(score<calculateScore());
+		simpleOutput("swapping");
+
+		do {
+			score = calculateScore();
 			trySwapping(true);
-		}
-		simpleOutput();
+		}while(score<calculateScore());
+		simpleOutput("force swapping");
 		
-		System.out.println("remove weak");
 		removeWeakCourses();
-		simpleOutput();
+		simpleOutput("remove weak");
 		
-		System.out.println("normal iteration");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			runIteration(false, false);
-		}
-		simpleOutput();
+		}while(score<calculateScore());
+		simpleOutput("normal iteration");
 		
-		System.out.println("swapping");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			trySwapping(false);
-		}
-		simpleOutput();
+		}while(score<calculateScore());
+		simpleOutput("normal iteration");
 	
-		System.out.println("force swapping");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			trySwapping(true);
-		}
-		simpleOutput();
+		}while(score<calculateScore());
+		simpleOutput("force swapping");
 		
-		System.out.println("deleteEmpty");
 		deleteEmptyCourses();
-		simpleOutput();
+		simpleOutput("deleteEmpty");
 		
-		System.out.println("normal iteration");
-		for (int i = 0; i < 6; i++) {
+		do {
+			score = calculateScore();
 			runIteration(false, false);
-		}
-		simpleOutput();
+		}while(score<calculateScore());
+		simpleOutput("normal iteration");
 		
-		System.out.println("alternatives");
-		for (int i = 0; i < 6; i++) {
-			useAlternative();
-		}
-		simpleOutput();
+		do {
+			score = calculateScore();
+			useAlternative();			
+		}while(score<calculateScore());
+		simpleOutput("alternatives");
+		
+		fillEmpty();
+		simpleOutput("fill empty wishes");		
 		
 		return prozentScore();		
-	}	
-
-	
-	private void initSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
-
-		cSchueler = new ArrayList<>();
-		for (Schueler schuel : schueler) {
-			cSchueler.add(new CalcSchueler(schuel, unternehmen));
-		}
 	}
-
 	
-	private int calculateScore() {
-
-		int retVal = 0;
-
-		for (CalcSchueler cSchuel : cSchueler) {
-
-			retVal += cSchuel.calculateCurrScore();
-		}
-
-		System.out.println("Score: " + retVal);
-
-		return retVal;
+	public List<CalcSchueler> getcSchueler() {
+		return cSchueler;
 	}
 	
 
-	private int calculateMaxScore() {
-
-		int retVal = 0;
-
-		for (CalcSchueler cSchuel : cSchueler) {
-			retVal += cSchuel.calculateMaxScore();
-		}
-		System.out.println("MaxScore: " + retVal);
-		return retVal;
+	public List<Kurse> getKurse() {
+		return kurse;
+	}
+	
+	public void setDebug(boolean debug) {
+		this.debug = debug;
 	}
 	
 
+	/**
+	 * berechnet den Prozentsatz des erreichten Erfolgsscore vom theoretisch erreichbaren
+	 * 
+	 * @return prozentualer Score: String
+	 */
 	public String prozentScore() {
 
 		String retVal = "0%";
@@ -157,11 +152,60 @@ public class KursPlaner {
 	}
 	
 
-	private void setcSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
-		initSchueler(schueler, unternehmen);
-	}
-	
+	/**
+	 * erzeugt aus der Schuelerliste eine entsprechende CalcSchuelerliste
+	 * 
+	 * @param schueler Schuelerliste
+	 * @param unternehmen Unternehmensliste
+	 */
+	private void initSchueler(List<Schueler> schueler, List<Unternehmen> unternehmen) {
 
+		cSchueler = new ArrayList<>();
+		for (Schueler schuel : schueler) {
+			cSchueler.add(new CalcSchueler(schuel, unternehmen));
+		}
+	}
+
+	/**
+	 * berechnet den aktuellen Erfolgsscore
+	 * 	  
+	 * @return Erfolgsscore: int
+	 */
+	private int calculateScore() {
+
+		int retVal = 0;
+
+		for (CalcSchueler cSchuel : cSchueler) {
+
+			retVal += cSchuel.calculateCurrScore();
+		}
+		return retVal;
+	}
+		
+	/**
+	 * berechnet den theoretisch erreichbaren Erfolgsscore
+	 * 
+	 * @return maximaler Score : int
+	 */
+	private int calculateMaxScore() {
+
+		int retVal = 0;
+
+		for (CalcSchueler cSchuel : cSchueler) {
+			retVal += cSchuel.calculateMaxScore();
+		}
+		return retVal;
+	}
+
+	/**
+	 * Iteration, die Kurse anlegt und Wuensche von Schuelern erfuellt.
+	 * Pro Durchlauf wird versucht pro Schueler einen nichtleeren 
+	 * Wunsch zu erfuellen.
+	 * Die Wuensche werden nach Gewichtung (Anzahl unzugeordneter Bewerber * Prioritaet Wunsch) vorsortiert.
+	 * 
+	 * @param ignoreRooms wenn true, wird die Anzahl der verfuegbaren Raeume ignoriert
+	 * @param ignoreFirms wenn true, wird ignoriert, dass eine Firma pro Zeislot nur einen Kurs anbietet
+	 */
 	private void runIteration(boolean ignoreRooms, boolean ignoreFirms) {
 
 		for (CalcSchueler schuel : cSchueler) {
@@ -195,6 +239,13 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * Versucht unerfuellte Wuensche zu erfuellen, indem fuer bereits erfuellte Wuensche ein alternativer
+	 * Kurs gesucht wird.
+	 * 
+	 * @param force wenn true, wird eine Kursbuchung auch ohne Alternative aufgeloest, wenn die Prioritaet
+	 * des fordernden Wunsches hoeher ist
+	 */
 	private void trySwapping(boolean force) {
 		for (CalcSchueler schuel : cSchueler) {
 			
@@ -215,6 +266,14 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * Rekursive Methode, die Kurstauschoperationen durchfuehrt
+	 * 
+	 * @param wunsch Wunsch, fuer den getauscht werden soll
+	 * @param schuel betreffender Schueler
+	 * @param typ Zeitslottyp mit dem gestartet wird
+	 * @param force wenn true, tauschen auch ohne Alternative (Prio)
+	 */
 	private void swapCourse(Wunsch wunsch, CalcSchueler schuel, Typ typ, boolean force) {
 		Kurse kurs = findMatchingKurs(wunsch, typ);
 		
@@ -249,6 +308,10 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * versucht Alternativwuensche zu erfuellen, auch durch Anlegen neuer Kurse
+	 * 
+	 */
 	private void useAlternative() {
 		for (CalcSchueler cSchuel : cSchueler) {
 			for (SchuelerSlot slot : cSchuel.getSlots()) {
@@ -277,9 +340,59 @@ public class KursPlaner {
 				}
 			}
 		}
-	}	
+	}
 	
+	/**
+	 * fuellt leere Wuensche mit beliebigen Kursen, beginnend mit den leersten Kursen
+	 */
+	private void fillEmpty() {
+		for(CalcSchueler cSchuel : cSchueler) {
+			for(Wunsch wunsch : cSchuel.getWuensche()) {
+				if(wunsch.getState().equals(WunschState.LEER)) {
+					Zeitslot slot = cSchuel.nextFreeSlot(Typ.A);
+					List<Kurse> kurse = courses(slot.getTyp(), null);
+					kurse.sort(kursByParticipants);
+					
+					for(Kurse kurs : kurse) {
+						if(! alreadyBooked(kurs.getUnternehmen(), cSchuel) && 
+								! kursVoll(kurs)) {
+							cSchuel.bookCourse(kurs, wunsch);
+							break;
+						}
+					}
+					
+				}
+			}
+		}
+	}
 	
+	/**
+	 * prueft, ob eine Veranstaltung (Unternehmen) von einem Schueler schon auf einem anderen 
+	 * Zeitslot belegt wird
+	 * 
+	 * @param unt Veranstaltungstyp
+	 * @param cSchuel betreffender Schueler
+	 * @return true, wenn Veranstaltung schon belegt wurde
+	 */
+	private boolean alreadyBooked(Unternehmen unt, CalcSchueler cSchuel) {
+		boolean retVal = false;
+		for(SchuelerSlot slot : cSchuel.getSlots()) {
+			
+			if(slot.getKurs() != null) {
+				if(slot.getKurs().getUnternehmen().equals(unt)) {
+					retVal = true;
+					break;
+				}
+			}
+		}
+		return retVal;
+	}
+	
+	/**
+	 * loescht soviele Kurse wie noetig auf jedem Zeitslot, sodass die Raumanzahl nicht überschritten wird
+	 * und doppelte Kurse eines Unternehmens
+	 * Kurse werden nach schwaechster Gewichtung gelöscht (Teilnehmer * Prioritaet)
+	 */
 	private void removeWeakCourses() {
 		for(Typ slot : Typ.values()) {
 			List<Kurse> slotKurse = courses(slot, null);
@@ -308,6 +421,16 @@ public class KursPlaner {
 		}
 	}
 	
+	
+	/**
+	 * fuellt eine uebergebene Liste mit Kursen die geloescht werden sollen,
+	 * weil es mehr als einen Kurs derselben Firma auf dem gleichen Zeitslot gibt.
+	 * Gibt immer die schwaecher gewichteten Kurse zurueck.
+	 * 
+	 * @param unt Veranstaltungstyp
+	 * @param slot zu pruefender Zeitslot
+	 * @param toDelete zu fuellende Liste
+	 */
 	private void findWeakCourses(Unternehmen unt, Typ slot, List<Kurse> toDelete){
 		List<Kurse> list = courses(slot, unt.getUnternehmen());
 		
@@ -318,6 +441,13 @@ public class KursPlaner {
 	}
 		
 
+	/**
+	 * prueft, ob es einen Kurs auf einem Zeitslot fuer einen Wunsch schon gibt und gibt ihn zurueck
+	 * 
+	 * @param slot gewuenschter Zeitslot
+	 * @param wunsch Wunsch, der erfuellt werden soll
+	 * @return existierenden Kurs, falls vorhanden
+	 */
 	private Kurse existsKurs(Zeitslot slot, Wunsch wunsch) {
 		Kurse retVal = null;
 
@@ -327,11 +457,16 @@ public class KursPlaner {
 				retVal = kurs;
 			}
 		}
-
 		return retVal;
 	}
 	
 
+	/**
+	 * prueft, ob ein Kurs voll ist
+	 * 
+	 * @param kurs betreffender Kurs
+	 * @return true wenn Kurs voll ist
+	 */
 	private boolean kursVoll(Kurse kurs) {
 		boolean retVal = true;
 
@@ -346,6 +481,15 @@ public class KursPlaner {
 	}
 	
 
+	/**
+	 * findet den naechsten passenden Zeitslot eines Schuelers, falls vorhanden, beginnend mit 
+	 * dem übergebenen Slottyp
+	 * 
+	 * @param wunsch zu erfuellender Wunsch
+	 * @param cSchuel zu durchsuchender Schueler
+	 * @param start Zeitslot, mit dem sie Suche begonnen wird
+	 * @return gefundener Zeitslot
+	 */
 	private SchuelerSlot nextMatching(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		SchuelerSlot retVal = null;
 		Typ freeSlot = start;
@@ -364,11 +508,13 @@ public class KursPlaner {
 	
 
 	/**
-	 * Kurs finden fuer einen leeren Schuelerslot
-	 * @param wunsch
-	 * @param cSchuel
-	 * @param start
-	 * @return
+	 * Kurs finden fuer einen leeren Schuelerslot, falls vorhanden.
+	 * Rekursiv.
+	 * 
+	 * @param wunsch zu erfuellender Wunsch
+	 * @param cSchuel betreffender Schueler
+	 * @param start Zeitslot, mit dem begonnen wird
+	 * @return gefundener Kurs
 	 */
 	private Kurse findMatchingKurs(Wunsch wunsch, CalcSchueler cSchuel, Typ start) {
 		Kurse retVal = null;
@@ -392,6 +538,14 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * Kurs finden fuer einen unerfuellten Wunsch, falls vorhanden.
+	 * Rekursiv.
+	 * 
+	 * @param wunsch zu erfuellender Wunsch
+	 * @param start Zeitslot, mit dem begonnen wird
+	 * @return gefundener Kurs
+	 */
 	private Kurse findMatchingKurs(Wunsch wunsch,  Typ start) {
 		
 		Kurse retVal = null;
@@ -411,6 +565,18 @@ public class KursPlaner {
 	}
 		
 	
+	
+	/**
+	 * sucht einen passenden Zeitslot, falls vorhanden, um einen neuen Kurs anzulegen.
+	 * Rekursiv.
+	 * 
+	 * @param wunsch zu erfuellender Wunsch
+	 * @param cSchuel betreffender Schueler
+	 * @param slot Zeitslot, mit dem begonnen wird
+	 * @param ignoreRooms wenn true, Raumanzahl ignorieren
+	 * @param ignoreFirms wenn true, doppelte Firmenbelegung ignorieren
+	 * @return Zeitslottyp, der passt
+	 */
 	private Typ findOpenKursSlot(Wunsch wunsch, CalcSchueler cSchuel, Typ slot, boolean ignoreRooms, boolean ignoreFirms) {
 		Typ retVal = null;
 		
@@ -440,9 +606,10 @@ public class KursPlaner {
 	/**
 	 * hat die Veranstaltung schon einen Kurs neben diesem Slot? 
 	 * (Luecken vermeiden)
-	 * @param slot
-	 * @param unt
-	 * @return
+	 * 
+	 * @param slot zu pruefender Zeitslot
+	 * @param unt zu pruefender Veranstaltungstyp
+	 * @return true, wenn benachbart
 	 */
 	private boolean nextToExisting(Typ slot, Unternehmen unt) {
 		boolean retVal = false;
@@ -469,6 +636,12 @@ public class KursPlaner {
 	}
 		
 	
+	/**
+	 * prueft, ob auf dem uebergebenen Zeitslot ein freier Raum verfuegbar ist
+	 * 
+	 * @param slotTyp Zeitslottyp
+	 * @return true, wenn Raum verfuegbar ist
+	 */
 	private boolean freeRoom(Typ slotTyp) {
 		int number = 0;
 		for( Kurse kurs : kurse ) {
@@ -479,37 +652,9 @@ public class KursPlaner {
 		return (number < raeume.size());		
 	}
 		
-
-	private void setKurse(List<Kurse> kurse) {
-		this.kurse = kurse;
-	}
-	
-
-	public List<CalcSchueler> getcSchueler() {
-		return cSchueler;
-	}
-	
-
-	public List<Kurse> getKurse() {
-		return kurse;
-	}
-	
-
-	public List<Unternehmen> getUnternehmen() {
-		return unternehmen;
-	}
-	
-	
-	private void setRaeume(List<Raum> raeume) {
-		this.raeume = raeume;
-	}
-	
-
-	private void setUnternehmen(List<Unternehmen> unternehmen) {
-		this.unternehmen = unternehmen;
-	}
-		
-	
+	/**
+	 * loescht durch "swapping" eventuell leer gewordene Kurse
+	 */
 	private void deleteEmptyCourses() {
 		List<Kurse> found = new ArrayList<>();
 		for(Kurse kurs : kurse) {
@@ -521,7 +666,12 @@ public class KursPlaner {
 		kurse.removeAll(found);
 	}
 	
-	
+	/**
+	 * Loescht bestehenden Kurs, indem alle Vorgaenge des Anlegens und Belegens mit Schuelern
+	 * rueckabgewickelt werden.
+	 * 
+	 * @param kurs zu loeschender Kurs
+	 */
 	private void deleteCourse(Kurse kurs) {
 		for(CalcSchueler cSchuel : new ArrayList<CalcSchueler>(kurs.getKursTeilnehmer())) {
 			cSchuel.leaveCourse(kurs, cSchuel.getSlotByType(kurs.getZeitslot().getTyp()).getErfuellterWunsch());
@@ -531,6 +681,9 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * sortiert Wuensche absteigend nach einem speziellen Occurrence-Merkmal. 
+	 */
 	Comparator<Wunsch> wunschByOccurrence = new Comparator<Wunsch>() {
 		
 		@Override
@@ -540,14 +693,10 @@ public class KursPlaner {
 		
 	};
 	
-	
-	Comparator<Wunsch> wunschByPriority = new Comparator<Wunsch>() {
-		@Override
-		public int compare(Wunsch o1, Wunsch o2) {			
-			return Integer.compare(o1.getPrio(), o2.getPrio());
-		}
-	};
-	
+	/**
+	 * sortiert Kurse nach Gewichtung. <br/>
+	 * Gewichtung = Teilnehmerzahl * Prioritaet des erfuellten Wunsches, absteigend
+	 */
 	Comparator<Kurse> kursByWeight = new Comparator<Kurse>() {
 		
 		@Override
@@ -557,6 +706,26 @@ public class KursPlaner {
 	};
 	
 	
+	/**
+	 * sortiert Kurse strikt nach der Anzahl der Kursteilnehmer, aufsteigend
+	 */
+	Comparator<Kurse> kursByParticipants = new Comparator<Kurse>() {
+
+		@Override
+		public int compare(Kurse o2, Kurse o1) {
+			return Integer.compare(o2.getKursTeilnehmer().size(), o1.getKursTeilnehmer().size());
+		}
+		
+	};
+	
+	/**
+	 * Berechnung eines Sortiermerkmals.
+	 * Bei Occurrence werden noch unzugeteilte Bewerberwuensche fuer die Veranstaltung mit der jeweiligen Prioritaet des 
+	 * Wunsches multipliziert.
+	 * 
+	 * @param wunsch
+	 * @return
+	 */
 	private int occurrence(Wunsch wunsch) {
 		int retVal = 0;
 		
@@ -578,6 +747,11 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * berechnet die Gesamtzahl der belegten Zeitslots zu Debugging-Zwecken
+	 * 
+	 * @return Anzahl belegter Zeitslots
+	 */
 	private int belegteSlots() {
 		int retVal = 0;
 		for(CalcSchueler cSchuel : cSchueler) {			
@@ -591,6 +765,13 @@ public class KursPlaner {
 	}
 	
 	
+	/**
+	 * gibt die Anzahl Kurse auf einem Zeitslot zurück
+	 * 
+	 * @param slot betreffender Zeitslot
+	 * @param unternehmen wenn nicht null, dann werden nur Veranstaltungen mit demselben Unternehmensstring beruecksichtigt
+	 * @return Anzahl gefundener Kurse
+	 */
 	private List<Kurse> courses(Typ slot, String unternehmen) {
 		List<Kurse> retVal = new ArrayList<Kurse>();
 		for(Kurse kurs : kurse) {
@@ -608,7 +789,13 @@ public class KursPlaner {
 	}
 	
 	
-	public boolean hasMultiple(Unternehmen unt) {
+	/**
+	 * prueft, ob ein Veranstaltungstyp einer von mehreren mit demselben Unternehmensstring ist
+	 * 
+	 * @param unt Veranstaltungstyp
+	 * @return true, wenn es mehrere Veranstaltungen der gleichen Firma gibt
+	 */
+	private boolean hasMultiple(Unternehmen unt) {
 		boolean retVal = false;
 		int number = 0;
 		for(Unternehmen unt2 : unternehmen) {
@@ -623,24 +810,36 @@ public class KursPlaner {
 	}	
 	
 	
-	private void simpleOutput() {
-//		for (CalcSchueler cSchuel : getcSchueler()) {
-//
-//			String zeile = cSchuel.getSchueler().getNachname() + " | ";
-//
-//			for (SchuelerSlot slot : cSchuel.getSlots()) {
-//				Kurse kurs = slot.getKurs();
-//				if (kurs != null) {
-//					zeile += slot.getKurs().getUnternehmen().getFirmenID() + " | ";
-//				} else {
-//					zeile += "null |";
-//				}
-//			}
-//
-//			System.out.println(zeile);
-//		}
+	/**
+	 * Methode, die eine einfache Konsolenausgabe zu Debug-Zwecken erzeugt
+	 */
+	private void simpleOutput(String title) {
+		//nur im Debugfall Ausgabe
+		if(! debug) {
+			return;
+		}
+		
+		System.out.println(title + ":\n");
+		
+		for (CalcSchueler cSchuel : getcSchueler()) {
 
-		for (Unternehmen unt : getUnternehmen()) {
+			String zeile = cSchuel.getSchueler().getNachname() + " | ";
+
+			for (SchuelerSlot slot : cSchuel.getSlots()) {
+				Kurse kurs = slot.getKurs();
+				if (kurs != null) {
+					zeile += slot.getKurs().getUnternehmen().getFirmenID() + " | ";
+				} else {
+					zeile += "null |";
+				}
+			}
+
+			System.out.println(zeile);
+		}
+		
+		System.out.println();
+
+		for (Unternehmen unt : unternehmen) {
 			String zeile = unt.getFirmenID() + " | ";
 			for (Typ typ : Typ.values()) {
 				Kurse kurs = unt.getKurse().get(typ);
@@ -652,8 +851,11 @@ public class KursPlaner {
 			}
 			System.out.println(zeile);
 		}
-		System.out.println(prozentScore());
-		System.out.println(belegteSlots());
-	}
+		System.out.println("Score: " + calculateScore());
+		System.out.println("Max Score: " + calculateMaxScore());
+		System.out.println("Prozentualer Score: " + prozentScore());
+		System.out.println("Belegte Slots: " + belegteSlots());
+		System.out.println("\n");
+	}	
 	
 }

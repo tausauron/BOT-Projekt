@@ -47,6 +47,7 @@ public class Model implements ModelInterface {
 		loadFromDB();
 	}
 
+
 	@Override
 	public String belegeKurse() throws IllegalStateException {
 
@@ -78,88 +79,87 @@ public class Model implements ModelInterface {
 		return score;
 	}
 
-	public void deleteCompany(Unternehmen unternehmen) throws Exception {
-		this.unternehmenInput.remove(unternehmen);
-		saveToDB();
-	}
-
 	@Override
 	public List<Schueler> importStudent(String absolutePath) throws Exception {
 
 		schuelerInput = ImportFile.getChoices(absolutePath);
-		saveToDB();
 		return schuelerInput;
 	}
+	
 
 	@Override
 	public List<Schueler> getAllStudents() {
 		return schuelerInput;
 	}
+	
 
 	@Override
 	public void saveAllStudents(List<Schueler> students) throws Exception {
 		this.schuelerInput = students;
 		saveToDB();
 	}
+	
 
 	@Override
 	public void exportStudent(String path, List<Schueler> students) {
 		IExport exporter = new ExportFile();
 		exporter.exportStudentData(students, path);
 	}
+	
 
 	@Override
 	public List<Raum> getAllRooms() {
 		return raeumeInput;
 	}
+	
 
 	@Override
 	public void saveAllRooms(List<Raum> rooms) throws Exception {
 		this.raeumeInput = rooms;
 		saveToDB();
 	}
-
-	public void deleteRoom(Raum room) throws Exception {
-		this.raeumeInput.remove(room);
-		saveToDB();
-	}
+	
 
 	@Override
 	public List<Raum> importRooms(String path) throws Exception {
 		this.raeumeInput = ImportFile.getRoom(path);
-		saveToDB();
 		return raeumeInput;
 	}
+	
 
 	@Override
 	public void exportRooms(String path, List<Raum> rooms) {
 		IExport exporter = new ExportFile();
 		exporter.exportRoomData(rooms, path);
 	}
+	
 
 	@Override
 	public List<Unternehmen> getAllCompanies() {
 		return unternehmenInput;
 	}
+	
 
 	@Override
 	public void saveAllCompanies(List<Unternehmen> companies) throws Exception {
 		this.unternehmenInput = companies;
 		saveToDB();
 	}
+	
 
 	@Override
 	public List<Unternehmen> importCompany(String absolutePath) throws Exception {
 		this.unternehmenInput = ImportFile.getCompany(absolutePath);
-		saveToDB();
 		return unternehmenInput;
 	}
+	
 
 	@Override
 	public void exportCompany(String path, List<Unternehmen> companies) {
 		IExport exporter = new ExportFile();
 		exporter.exportCompanyData(companies, path);
 	}
+	
 
 	@Override
 	public void exportLoesung(String path) throws FileNotFoundException, IOException {
@@ -175,6 +175,7 @@ public class Model implements ModelInterface {
 		exporter.exportRoomUsage(unternehmen, roomPlanPath);
 		exporter.exportParticipants(unternehmen, attendencePath);
 	}
+	
 
 	@Override
 	public Boolean checkLogin(String username, String password) {
@@ -192,11 +193,18 @@ public class Model implements ModelInterface {
 		}
 		return false;
 	}
+	
 
+	/**
+	 * Speichert den aktuellen Datenstand in der Datenbank
+	 * 
+	 * @throws Exception
+	 */
 	private void saveToDB() throws Exception {
 		database.saveState(raeume, getSchuelerFromResult(), createUnternehmenDAOs(unternehmen), createKursDAOs(),
 				raeumeInput, schuelerInput, createUnternehmenDAOs(unternehmenInput));
 	}
+	
 
 	private List<UnternehmenDAO> createUnternehmenDAOs(List<Unternehmen> unternehmen) {
 		List<UnternehmenDAO> retVal = new ArrayList<>();
@@ -206,6 +214,7 @@ public class Model implements ModelInterface {
 		}
 		return retVal;
 	}
+	
 
 	private List<KursDAO> createKursDAOs() {
 		List<KursDAO> retVal = new ArrayList<>();
@@ -215,7 +224,14 @@ public class Model implements ModelInterface {
 		}
 		return retVal;
 	}
+	
 
+	/**
+	 * laedt, falls vorhanden einen frueheren Datenbestand aus der Datenbank
+	 * 
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	private void loadFromDB() throws SQLException, ClassNotFoundException {
 
 		schuelerInput = database.loadSchuelerInput();
@@ -264,7 +280,14 @@ public class Model implements ModelInterface {
 		}
 
 	}
+	
 
+	/**
+	 * findet das passende Ergebnis-Schuelerobjekt fuer einen gesuchten Schueler
+	 * 
+	 * @param schuel gesuchter Schueler
+	 * @return gefundenes CalcSchueler-Objekt
+	 */
 	private CalcSchueler findCalcSchueler(Schueler schuel) {
 		CalcSchueler retVal = null;
 
@@ -277,6 +300,12 @@ public class Model implements ModelInterface {
 		return retVal;
 	}
 
+	/**
+	 * findet das passende Unternehmensobjekt mit einer Id
+	 * 
+	 * @param id gesuchte Id
+	 * @return gefundenes Unternehmensobjekt
+	 */
 	private Unternehmen findUnternehmen(int id) {
 		Unternehmen retVal = null;
 
@@ -289,6 +318,12 @@ public class Model implements ModelInterface {
 		return retVal;
 	}
 
+
+	/**
+	 * extrahiert die Schuelerliste aus einer vorhandenen Ergebnis-Schuelerliste
+	 * 
+	 * @return extrahierte Schuelerliste
+	 */
 	private List<Schueler> getSchuelerFromResult() {
 		List<Schueler> retVal = new ArrayList<>();
 
@@ -297,6 +332,7 @@ public class Model implements ModelInterface {
 		}
 		return retVal;
 	}
+	
 
 	@Override
 	public void deleteAllStudent() throws Exception {
@@ -305,18 +341,26 @@ public class Model implements ModelInterface {
 
 	}
 
+	
 	@Override
 	public void deleteAllRooms() throws Exception {
 		this.raeumeInput = new ArrayList<Raum>();
 		saveToDB();
 	}
 
+	
 	@Override
 	public void deleteAllCompanies() throws Exception {
 		this.unternehmenInput = new ArrayList<Unternehmen>();
 		saveToDB();
 	}
 	
+	
+	/**
+	 * Erzeugt eine Kopie der vorhandenen Unternehmensdaten
+	 * 
+	 * @return kopierte Unternehmensliste
+	 */
 	private List<Unternehmen> copyUnternehmenInput(){
 		List<Unternehmen> retVal = new ArrayList<>();
 		
