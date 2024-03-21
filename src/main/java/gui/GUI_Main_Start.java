@@ -56,8 +56,8 @@ public class GUI_Main_Start {
 		frmStartMain = new JFrame();
 		// Center the frame
 
-		frmStartMain.setTitle("BOT");
-		frmStartMain.setBounds(100, 100, 222, 270);
+		frmStartMain.setTitle("BOT: Menü");
+		frmStartMain.setBounds(100, 100, 250, 270);
 		frmStartMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JButton btngenLösung = new JButton("Generieren");

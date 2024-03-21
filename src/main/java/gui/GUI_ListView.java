@@ -52,9 +52,6 @@ public class GUI_ListView {
 	private JTable tableSchüler;
 	private JTable tableUn;
 	private JTable tableRaum;
-	private List<Unternehmen> oldunternehmenList= new ArrayList<>();
-	private List<Raum> oldraumList = new ArrayList<>();
-	private List<Schueler> oldschülerList = new ArrayList<>();
 
 	/**
 	 * Konstruktor ohne Liste übergabe/ Wird die oberfläch gestartet die eine Liste
@@ -87,9 +84,6 @@ public class GUI_ListView {
 			List<Raum> listRaum) {
 		//TODO Fehler speichern
 		
-		this.oldschülerList=listSchüler;
-		this.oldunternehmenList=listUnternehmen;
-		this.oldraumList=listRaum;
 		this.myController = myController;
 		this.schülerList = listSchüler;
 		this.unternehmenList = listUnternehmen;
@@ -121,7 +115,7 @@ public class GUI_ListView {
 				}
 			}
 		});
-		frame.setTitle("BOT");
+		frame.setTitle("BOT: Listen Bearbeiten");
 
 		frame.setBounds(100, 100, 752, 506);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

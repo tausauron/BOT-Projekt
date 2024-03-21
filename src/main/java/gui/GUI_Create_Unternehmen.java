@@ -99,9 +99,9 @@ public class GUI_Create_Unternehmen {
 		tfieldFachrichtung = new JTextField();
 		tfieldFachrichtung.setColumns(10);
 
-		JLabel lblNachname = new JLabel("Max Teilnehmer:");
+		JLabel lblNachname = new JLabel("Max. Teilnehmer:");
 
-		lblWahl1 = new JLabel("Max Veranstaltungen:");
+		lblWahl1 = new JLabel("Max. Veranstaltungen:");
 
 		lblWahl2 = new JLabel("Frühester Zeitslot:");
 
