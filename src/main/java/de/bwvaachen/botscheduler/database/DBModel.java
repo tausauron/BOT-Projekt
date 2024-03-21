@@ -388,10 +388,12 @@ public class DBModel implements IDatabase {
     //********** Kurse **********
 
     /**
-     * Speichert eine Liste von KursDAO Objekten in der Datenbank. Diese Liste kann
-     * @param kurse
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * Speichert eine Liste von KursDAO Objekten in der Datenbank. Diese Liste kann nur einen oder auch keinen enthalten.
+     * @param kurse eine Liste der Kurse die gespeichert werden sollen. Datentyp: List<KursDAO>
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
@@ -425,6 +427,16 @@ public class DBModel implements IDatabase {
         }
     }
 
+    /**
+     * Kurse werden aus der Datenbank geladen. Damit keine neuen Objekte aus der Datenbank erstellt werden, wird die
+     * Liste mitgegeben die gespeichert wurde und zurückgegeben wird diese Liste mit den Informationen aus der Datenbank.
+     * @param schlrList Liste der Schueler die gespeichert wurden
+     * @param raum Liste der Räume die gespeichert wurden
+     * @param unternehmen Liste der Unternehmen die gespeichert wurden
+     * @return eine Liste von KursDAOs
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -463,6 +475,15 @@ public class DBModel implements IDatabase {
 
 
     //********** Raum **********
+
+    /**
+     * Es wird eine Liste von Räumen gespeichert. Diese Liste kann auch nur einen oder keinen enthalten.
+     * @param raumList eine Liste der zu speichernden Räume
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     public void saveRooms(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
@@ -480,6 +501,12 @@ public class DBModel implements IDatabase {
         }
     }
 
+    /**
+     * Es werden alle Räume aus der Datenbank geladen
+     * @return eine Liste von alles Räumen aus der Datenbank
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public List<Raum> loadRooms() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -514,6 +541,13 @@ public class DBModel implements IDatabase {
 
     //***** Input Methoden *****
     //********** Rooms **********
+
+    /**
+     *
+     * @return
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     @Override
     public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -544,6 +578,13 @@ public class DBModel implements IDatabase {
 
         return raumList;
     }
+
+    /**
+     *
+     * @param raumList
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void saveRoomInputData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
