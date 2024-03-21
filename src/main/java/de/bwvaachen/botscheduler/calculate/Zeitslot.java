@@ -17,7 +17,9 @@ public class Zeitslot {
 		this.typ = typ;
 	}
 	
-	
+	/**
+	 * Enum zur Beschreibung 
+	 */
 	public enum Typ {
 		A("8:45 – 9:30"),
 		B("9:50 – 10:35"),
@@ -37,6 +39,13 @@ public class Zeitslot {
 	}
 	
 	
+	/**
+	 * prueft, ob ein Zeitslot spaeter oder zum gleichen Zeitpunkt stattfindet
+	 * 
+	 * @param typ gepruefter Zeitslottyp
+	 * @param vergleich Zeitslottyp zum Vergleich
+	 * @return true, wenn Zeitslot spaeter oder gleichen Typs ist
+	 */
 	public static boolean istGleichOderSpaeter(Typ typ, Typ vergleich) {
 		
 		boolean retVal = false;
@@ -48,8 +57,8 @@ public class Zeitslot {
 		return retVal;
 
 	}
-
-
+	
+	//Getter Setter
 	public Kurse getKurs() {
 		return kurs;
 	}

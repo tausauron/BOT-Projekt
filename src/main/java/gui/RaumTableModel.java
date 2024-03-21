@@ -1,16 +1,19 @@
 package gui;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
+
 /**
+ * Ein Model um ein Tabelle in der View Scrollpane Darzustellen
  * 
  * @author Wagner_Eri
  *
  */
-// Eric
-//Ein Model um ein Tabelle in der View Scrollpane Darzustellen
+
+@SuppressWarnings("serial")
 public class RaumTableModel extends AbstractTableModel {
-	private static final String[] COLUMN_NAMES = {"Name","Kapazität"};
+	private static final String[] COLUMN_NAMES = { "Name", "Kapazität" };
 	private List<Raum> raumListe;
 
 	public RaumTableModel(List<Raum> räume) {

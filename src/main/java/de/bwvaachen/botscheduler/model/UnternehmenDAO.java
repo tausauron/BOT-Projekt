@@ -66,7 +66,7 @@ public class UnternehmenDAO {
 		this.maxVeranstaltungen = maxVeranstaltungen;
 	}
 
-	public String getFruehsterZeitslot() {
+	public String getFruehesterZeitslot() {
 		return fruehsterZeitslot;
 	}
 

@@ -1,22 +1,33 @@
 package execlLoad;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.RegionUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.SchuelerSlot;
-import de.bwvaachen.botscheduler.calculate.Wunsch;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
-import klassenObjekte.*;
+import klassenObjekte.Kurse;
+import klassenObjekte.Raum;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
 
 /**
  * 
@@ -26,6 +37,7 @@ import klassenObjekte.*;
 
 public class ExportFile implements IExport {
 
+	@Override
 	public void exportStudentData(List<Schueler> studentList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -60,19 +72,12 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	@Override
 	public void exportCompanyData(List<Unternehmen> companyList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -102,19 +107,12 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	@Override
 	public void exportRoomData(List<Raum> roomList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -136,24 +134,34 @@ public class ExportFile implements IExport {
 			// Write the workbook content to the output file
 			workbook.write(fos);
 
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) {
+	@Override
+	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) throws FileNotFoundException, IOException {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
 			Sheet sheet = workbook.createSheet("Laufzettel");
 
+/*
+			TODO: create a sheet for each class
+			
+			
+			Set<String> uniqueKlassen = new HashSet<>();
+
+			for (CalcSchueler calcStudent : calcStudents) {
+			    String klasse = calcStudent.getSchueler().getKlasse();
+			    uniqueKlassen.add(klasse);
+			}
+
+			for (String klasse : uniqueKlassen) {
+			    System.out.println(klasse);
+			}
+
+*/
+			
 			int rowNum = 0;
 			for (CalcSchueler calcStudent : calcStudents) {
 				// Klasse
@@ -192,10 +200,14 @@ public class ExportFile implements IExport {
 						dataRow4.createCell(1).setCellValue(" - ");
 					}
 
-					if (slot.getErfuellterWunsch() != null) {
-						dataRow4.createCell(2).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getUnternehmen());
-						dataRow4.createCell(3).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getFachrichtung());
-						dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
+					if (slot.getKurs() != null) {
+						dataRow4.createCell(2).setCellValue(slot.getKurs().getUnternehmen().getUnternehmen());
+						dataRow4.createCell(3).setCellValue(slot.getKurs().getUnternehmen().getFachrichtung());
+						if(slot.getErfuellterWunsch().getVeranstaltung() != null) {						
+							dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
+						}else {
+							dataRow4.createCell(4).setCellValue("leer");
+						}
 					} else {
 						dataRow4.createCell(2).setCellValue(" - ");
 						dataRow4.createCell(3).setCellValue(" - ");
@@ -214,31 +226,243 @@ public class ExportFile implements IExport {
 			
 			// Write the workbook content to the output file
 			workbook.write(fos);
-
-			try {
-				UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-			}
-
-			JOptionPane.showMessageDialog(null, "Erfolgreich exportiert!\n" + exportFilePath, "Export",
-					JOptionPane.INFORMATION_MESSAGE);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void exportRoomUsage(List<Unternehmen> unternehmen, String path) {
-		// TODO Auto-generated method stub
-
+	public void exportRoomUsage(List<Unternehmen> unternehmen, String path) throws IOException {
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(path)) {
+			Sheet sheet = workbook.createSheet("Raumplan");
+			CellStyle title = titleStyle(workbook);
+			CellStyle table = tableHeadStyle(workbook);
+			CellStyle tableLeft = workbook.createCellStyle();
+			tableLeft.cloneStyleFrom(table);
+			table.setAlignment(HorizontalAlignment.CENTER);
+			tableLeft.setWrapText(true);
+			CellStyle tableHead = workbook.createCellStyle();
+			tableHead.cloneStyleFrom(table);
+			tableHead.setAlignment(HorizontalAlignment.CENTER);
+			tableHead.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+			tableHead.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+			tableHead.setBorderTop(BorderStyle.NONE);
+			tableHead.setBorderBottom(BorderStyle.NONE);
+			
+			
+			int rowNum = 0;
+			Row dataRow = sheet.createRow(rowNum++);
+			createCell(dataRow, 0, title).setCellValue("Organisationsplan für den Berufsorientierungstag");
+			rowNum++;
+			
+			Cell upperLeft = null;
+			Cell lowerRight = null;
+			
+			dataRow = sheet.createRow(rowNum++);			
+			upperLeft = createCell(dataRow, 0, tableHead);
+			createCell(dataRow, 1, tableHead);
+			createCell(dataRow, 2, tableHead).setCellValue(Typ.A.getZeitraum());
+			createCell(dataRow, 3, tableHead).setCellValue(Typ.B.getZeitraum());
+			createCell(dataRow, 4, tableHead).setCellValue(Typ.C.getZeitraum());
+			createCell(dataRow, 5, tableHead).setCellValue(Typ.D.getZeitraum());
+			createCell(dataRow, 6, tableHead).setCellValue(Typ.E.getZeitraum());
+			
+			dataRow = sheet.createRow(rowNum++);
+			createCell(dataRow, 0, tableHead);
+			createCell(dataRow, 1, tableHead);
+			createCell(dataRow, 2, tableHead).setCellValue(Typ.A.name());
+			createCell(dataRow, 3, tableHead).setCellValue(Typ.B.name());
+			createCell(dataRow, 4, tableHead).setCellValue(Typ.C.name());
+			createCell(dataRow, 5, tableHead).setCellValue(Typ.D.name());
+			createCell(dataRow, 6, tableHead).setCellValue(Typ.E.name());
+			
+			for(Unternehmen unt : unternehmen) {
+				dataRow = sheet.createRow(rowNum++);
+				createCell(dataRow, 0, tableLeft).setCellValue(unt.getFirmenID());
+				createCell(dataRow, 1, tableLeft).setCellValue(unt.getUnternehmen());
+				createCell(dataRow, 2, table).setCellValue(unt.getKurse().get(Typ.A) != null ? unt.getKurse().get(Typ.A).getRaum().getName(): "");
+				createCell(dataRow, 3, table).setCellValue(unt.getKurse().get(Typ.B) != null ? unt.getKurse().get(Typ.B).getRaum().getName(): "");
+				createCell(dataRow, 4, table).setCellValue(unt.getKurse().get(Typ.C) != null ? unt.getKurse().get(Typ.C).getRaum().getName(): "");
+				createCell(dataRow, 5, table).setCellValue(unt.getKurse().get(Typ.D) != null ? unt.getKurse().get(Typ.D).getRaum().getName(): "");
+				lowerRight = createCell(dataRow, 6, table);
+				lowerRight.setCellValue(unt.getKurse().get(Typ.E) != null ? unt.getKurse().get(Typ.E).getRaum().getName(): "");
+			}
+			
+			fatBorder(upperLeft, sheet.getRow(--rowNum).getCell(1), sheet);
+			fatBorder(upperLeft, lowerRight, sheet);
+			
+			// Spaltenbreite 3 Zeichen
+			sheet.setColumnWidth(0, 3 * 256);
+			//Spaltenbreite 30 Zeichen
+			sheet.setColumnWidth(1, 30 * 256);
+	        // Auto-Size für jede Spalte
+	        for (int i = 2; i <= 6; i++) {
+	            sheet.autoSizeColumn(i);
+	        }
+			
+			
+			workbook.write(fos);			
+		}
 	}
 
 	@Override
-	public void exportParticipants(List<Unternehmen> unternehmen, String path) {
-		// TODO Auto-generated method stub
+	public void exportParticipants(List<Unternehmen> unternehmen, String path) throws IOException {
+		
+		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(path)) {
+			CellStyle title = titleStyle(workbook);
+			CellStyle table = tableStyle(workbook);
+			CellStyle tableHead = tableHeadStyle(workbook);
+			
+			Row dataRow = null;
 
+
+			for(Unternehmen unt : unternehmen) {
+				Sheet sheet = workbook.createSheet(unt.getFirmenID() + " " +  unt.getUnternehmen());
+				int rowNum = 0;
+				dataRow = sheet.createRow(rowNum++);
+				createCell(dataRow, 0, title).setCellValue(unt.getUnternehmen());;
+				dataRow = sheet.createRow(rowNum++);
+				createCell(dataRow, 0, null).setCellValue(unt.getFachrichtung());;
+				dataRow = sheet.createRow(rowNum++);
+				
+				List<Kurse> kurse = new ArrayList<>(unt.getKurse().values());
+				kurse.sort(bySlotType);				
+				
+				for(Kurse kurs : kurse) {
+					Cell upperLeft;
+					Cell lowerRight = createCell(dataRow, rowNum, null);
+					
+					dataRow = sheet.createRow(rowNum++);
+					upperLeft = createCell(dataRow, 1, tableHead);
+					upperLeft.setCellValue("Raum");
+					createCell(dataRow, 2, tableHead).setCellValue(kurs.getRaum().getName());
+					dataRow = sheet.createRow(rowNum++);
+					createCell(dataRow, 1, tableHead).setCellValue("Zeit");
+					lowerRight = createCell(dataRow, 2, tableHead);
+					lowerRight.setCellValue(kurs.getZeitslot().getTyp().getZeitraum());
+					fatBorder(upperLeft, lowerRight, sheet);
+					
+					dataRow = sheet.createRow(rowNum++);
+					upperLeft = createCell(dataRow, 1, tableHead);
+					upperLeft.setCellValue("Klasse");
+					createCell(dataRow, 2, tableHead).setCellValue("Name");
+					createCell(dataRow, 3, tableHead).setCellValue("Vorname");
+					createCell(dataRow, 4, tableHead).setCellValue("Anwesend?");
+										
+					for(CalcSchueler cSchuel : kurs.getKursTeilnehmer()) {
+						dataRow = sheet.createRow(rowNum++);
+						createCell(dataRow, 1, table).setCellValue(cSchuel.getSchueler().getKlasse());
+						createCell(dataRow, 2, table).setCellValue(cSchuel.getSchueler().getNachname());
+						createCell(dataRow, 3, table).setCellValue(cSchuel.getSchueler().getVorname());
+						lowerRight = createCell(dataRow, 4, table);
+					}
+					
+					fatBorder(upperLeft, lowerRight, sheet);
+					
+					dataRow = sheet.createRow(rowNum++);
+			        // Auto-Size für jede Spalte
+			        for (int i = 1; i < 5; i++) {
+			            sheet.autoSizeColumn(i);
+			        }
+				}
+			}
+			workbook.write(fos);
+		}
 	}
+	
+	/**
+	 * erzeugt eine neue Zelle in der uebergebenen Zeile
+	 * 
+	 * @param row Zeile
+	 * @param col Spalte
+	 * @param style Zellenformatierung
+	 * @return erzeugte Zelle
+	 */
+	private Cell createCell(Row row, int col ,CellStyle style) {
+		Cell cell = row.createCell(col);
+		if(style != null) {
+			cell.setCellStyle(style);
+		}
+		return cell;
+	}
+	
+	/**
+	 * umrahmt einen Bereich auf dem Arbeitsblatt mit einem fetten Rahmen
+	 * 
+	 * @param upperLeft obere linke Zelle des Bereichs
+	 * @param lowerRight untere rechte Zelle des Bereichs
+	 * @param sheet Arbeitsblatt mit dem Bereich
+	 */
+	private void fatBorder(Cell upperLeft, Cell lowerRight, Sheet sheet) {
+		CellRangeAddress region = CellRangeAddress.valueOf(upperLeft.getAddress().formatAsString() + ":" + 
+															lowerRight.getAddress().formatAsString());
+		RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, sheet);
+		RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, sheet);
+		RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, sheet);
+		RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, sheet);
+	}
+	
+	/**
+	 * erzeugt die Zellenformatierung fuer eine Zelle in einer Tabelle mit duennen Rahmen
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
+	private CellStyle tableStyle(Workbook wb) {
+		CellStyle retVal = wb.createCellStyle();
+		
+		retVal.setBorderBottom(BorderStyle.THIN);
+		retVal.setBorderLeft(BorderStyle.THIN);
+		retVal.setBorderTop(BorderStyle.THIN);
+		retVal.setBorderRight(BorderStyle.THIN);
+		
+		return retVal;		
+	}
+	
+	
+	/**
+	 * erzeugt die Zellenformatierung fuer einen Tabellenkopf mit fetter Schrift
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
+	private CellStyle tableHeadStyle(Workbook wb) {
+		CellStyle retVal = wb.createCellStyle();
+		
+		retVal.cloneStyleFrom(tableStyle(wb));
+		Font tableHeadFont = wb.createFont();
+		tableHeadFont.setBold(true);
+		retVal.setFont(tableHeadFont);
+		
+		return retVal;
+	}
+	
+	/**
+	 * erzeugt die Zellenformatierung fuer die Ueberschrift eines Arbeitsblatts
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
+	private CellStyle titleStyle(Workbook wb) {
+		CellStyle retVal = wb.createCellStyle();
+		
+		Font titleFont = wb.createFont();
+		titleFont.setBold(true);
+		titleFont.setFontHeightInPoints((short) 20);
+		retVal.setFont(titleFont);
+		
+		return retVal;		
+	}
+	
+	/**
+	 * sortiert die Kurse in einer Liste nach der zeitlichen Reihenfolge ihrer Zeitslots
+	 */
+	Comparator<Kurse> bySlotType = new Comparator<Kurse>() {
+		
+		@Override
+		public int compare(Kurse o1, Kurse o2) {
+			
+			return Integer.compare(o1.getZeitslot().getTyp().ordinal(), o2.getZeitslot().getTyp().ordinal());
+		}
+	};
 
 	/*
 	 * try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new
@@ -281,5 +505,8 @@ public class ExportFile implements IExport {
 	 * exportFilePath, "Export", JOptionPane.INFORMATION_MESSAGE); } catch
 	 * (Exception e) { e.printStackTrace(); }
 	 */
+	
+	
+
 
 }

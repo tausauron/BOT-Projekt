@@ -1,17 +1,20 @@
 package gui;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import klassenObjekte.*;
 
 /**
+ * Ein Model um ein Tabelle in der View Scrollpane Darzustellen
  * 
  * @author Wagner_Eri
  *
  */
 
-//Ein Model um ein Tabelle in der View Scrollpane Darzustellen
+@SuppressWarnings("serial")
 public class UnternehmenTableModel extends AbstractTableModel {
-	private static final String[] COLUMN_NAMES = { "Nr","Firma", "Fachrichtung","Max Teilnehmer","Max Veranstaltungen","Frühester Zeitslot"};
+	private static final String[] COLUMN_NAMES = { "Nr", "Firma", "Fachrichtung", "Max Teilnehmer",
+			"Max Veranstaltungen", "Frühester Zeitslot" };
 	private List<Unternehmen> unternehmenListe;
 
 	public UnternehmenTableModel(List<Unternehmen> schüler) {

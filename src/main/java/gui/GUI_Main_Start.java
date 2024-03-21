@@ -1,87 +1,147 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
+import de.bwvaachen.botscheduler.grassmann.myInterface.MyController;
+import klassenObjekte.Raum;
+import klassenObjekte.Schueler;
+import klassenObjekte.Unternehmen;
+
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class GUI_Main_Start {
 
 	private MyController myController;
-	
-	private JFrame frmTitelDesProgramms;
+
+	private JFrame frmStartMain;
 
 	/**
-	 * Create the application.
-	 * @param myController 
+	 * Erste Oberfläche die Generieren, Liste Bearbeiten, Daten Löschen Anzeigt
+	 * 
+	 * @param myController    Damit alle Methoden genutzt werden können
+	 * @param listSchüler     Liste von der DB
+	 * @param listUnternehmen Liste von der DB
+	 * @param listRaum        Liste von der DB
 	 */
-	public GUI_Main_Start(MyController myController) {
-		this.myController=myController;
+	public GUI_Main_Start(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
+			List<Raum> listRaum) {
+		this.myController = myController;
+
 		initialize();
-		this.frmTitelDesProgramms.setVisible(true);
+		this.frmStartMain.setVisible(true);
+		frmStartMain.setLocationRelativeTo(null);
+	}
+
+	private void initialize() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
+		frmStartMain = new JFrame();
+		// Center the frame
+
+		frmStartMain.setTitle("BOT: Menü");
+		frmStartMain.setBounds(100, 100, 250, 270);
+		frmStartMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JButton btngenLösung = new JButton("Generieren");
+		btngenLösung.addActionListener((e) -> btnPressedgenLösung());
+
+		JButton btnBearbeiten = new JButton("Listen Bearbeiten");
+		btnBearbeiten.addActionListener((e) -> öffneListView());
+
+		JButton btnDatenLschen = new JButton("Daten löschen");
+		btnDatenLschen.addActionListener((e) -> LöscheDateninDatenBank());
+		GroupLayout groupLayout = new GroupLayout(frmStartMain.getContentPane());
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+								.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+								.addComponent(btnBearbeiten, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+								.addComponent(btnDatenLschen, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+						.addContainerGap()));
+		groupLayout
+				.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+								.addComponent(btngenLösung, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(btnDatenLschen,
+										GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(21, Short.MAX_VALUE)));
+		frmStartMain.getContentPane().setLayout(groupLayout);
+
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmStartMain.setIconImage(ui_Logo);
+
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Das ListView wird geöffnet und main Window dispose
 	 */
-	private void initialize() {
-		frmTitelDesProgramms = new JFrame();
-		frmTitelDesProgramms.setTitle("BOT");
-		frmTitelDesProgramms.setBounds(100, 100, 222, 270);
-		frmTitelDesProgramms.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		JButton btngenLösung = new JButton("Generiere");
-		btngenLösung.addActionListener((e)->btnPressedgenLösung());
-		
-		JButton btnBearbeiten = new JButton("Listen Bearbeiten");
-		btnBearbeiten.addActionListener((e)->öffneListView());
-		
-		JButton btnDatenLschen = new JButton("Daten löschen");
-		btnDatenLschen.addActionListener((e)->LöscheDateninDatenBank());
-		GroupLayout groupLayout = new GroupLayout(frmTitelDesProgramms.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btngenLösung, GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
-						.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDatenLschen, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btngenLösung, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnBearbeiten, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(btnDatenLschen, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(51, Short.MAX_VALUE))
-		);
-		frmTitelDesProgramms.getContentPane().setLayout(groupLayout);
-	}
-
 	private void öffneListView() {
-		//TODO
+		myController.startListView();
+		frmStartMain.dispose();
 	}
 
+	/**
+	 * Wird mit einer Auswahl gestellt welche Daten gelöscht werden sollen aus der
+	 * DB und Listen Anzeige
+	 */
 	private void LöscheDateninDatenBank() {
-		myController.deleteStudent();
-		myController.deleteCompany();
-		myController.deleteCompany();
+		String[] options = { "Alle Daten", "Nur Schüler", "Nur Unternehmen", "Nur Räume", "Abbrechen" };
+		int choice = JOptionPane.showOptionDialog(null, "Wählen Sie, welche Daten Sie löschen möchten:",
+				"Lösch-Optionen", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+				options[4]);
+
+		if (choice == JOptionPane.YES_OPTION) {
+			myController.deleteAllStudent();
+			myController.deleteAllCompany();
+			myController.deleteAllRoom();
+
+		} else if (choice == 1) {
+			myController.deleteAllStudent();
+		} else if (choice == 2) {
+			myController.deleteAllCompany();
+		} else if (choice == 3) {
+			myController.deleteAllRoom();
+		}
 	}
 
+	/**
+	 * Der Allgorithmus läuft durch, es wird ein Ordner gewählt in der die Dateien
+	 * Exportiert werden soll
+	 */
 	private void btnPressedgenLösung() {
-		myController.exportStudentSchedule(frmTitelDesProgramms);
+
+		try {
+			String path = MyJFileChooser.getPathFolder(frmStartMain, "");
+			if (!path.equals("")) {
+				// TODO
+				myController.generiereLoesungen(path);
+
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

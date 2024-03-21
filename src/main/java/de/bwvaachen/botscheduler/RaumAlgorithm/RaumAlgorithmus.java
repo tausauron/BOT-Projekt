@@ -142,14 +142,15 @@ public class RaumAlgorithmus
 			Raum passenderRaum = null;
 
 			if (bereitsZugeordneteRaeume.size() > raumListe2.size()) // Wenn bei aktuellem Kurs, die
-				// bereitsZugeordneteRaeume liste = raumliste
-				// groß
+			// bereitsZugeordneteRaeume liste = raumliste
+			// groß
 			{
 				System.out.println("Kurs wird anders gespeichert");
 				kursGehoertInNichtZuOrdbareListe(kurs, "Es ist kein freier Raum mehr verfuegbar", true);
 			} else
 			{
-				//versucheGleichenRaumZuzuordnen(kurs, slotKursListe);
+				// versucheGleichenRaumZuzuordnen(kurs, slotKursListe);
+
 				for (Raum raum : raumListe2)
 				{
 					System.out.println("\n Betrachteter Raum ist:" + raum.getName());
@@ -168,7 +169,8 @@ public class RaumAlgorithmus
 							kursGehoertInNichtZuOrdbareListe(kurs,
 									"Fuer diesen Kurs, gibt es keinen Kurs mit passender Kapazitaet", true);
 							System.out.println("Raum: " + raum.getName() + " keine Kapazitaet!! " + raum.getKapazitaet()
-							+ " VS " + kurs.getKursTeilnehmer().size());
+									+ " VS " + kurs.getKursTeilnehmer().size());
+
 						}
 					} else // else Raum ist schon Zugeteilt worden
 					{
@@ -211,18 +213,16 @@ public class RaumAlgorithmus
 			if (eingeteilteKurseListe.get(i).equals(aktuelleZeitSlotListe))
 			{
 				// i ist nun die pos an welcher stelle das aktuelle zeitslot ist
-				if(i == 0)
+				if (i == 0)
 				{
-					//nichts
-				}else
+					// nichts
+				} else
 				{
 					// checke ob aktueller kurs in vorherigen array ist
-					if((eingeteilteKurseListe.get(i-1)).contains(kurs))
+					if ((eingeteilteKurseListe.get(i - 1)).contains(kurs))
 					{
 						// versuche den raum vom letztenmal nochmal zuzuordnen
 					}
-					
-					
 
 				}
 			}

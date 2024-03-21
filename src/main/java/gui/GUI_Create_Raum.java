@@ -1,34 +1,51 @@
 package gui;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import klassenObjekte.Raum;
-import klassenObjekte.Schueler;
-import klassenObjekte.Unternehmen;
-import javax.swing.JSpinner;
+
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 
 public class GUI_Create_Raum {
 
-	private JFrame frmSchlerHinzufgen;
+	private JFrame frmCreateRoom;
 	private JTextField tfieldName;
 	private GUI_ListView gui_ListView;
 	private JSpinner spKapaz;
+	private List<Raum> raumList;
 
-	public GUI_Create_Raum(GUI_ListView gui_ListView) {
+	/**
+	 * Konstruktor, initialisiert GUI
+	 * 
+	 * @param gui_ListView Nötig um addRaumToList(new Raum(tfieldName.getText(),
+	 *                     (int) spKapaz.getValue())); aufzurufen
+	 * @param raumList     Zum Überprüfen von doppelten Namen
+	 */
+	public GUI_Create_Raum(GUI_ListView gui_ListView, List<Raum> raumList) {
 		this.gui_ListView = gui_ListView;
+		this.raumList = raumList;
 		initialize();
-		this.frmSchlerHinzufgen.setVisible(true);
+		this.frmCreateRoom.setVisible(true);
+		frmCreateRoom.setLocationRelativeTo(null);
 
 	}
 
@@ -36,11 +53,18 @@ public class GUI_Create_Raum {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmSchlerHinzufgen = new JFrame();
+		frmCreateRoom = new JFrame();
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmCreateRoom.setIconImage(ui_Logo);
 
-		frmSchlerHinzufgen.setTitle("Raum Hinzufügen");
-		frmSchlerHinzufgen.setBounds(100, 100, 255, 175);
-		frmSchlerHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmCreateRoom.setTitle("Raum Hinzufügen");
+		frmCreateRoom.setBounds(100, 100, 255, 175);
+		frmCreateRoom.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JLabel lblKlasse = new JLabel("Name:");
 
@@ -56,7 +80,7 @@ public class GUI_Create_Raum {
 		btnAbbrechen.addActionListener((e) -> btnPressedAbbrechen());
 
 		spKapaz = new JSpinner();
-		GroupLayout groupLayout = new GroupLayout(frmSchlerHinzufgen.getContentPane());
+		GroupLayout groupLayout = new GroupLayout(frmCreateRoom.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -88,23 +112,51 @@ public class GUI_Create_Raum {
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnHinzufügen)
 								.addComponent(btnAbbrechen))
 						.addContainerGap(21, Short.MAX_VALUE)));
-		frmSchlerHinzufgen.getContentPane().setLayout(groupLayout);
+		frmCreateRoom.getContentPane().setLayout(groupLayout);
 	}
 
+	/**
+	 * Damit nicht alles geschlossen wird wird Dispose benutzt
+	 */
 	private void btnPressedAbbrechen() {
-		frmSchlerHinzufgen.dispose();
+		frmCreateRoom.dispose();
 
 	}
 
+	/**
+	 * Btn um ein Raum zu erstellen aus dem Inhalt der Felder
+	 */
 	private void btnpressedHinzufügen() {
 
 		if (!tfieldName.getText().isEmpty()) {
-			gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
-			frmSchlerHinzufgen.dispose();
+
+			if (!doppelteRaumVergabe()) {
+				gui_ListView.addRaumToList(new Raum(tfieldName.getText(), (int) spKapaz.getValue()));
+				frmCreateRoom.dispose();
+			}
+
 		} else {
 			JOptionPane.showMessageDialog(null, "Feld: Name ist leer", "Fehler Leeres Feld", JOptionPane.ERROR_MESSAGE);
 		}
 
+	}
+
+	/**
+	 * Zum Überprüfen ob der Raum schon in der Liste Existiert
+	 * @return True: wenn ein Raum einen gleichen Namen hat, False: wenn ein Raum nicht doppelt vergeben ist
+	 */
+	private boolean doppelteRaumVergabe() {
+		List<String> x = new ArrayList<>();
+
+		for (Raum raum : raumList) {
+			x.add(raum.getName());
+		}
+		if (x.contains(tfieldName.getText())) {
+			JOptionPane.showMessageDialog(null, "Ein Raum hat den gleichen Namen", "Gleiche Namen",
+					JOptionPane.ERROR_MESSAGE);
+			return true;
+		}
+		return false;
 	}
 
 }

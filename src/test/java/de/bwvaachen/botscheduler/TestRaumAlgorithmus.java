@@ -18,6 +18,7 @@ import de.bwvaachen.botscheduler.calculate.Zeitslot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import execlLoad.ImportFile;
 import junit.framework.Assert;
+
 import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
@@ -47,7 +48,7 @@ class TestRaumAlgorithmus
 		String eventPath = TestRaumAlgorithmus.class.getResource("IMPORT BOT1_Veranstaltungsliste.xlsx").toURI()
 				.getPath();
 		unternehmen = ImportFile.getCompany(eventPath); // Holt sich die ganzen Veranstaltungen und packt diese in eine
-														// ArrayList
+		// ArrayList
 
 		String roomPath = TestRaumAlgorithmus.class.getResource("IMPORT BOT0_Raumliste.xlsx").toURI().getPath();
 		raeume = ImportFile.getRoom(roomPath); // Holt sich die Raeume und packt diese in eine ArrayList
@@ -106,7 +107,7 @@ class TestRaumAlgorithmus
 		if (nichtZuordbareKurseMap.isEmpty())
 		{
 			fail();
-		}else
+		} else
 		{
 			for (Map.Entry<Kurse, String> entry : nichtZuordbareKurseMap.entrySet())
 			{

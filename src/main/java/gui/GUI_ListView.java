@@ -44,9 +44,9 @@ public class GUI_ListView {
 	private TableModel schülerListModel;
 	private TableModel unterNehmenListModel;
 	private TableModel raumListModel;
-	private List<Schueler> schülerList;
-	private List<Unternehmen> unternehmenList;
-	private List<Raum> raumList;
+	private List<Schueler> schülerList= new ArrayList<>();
+	private List<Unternehmen> unternehmenList= new ArrayList<>();
+	private List<Raum> raumList= new ArrayList<>();
 	private MyController myController;
 
 	private JTable tableSchüler;
@@ -54,24 +54,45 @@ public class GUI_ListView {
 	private JTable tableRaum;
 
 	/**
-	 * Create the application.
-	 */
-
-	/*
-	 * public GUI_ListView(List<Schueler> schüler, List<Unternehmen> unternehmen,
-	 * List<Raum> räume, MyController myController) {
+	 * Konstruktor ohne Liste übergabe/ Wird die oberfläch gestartet die eine Liste
+	 * von Schüler, Unternehmen, Raum anzeigt
 	 * 
-	 * this.schülerList = schüler; this.unternehmenList = unternehmen; this.raumList
-	 * = räume; initialize(); this.frame.setVisible(true); }
+	 * @param myController Übergabe damit Schnittstelle benutzt werden können
 	 */
-
-	public GUI_ListView(MyController myController) {
+	/*public GUI_ListView(MyController myController) {
 		this.myController = myController;
 		this.schülerList = new ArrayList<Schueler>();
 		this.unternehmenList = new ArrayList<Unternehmen>();
 		this.raumList = new ArrayList<Raum>();
+		this.oldschülerList=new ArrayList<Schueler>();
+		this.oldunternehmenList=new ArrayList<Unternehmen>();
+		this.oldraumList=new ArrayList<Raum>();
 		initialize();
 		this.frame.setVisible(true);
+	}*/
+
+	/**
+	 * Konstruktor mit Liste übergabe/ Wird die oberfläch gestartet die eine Liste
+	 * von Schüler, Unternehmen, Raum anzeigt
+	 * 
+	 * @param myController    Übergabe damit Schnittstelle benutzt werden können
+	 * @param listSchüler     Übergabe Schülerliste damit liste direkt existiert
+	 * @param listUnternehmen Übergabe Unternehmenliste damit liste direkt existiert
+	 * @param listRaum        Übergabe Raumliste damit liste direkt existiert
+	 */
+	public GUI_ListView(MyController myController, List<Schueler> listSchüler, List<Unternehmen> listUnternehmen,
+			List<Raum> listRaum) {
+		//TODO Fehler speichern
+		
+		this.myController = myController;
+		this.schülerList = listSchüler;
+		this.unternehmenList = listUnternehmen;
+		this.raumList = listRaum;
+		
+		
+		initialize();
+		this.frame.setVisible(true);
+		this.frame.setLocationRelativeTo(null);
 	}
 
 	/**
@@ -87,13 +108,17 @@ public class GUI_ListView {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				fensterSchließen(schülerList, unternehmenList, raumList);
+				try {
+					fensterSchließen(schülerList, unternehmenList, raumList);
+				} catch (Exception ex) {
+					throw new RuntimeException(ex);
+				}
 			}
 		});
-		frame.setTitle("BOT");
+		frame.setTitle("BOT: Listen Bearbeiten");
 
 		frame.setBounds(100, 100, 752, 506);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
@@ -113,7 +138,9 @@ public class GUI_ListView {
 		JButton btnSchülerDelete = new JButton("Löschen");
 		btnSchülerDelete.addActionListener((e) -> btnPressedSchülerLöschen(e));
 
-		// Schüler GUI
+		/**
+		 * Schüler GUI
+		 */
 		schülerListModel = new StudentTableModel(schülerList);
 
 		tableSchüler = new JTable(schülerListModel);
@@ -165,7 +192,9 @@ public class GUI_ListView {
 		JButton btnUnternehmenExportieren = new JButton("Exportieren");
 		btnUnternehmenExportieren.addActionListener((e) -> btnPressedUnternehmenExportieren());
 
-		// Unternehmen GUI
+		/**
+		 * Unternehmen GUI
+		 */
 		unterNehmenListModel = new UnternehmenTableModel(unternehmenList);
 		tableUn = new JTable(unterNehmenListModel);
 
@@ -203,7 +232,9 @@ public class GUI_ListView {
 						.addGap(19)));
 		panelUnternehmen.setLayout(gl_panelUnternehmen);
 
-		// Räume GUI
+		/**
+		 * Räume GUI
+		 */
 
 		JPanel panelRaum = new JPanel();
 
@@ -213,8 +244,10 @@ public class GUI_ListView {
 		btnRaumhinzufügen.addActionListener((e) -> btnPressedRaumHinzufügen());
 
 		JButton btnRaumImportieren = new JButton("Importieren");
+		btnRaumImportieren.addActionListener((e) -> btnPressedRaumImportieren());
 
 		JButton btnRaumExportieren = new JButton("Exportieren");
+		btnRaumExportieren.addActionListener((e) -> btnPressedRaumExportieren());
 
 		raumListModel = new RaumTableModel(raumList);
 		tableRaum = new JTable(raumListModel);
@@ -253,49 +286,94 @@ public class GUI_ListView {
 		frame.setIconImage(ui_Logo);
 	}
 
-	// Button Hinzufügen
+	/**
+	 * Button Hinzufügen um eine Oberfläche zu öffnen, welche einen Schüler
+	 * hinzufügt.
+	 */
 	private void btnPressedSchülerhinzufügen() {
-		// TODO
-		new GUI_Create_Schueler(this,unternehmenList);
+
+		new GUI_Create_Schueler(this, unternehmenList);
 	}
 
+	/**
+	 * Button Hinzufügen um eine Oberfläche zu öffnen, welche ein Unternehmen
+	 * hinzufügt.
+	 */
 	private void btnPressedUnternehmenhinzufügen() {
-		// TODO 
 
 		new GUI_Create_Unternehmen(this, unternehmenList);
 	}
 
+	/**
+	 * Button Hinzufügen um eine Oberfläche zu öffnen, welche einen Raum hinzufügt.
+	 */
 	private void btnPressedRaumHinzufügen() {
-		// TODO Raum Hinzufügen
-		new GUI_Create_Raum(this);
-	
+		new GUI_Create_Raum(this, this.raumList);
 	}
 
-	// Button die den Index Ermitteln und dann Löschen
+	/**
+	 * Button die den Index Ermittelt und dann den Schüler löscht
+	 * 
+	 * @param e
+	 */
 	private void btnPressedSchülerLöschen(ActionEvent e) {
 		if (tableSchüler.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableSchüler.getSelectedRow();
-			removeOnPositionSchüler(selectedRow);
+
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame,
+					"Soll der ausgewählte Schüler wirklich gelöscht werden?", "Schüler löschen",
+					JOptionPane.YES_NO_OPTION);
+
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the student
+				removeOnPositionSchüler(selectedRow);
+			}
 		} else {
 			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Schüler aus.", "Keine Auswahl",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
+	/**
+	 * Button die den Index Ermittelt und dann den Unternehmen löscht
+	 * 
+	 */
 	private void btnPressedUnternehmeLöschen() {
 		if (tableUn.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableUn.getSelectedRow();
-			removeOnPositionUnternehmen(selectedRow);
+
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame,
+					"Soll das ausgewählte Unternehmen wirklich gelöscht werden?", "Unternehmen löschen",
+					JOptionPane.YES_NO_OPTION);
+
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the company
+				removeOnPositionUnternehmen(selectedRow);
+			}
 		} else {
 			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie ein Unternehmen aus.", "Keine Auswahl",
 					JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
+	/**
+	 * Button die den Index Ermittelt und dann den Raum löscht
+	 * 
+	 */
 	private void btnPressedRaumLöschen() {
 		if (tableRaum.getSelectedRow() != -1) { // Check if a row is selected
 			int selectedRow = tableRaum.getSelectedRow();
-			removeOnPositionRaum(selectedRow);
+
+			// Show a confirmation dialog
+			int response = JOptionPane.showConfirmDialog(frame, "Soll der ausgewählte Raum wirklich gelöscht werden?",
+					"Raum löschen", JOptionPane.YES_NO_OPTION);
+
+			if (response == JOptionPane.YES_OPTION) {
+				// User clicked "Yes", so delete the room
+				removeOnPositionRaum(selectedRow);
+			}
 		} else {
 			JOptionPane.showMessageDialog(frame, "Bitte wählen Sie einen Raum aus.", "Keine Auswahl",
 					JOptionPane.WARNING_MESSAGE);
@@ -318,7 +396,10 @@ public class GUI_ListView {
 		refreshRaum();
 	}
 
-	// Import Buttons
+	/**
+	 * Import Button, öffnet einen FileChooser welche die Datei einliest und eine
+	 * Schülerliste erhält und diese Anzeigt in der Oberfläche
+	 */
 	private void btnPressedSchülerImportieren() {
 		schülerList.clear();
 		List<Schueler> importedStudents = myController.importStudent(this.frame);
@@ -327,6 +408,10 @@ public class GUI_ListView {
 		}
 	}
 
+	/**
+	 * Import Button, öffnet einen FileChooser welche die Datei einliest und eine
+	 * Unternehmenliste erhält und diese Anzeigt in der Oberfläche
+	 */
 	private void btnPressedUnternehmenImportieren() {
 		unternehmenList.clear();
 		List<Unternehmen> importUntList = myController.importCompany(this.frame);
@@ -336,6 +421,10 @@ public class GUI_ListView {
 		}
 	}
 
+	/**
+	 * Import Button, öffnet einen FileChooser welche die Datei einliest und eine
+	 * Raumliste erhält und diese Anzeigt in der Oberfläche
+	 */
 	private void btnPressedRaumImportieren() {
 		raumList.clear();
 		List<Raum> importedRaumList = myController.importRooms(this.frame);
@@ -344,23 +433,37 @@ public class GUI_ListView {
 		}
 	}
 
-	// Export Buttons
+	/**
+	 * Export Button, öffnet einen FileChooser, welche an gewünschten Ort die
+	 * vorhandenen Schüler in Excel Exportiert
+	 */
 	private void btnPressedSchülerExportieren() {
 
 		myController.exportStudent(schülerList, this.frame);
 	}
 
+	/**
+	 * Export Button, öffnet einen FileChooser, welche an gewünschten Ort die
+	 * vorhandenen Unternehmen in Excel Exportiert
+	 */
 	private void btnPressedUnternehmenExportieren() {
 
 		myController.exportCompany(unternehmenList, this.frame);
 	}
 
+	/**
+	 * Export Button, öffnet einen FileChooser, welche an gewünschten Ort die
+	 * vorhandenen Räume in Excel Exportiert
+	 */
 	private void btnPressedRaumExportieren() {
-
 		myController.exportRooms(raumList, this.frame);
 	}
 
-	// Methode to add "" to List
+	/**
+	 * Wird der Liste hinzugefügt
+	 * 
+	 * @param newSchüler Der gewünschte Schüler
+	 */
 	protected void addSchülerToList(Schueler newSchüler) {
 
 		schülerList.add(newSchüler);
@@ -368,12 +471,22 @@ public class GUI_ListView {
 		refreshSchüler();
 	}
 
+	/**
+	 * Wird der Liste hinzugefügt
+	 * 
+	 * @param newSchüler Das gewünschte Unternehmen
+	 */
 	protected void addUnternehmenToList(Unternehmen newUnternehmen) {
 		unternehmenList.add(newUnternehmen);
 
 		refreshUnternehmen();
 	}
 
+	/**
+	 * Wird der Liste hinzugefügt
+	 * 
+	 * @param newSchüler Das gewünschte Raum
+	 */
 	protected void addRaumToList(Raum newRaum) {
 
 		raumList.add(newRaum);
@@ -381,7 +494,9 @@ public class GUI_ListView {
 		refreshRaum();
 	}
 
-	// Refresh Methoden
+	/**
+	 * Aktualisiert Schüler liste damit diese Angezeigt werden
+	 */
 	private void refreshSchüler() {
 		TableModel modelSchüler = new StudentTableModel(schülerList);
 		tableSchüler = new JTable(modelSchüler);
@@ -389,6 +504,9 @@ public class GUI_ListView {
 		scrollPaneSchüler.setViewportView(tableSchüler);
 	}
 
+	/**
+	 * Aktualisiert Unternehmen liste damit diese Angezeigt werden
+	 */
 	private void refreshUnternehmen() {
 		TableModel unTableModel = new UnternehmenTableModel(unternehmenList);
 		tableUn = new JTable(unTableModel);
@@ -396,6 +514,9 @@ public class GUI_ListView {
 		scrollPaneUnternehmen.setViewportView(tableUn);
 	}
 
+	/**
+	 * Aktualisiert Raum liste damit diese Angezeigt werden
+	 */
 	private void refreshRaum() {
 		TableModel modelRaum = new RaumTableModel(raumList);
 		tableRaum = new JTable(modelRaum);
@@ -403,22 +524,40 @@ public class GUI_ListView {
 		scrollPaneRaum.setViewportView(tableRaum);
 	}
 
-	// On Close Methode
-	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+	/**
+	 * Wenn das Fenster geschlossen wird dann wird gefragt ob gespeichert werden
+	 * soll oder nicht
+	 * 
+	 * @param schülerList     Übergabe Liste Schüler zum Speicher in der DB
+	 * @param unternehmenList Übergabe Liste Unternehmen zum Speicher in der DB
+	 * @param raumList        Übergabe Liste Raum zum Speicher in der DB
+	 * @throws Exception
+	 */
+	protected void fensterSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList, List<Raum> raumList)
+			throws Exception {
 		speichernDerDatenbeimSchließen(schülerList, unternehmenList, raumList);
 	}
 
+	/**
+	 * Wenn das Fenster geschlossen wird dann wird gefragt ob gespeichert werden
+	 * soll oder nicht
+	 * 
+	 * @param schülerList     Übergabe Liste Schüler zum Speicher in der DB
+	 * @param unternehmenList Übergabe Liste Unternehmen zum Speicher in der DB
+	 * @param raumList        Übergabe Liste Raum zum Speicher in der DB
+	 * @throws Exception
+	 */
 	private void speichernDerDatenbeimSchließen(List<Schueler> schülerList, List<Unternehmen> unternehmenList,
-			List<Raum> raumList) {
+			List<Raum> raumList) throws Exception {
 
 		int confirmation = JOptionPane.showConfirmDialog(null, "Möchten Sie die Daten vor dem Schließen speichern?",
 				"Bestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (confirmation == JOptionPane.YES_OPTION) {
 			myController.closeListView(schülerList, raumList, unternehmenList);
+			myController.startMainGUI();
 		} else {
-
+			myController.startMainGUI();
 		}
 
 	}
