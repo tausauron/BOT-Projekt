@@ -1,13 +1,8 @@
 package de.bwvaachen.botscheduler.database;
-
 import de.bwvaachen.botscheduler.model.KursDAO;
 import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +13,7 @@ public class DBModel implements IDatabase {
 
 
 
-    public DBModel(String pfad) throws SQLException, ClassNotFoundException, URISyntaxException {
+    public DBModel(String pfad) throws SQLException, ClassNotFoundException {
         this.pfad = pfad;
         //Path p = Path.of(pfad.getPath(), "data", "Database");
         if (!exitsTable("Schueler")){
@@ -193,13 +188,12 @@ public class DBModel implements IDatabase {
     //***** Check Tables in Database *****
 
     /**
-     * Prüft, ob eine bestimmte Tabelle in der Datenbank existiert
-     * @param tableName name der Tabelle die geprüft werden soll
-     * @return ein bool wert der aussagt, ob es die Tabelle in der Datenbank existiert
-     * @throws SQLException Um prüfen zu können, ob es eine Tabelle existiert, muss eine Connection zu der Datenbank
-     * bestehen. Wenn diese Connection nicht hergestellt werden kann, wird die Exception geworfen.
-     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
-     * der Driver-Klasse gesucht wird.
+     * Methode die überprüft, ob es die Tabelle die als String mitgegeben wurde, in der Datenbank existiert.
+     * @param tableName Name der Tabelle die in der Datenbank gesucht werden soll.
+     * @return Bool-wert, ob die Tabelle gefunden wurde oder nicht. True = existiert | False = existiert nicht
+     * @throws SQLException Da es eine Datenbank zugriff, aufgebaut werden muss um zu prüfen, ob es die Tabelle enthält,
+     * kann eine SQLException geworfen werden, falls der Aufbau nicht funktioniert hat.
+     * @throws ClassNotFoundException Wenn der Driver nicht gefunden wurde, wird eine Exception geworfen.
      */
     private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
         boolean res = false;
@@ -262,15 +256,6 @@ public class DBModel implements IDatabase {
         }
     }
 
-    /**
-     * Es werden Schüler aus der Datenbank geladen. Aus den gespeicherten Informationen aus der Datenbnak werden
-     * Schülerobjekte zusammengebaut und in eine Liste gepackt
-     * @return Eine Liste von Schülern 'List<Schueler>'
-     * @throws SQLException zum Laden von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
-     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
-     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
-     * der Driver-Klasse gesucht wird.
-     */
     @Override
     public List<Schueler> loadSchueler() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -313,7 +298,7 @@ public class DBModel implements IDatabase {
 
     /**
      * Es wird eine Liste von Unternehmen in der Datenbank gespeichert. Diese Liste kann auch nur einen oder keinen Eintrag haben
-     * @param unternehmenList
+     * @param unternehmenList Liste der Unternehmen die gespeichert werden soll. List<UnternehmenDAO>
      * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
      * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
      * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
@@ -341,14 +326,6 @@ public class DBModel implements IDatabase {
         }
     }
 
-    /**
-     * Es werden die Unternehmen die in der Datenbank gespeichert werden, geladen und als eine Liste zurückgegeben.
-     * @return alle in der Datenbank gespeicherten Unternehmen als Liste 'List<UnternehmenDAO>
-     * @throws SQLException zum Laden von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
-     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
-     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
-     * der Driver-Klasse gesucht wird.
-     */
     @Override
     public List<UnternehmenDAO> loadUnternehmen() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -393,10 +370,12 @@ public class DBModel implements IDatabase {
     //********** Kurse **********
 
     /**
-     * Speichert eine Liste von KursDAO Objekten in der Datenbank. Diese Liste kann
-     * @param kurse
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * Speichert eine Liste von KursDAO Objekten in der Datenbank. Diese Liste kann nur einen oder auch keinen enthalten.
+     * @param kurse eine Liste der Kurse die gespeichert werden sollen. Datentyp: List<KursDAO>
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
      */
     public void saveKurse(List<KursDAO> kurse) throws SQLException, ClassNotFoundException {
         if (kurse != null) {
@@ -429,6 +408,7 @@ public class DBModel implements IDatabase {
             conn.close();
         }
     }
+
 
     @Override
     public List<KursDAO> loadKurse(List<Schueler> schlrList, List<Raum> raum, List<UnternehmenDAO> unternehmen) throws SQLException, ClassNotFoundException {
@@ -468,6 +448,15 @@ public class DBModel implements IDatabase {
 
 
     //********** Raum **********
+
+    /**
+     * Es wird eine Liste von Räumen gespeichert. Diese Liste kann auch nur einen oder keinen enthalten.
+     * @param raumList eine Liste der zu speichernden Räume
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     public void saveRooms(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
@@ -519,6 +508,7 @@ public class DBModel implements IDatabase {
 
     //***** Input Methoden *****
     //********** Rooms **********
+
     @Override
     public List<Raum> loadRoomsInput() throws SQLException, ClassNotFoundException {
         Connection conn = connection();
@@ -549,6 +539,16 @@ public class DBModel implements IDatabase {
 
         return raumList;
     }
+
+    /**
+     * Diese Methode speichert eine Liste von Räumen, die zum Teil in der GUI bearbeitet wurde und separat von der
+     * Raum-Liste gespeichert wird.
+     * @param raumList Die Liste die Gespeichert werden soll. List<Raum>
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     public void saveRoomInputData(List<Raum> raumList) throws SQLException, ClassNotFoundException {
         if (raumList != null) {
             Connection conn = connection();
@@ -602,6 +602,16 @@ public class DBModel implements IDatabase {
 
         return schuelerList;
     }
+
+    /**
+     * Diese Methode speichert eine Liste von Schülern, die zum Teil in der GUI bearbeitet wurde und separat von der
+     * Schüler-Liste gespeichert wird.
+     * @param schuelerList Die Liste die Gespeichert werden soll. List<Schueler>
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     public void saveSchuelerInputData(List<Schueler> schuelerList) throws SQLException, ClassNotFoundException {
         if (schuelerList != null) {
             Connection conn = connection();
@@ -671,6 +681,16 @@ public class DBModel implements IDatabase {
 
         return unternehmenList;
     }
+
+    /**
+     * Diese Methode speichert eine Liste von Unternehmen, die zum Teil in der GUI bearbeitet wurde und separat von der
+     * Unternehmen-Liste gespeichert wird.
+     * @param unternehmenList Die Liste die Gespeichert werden soll. List<UnternehmenDAO>
+     * @throws SQLException zum Speichern von Daten muss es ein Connection zu der Datenbank aufgebaut werden,
+     * wenn diese Connection nicht aufgebaut werden kann wird eine SQLException geworfen.
+     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
+     * der Driver-Klasse gesucht wird.
+     */
     public void saveUnternehmenInputData(List<UnternehmenDAO> unternehmenList) throws SQLException, ClassNotFoundException {
         if (unternehmenList != null) {
             Connection conn = connection();
@@ -696,6 +716,13 @@ public class DBModel implements IDatabase {
 
 
     //******* Find Methoden *******
+
+    /**
+     * Methode die in der gegebene Liste anhand der ebenfalls mitgegebenen ID das Objekt mit der ID findet und zurückgibt.
+     * @param raeume Liste der Raum Objekte List<Raum>
+     * @param ID int ID die in der Liste gesucht werden soll
+     * @return das Objekt mit der ID die gesucht wird. Raum
+     */
     private Raum findRaum(List<Raum> raeume, int ID){
         Raum res = null;
         for (Raum r : raeume){
@@ -705,6 +732,12 @@ public class DBModel implements IDatabase {
         }
         return res;
     }
+    /**
+     * Methode die in der gegebene Liste anhand der ebenfalls mitgegebenen ID das Objekt mit der ID findet und zurückgibt.
+     * @param schueler Liste der Raum Objekte List<Schueler>
+     * @param ID int ID die in der Liste gesucht werden soll
+     * @return das Objekt mit der ID die gesucht wird. Raum
+     */
     private Schueler findSchueler(List<Schueler> schueler, int ID){
         Schueler res = null;
         for (Schueler s : schueler){
@@ -714,6 +747,12 @@ public class DBModel implements IDatabase {
         }
         return res;
     }
+    /**
+     * Methode die in der gegebene Liste anhand der ebenfalls mitgegebenen ID das Objekt mit der ID findet und zurückgibt.
+     * @param unternehmen Liste der Raum Objekte List<Unternehmen>
+     * @param ID int ID die in der Liste gesucht werden soll
+     * @return das Objekt mit der ID die gesucht wird. Raum
+     */
     private UnternehmenDAO findUnternehmen(List<UnternehmenDAO> unternehmen, int ID){
         UnternehmenDAO res = null;
         for (UnternehmenDAO u : unternehmen){
