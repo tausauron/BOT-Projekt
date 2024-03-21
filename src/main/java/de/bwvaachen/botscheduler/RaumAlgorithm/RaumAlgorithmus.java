@@ -224,14 +224,22 @@ public class RaumAlgorithmus
 								dieserKursHatDenBenoetigtenRaum.setRaum(freierRaum);
 								kursRaumMap.replace(dieserKursHatDenBenoetigtenRaum, freierRaum);
 
-								//bereitsZugeordneteRaeume.add(freierRaum);
-								/*
-								 * erfolgreichZugeordnet++;
-								 * 
-								 * kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs, "", false);
-								 */
+								bereitsZugeordneteRaeume.add(freierRaum);
+
+								erfolgreichZugeordnet++;
+
+								kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs, "", false);
+
 							}
 						}
+					}
+					
+				
+					if(dieserKursHatDenBenoetigtenRaum == null) {
+						aktBetrachteterKurs.setRaum(vorherigerRaum);
+						bereitsZugeordneteRaeume.add(vorherigerRaum);
+						kursRaumMap.put(aktBetrachteterKurs, vorherigerRaum);
+						erfolgreichZugeordnet++;
 					}
 
 					vorherigerRaum = null;
@@ -241,6 +249,10 @@ public class RaumAlgorithmus
 
 				for (int i = 0; i < raumListe2.size(); i++)
 				{
+					if(aktBetrachteterKurs.getRaum()!=null) {
+						break;
+					}
+					
 					Raum aktBetrachteteRaum = raumListe2.get(i);
 
 					// wenn beim aktuellen Kurs, es schon einen vorherigem Raum gab
