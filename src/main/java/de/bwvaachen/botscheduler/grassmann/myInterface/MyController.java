@@ -46,12 +46,15 @@ public class MyController {
 		}
 	}
 
+	/**
+	 * erstellt & oeffnet die Datenansicht
+	 */
 	public void startListView() {
 		new GUI_ListView(this, getAllStudents(), getAllCompanies(), getAllRooms());
 	}
 
 	/**
-	 * erstellt / oeffnet die Haupt-GUI
+	 * erstellt & oeffnet die Haupt-GUI
 	 */
 	public void startMainGUI() {
 		new GUI_Main_Start(this, getAllStudents(), getAllCompanies(), getAllRooms());
