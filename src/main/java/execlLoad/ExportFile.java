@@ -34,7 +34,7 @@ import klassenObjekte.Unternehmen;
  */
 
 public class ExportFile implements IExport {
-
+	
 	@Override
 	public void exportStudentData(List<Schueler> studentList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
@@ -179,51 +179,51 @@ public class ExportFile implements IExport {
 				int rowNum = 2;
 				for (CalcSchueler calcStudent : calcStudentsByClass) {
 					// Name
-					Row dataRow2 = sheet.createRow(rowNum);
+					dataRow = sheet.createRow(rowNum);
 					rowNum++;
-					dataRow2.createCell(0).setCellValue(
+					dataRow.createCell(0).setCellValue(
 							calcStudent.getSchueler().getNachname() + ", " + calcStudent.getSchueler().getVorname());
 
 					// Überschriften
-					Row dataRow3 = sheet.createRow(rowNum);
+					dataRow = sheet.createRow(rowNum);
 					rowNum++;
-					upperLeft = createCell(dataRow3, 0, tableHead);
-					dataRow3.getCell(0).setCellValue("Zeit");
-					createCell(dataRow3, 1, tableHead).setCellValue("Raum");
-					createCell(dataRow3, 2, tableHead).setCellValue("Veranstaltung");
-					createCell(dataRow3, 3, tableHead).setCellValue("");
-					createCell(dataRow3, 4, tableHead).setCellValue("Wahl");
+					upperLeft = createCell(dataRow, 0, tableHead);
+					dataRow.getCell(0).setCellValue("Zeit");
+					createCell(dataRow, 1, tableHead).setCellValue("Raum");
+					createCell(dataRow, 2, tableHead).setCellValue("Veranstaltung");
+					createCell(dataRow, 3, tableHead).setCellValue("");
+					createCell(dataRow, 4, tableHead).setCellValue("Wahl");
 
 					for (SchuelerSlot slot : calcStudent.getSlots()) {
 						// Daten
-						Row dataRow4 = sheet.createRow(rowNum);
+						dataRow = sheet.createRow(rowNum);
 						rowNum++;
 						Typ t = slot.getTyp();
 
-						createCell(dataRow4, 0, table).setCellValue(t.getZeitraum());
+						createCell(dataRow, 0, table).setCellValue(t.getZeitraum());
 						if (slot.getKurs() != null) {
 							if (slot.getKurs().getRaum() != null) {
-								createCell(dataRow4, 1, table).setCellValue(slot.getKurs().getRaum().getName());
+								createCell(dataRow, 1, table).setCellValue(slot.getKurs().getRaum().getName());
 							} else {
-								createCell(dataRow4, 1, table).setCellValue(" - ");
+								createCell(dataRow, 1, table).setCellValue(" - ");
 							}
 						} else {
-							createCell(dataRow4, 1, table).setCellValue(" - ");
+							createCell(dataRow, 1, table).setCellValue(" - ");
 						}
 
-						lowerRight = createCell(dataRow4, 4, null);
+						lowerRight = createCell(dataRow, 4, null);
 
 						if (slot.getErfuellterWunsch() != null
 								&& slot.getErfuellterWunsch().getVeranstaltung() != null) {
-							createCell(dataRow4, 2, table)
+							createCell(dataRow, 2, table)
 									.setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getUnternehmen());
-							createCell(dataRow4, 3, event)
+							createCell(dataRow, 3, event)
 									.setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getFachrichtung());
-							createCell(dataRow4, 4, table).setCellValue(slot.getErfuellterWunsch().getNummer());
+							createCell(dataRow, 4, table).setCellValue(slot.getErfuellterWunsch().getNummer());
 						} else {
-							createCell(dataRow4, 2, table).setCellValue(" - ");
-							createCell(dataRow4, 3, event).setCellValue(" - ");
-							createCell(dataRow4, 4, table).setCellValue(" - ");
+							createCell(dataRow, 2, table).setCellValue(" - ");
+							createCell(dataRow, 3, event).setCellValue(" - ");
+							createCell(dataRow, 4, table).setCellValue(" - ");
 						}
 					}
 
