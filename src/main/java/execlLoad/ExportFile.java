@@ -37,6 +37,7 @@ import klassenObjekte.Unternehmen;
 
 public class ExportFile implements IExport {
 
+	@Override
 	public void exportStudentData(List<Schueler> studentList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -76,6 +77,7 @@ public class ExportFile implements IExport {
 		}
 	}
 
+	@Override
 	public void exportCompanyData(List<Unternehmen> companyList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -110,6 +112,7 @@ public class ExportFile implements IExport {
 		}
 	}
 
+	@Override
 	public void exportRoomData(List<Raum> roomList, String exportFilePath) {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -136,6 +139,7 @@ public class ExportFile implements IExport {
 		}
 	}
 
+	@Override
 	public void exportStudentSchedule(List<CalcSchueler> calcStudents, String exportFilePath) throws FileNotFoundException, IOException {
 		try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fos = new FileOutputStream(exportFilePath)) {
 
@@ -196,10 +200,14 @@ public class ExportFile implements IExport {
 						dataRow4.createCell(1).setCellValue(" - ");
 					}
 
-					if (slot.getErfuellterWunsch() != null) {
-						dataRow4.createCell(2).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getUnternehmen());
-						dataRow4.createCell(3).setCellValue(slot.getErfuellterWunsch().getVeranstaltung().getFachrichtung());
-						dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
+					if (slot.getKurs() != null) {
+						dataRow4.createCell(2).setCellValue(slot.getKurs().getUnternehmen().getUnternehmen());
+						dataRow4.createCell(3).setCellValue(slot.getKurs().getUnternehmen().getFachrichtung());
+						if(slot.getErfuellterWunsch().getVeranstaltung() != null) {						
+							dataRow4.createCell(4).setCellValue(slot.getErfuellterWunsch().getNummer());
+						}else {
+							dataRow4.createCell(4).setCellValue("leer");
+						}
 					} else {
 						dataRow4.createCell(2).setCellValue(" - ");
 						dataRow4.createCell(3).setCellValue(" - ");
@@ -280,8 +288,10 @@ public class ExportFile implements IExport {
 			
 			fatBorder(upperLeft, sheet.getRow(--rowNum).getCell(1), sheet);
 			fatBorder(upperLeft, lowerRight, sheet);
-						
+			
+			// Spaltenbreite 3 Zeichen
 			sheet.setColumnWidth(0, 3 * 256);
+			//Spaltenbreite 30 Zeichen
 			sheet.setColumnWidth(1, 30 * 256);
 	        // Auto-Size für jede Spalte
 	        for (int i = 2; i <= 6; i++) {
@@ -358,7 +368,14 @@ public class ExportFile implements IExport {
 		}
 	}
 	
-	
+	/**
+	 * erzeugt eine neue Zelle in der uebergebenen Zeile
+	 * 
+	 * @param row Zeile
+	 * @param col Spalte
+	 * @param style Zellenformatierung
+	 * @return erzeugte Zelle
+	 */
 	private Cell createCell(Row row, int col ,CellStyle style) {
 		Cell cell = row.createCell(col);
 		if(style != null) {
@@ -367,6 +384,13 @@ public class ExportFile implements IExport {
 		return cell;
 	}
 	
+	/**
+	 * umrahmt einen Bereich auf dem Arbeitsblatt mit einem fetten Rahmen
+	 * 
+	 * @param upperLeft obere linke Zelle des Bereichs
+	 * @param lowerRight untere rechte Zelle des Bereichs
+	 * @param sheet Arbeitsblatt mit dem Bereich
+	 */
 	private void fatBorder(Cell upperLeft, Cell lowerRight, Sheet sheet) {
 		CellRangeAddress region = CellRangeAddress.valueOf(upperLeft.getAddress().formatAsString() + ":" + 
 															lowerRight.getAddress().formatAsString());
@@ -376,6 +400,12 @@ public class ExportFile implements IExport {
 		RegionUtil.setBorderTop(BorderStyle.MEDIUM, region, sheet);
 	}
 	
+	/**
+	 * erzeugt die Zellenformatierung fuer eine Zelle in einer Tabelle mit duennen Rahmen
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
 	private CellStyle tableStyle(Workbook wb) {
 		CellStyle retVal = wb.createCellStyle();
 		
@@ -387,6 +417,13 @@ public class ExportFile implements IExport {
 		return retVal;		
 	}
 	
+	
+	/**
+	 * erzeugt die Zellenformatierung fuer einen Tabellenkopf mit fetter Schrift
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
 	private CellStyle tableHeadStyle(Workbook wb) {
 		CellStyle retVal = wb.createCellStyle();
 		
@@ -398,6 +435,12 @@ public class ExportFile implements IExport {
 		return retVal;
 	}
 	
+	/**
+	 * erzeugt die Zellenformatierung fuer die Ueberschrift eines Arbeitsblatts
+	 * 
+	 * @param wb Arbeitsmappe fuer die Formatierung
+	 * @return Zellenformatierung
+	 */
 	private CellStyle titleStyle(Workbook wb) {
 		CellStyle retVal = wb.createCellStyle();
 		
@@ -409,7 +452,9 @@ public class ExportFile implements IExport {
 		return retVal;		
 	}
 	
-	
+	/**
+	 * sortiert die Kurse in einer Liste nach der zeitlichen Reihenfolge ihrer Zeitslots
+	 */
 	Comparator<Kurse> bySlotType = new Comparator<Kurse>() {
 		
 		@Override

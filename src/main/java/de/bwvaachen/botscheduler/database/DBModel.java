@@ -5,16 +5,22 @@ import de.bwvaachen.botscheduler.model.UnternehmenDAO;
 import klassenObjekte.Raum;
 import klassenObjekte.Schueler;
 
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class DBModel implements IDatabase {
-    private final URL pfad = getClass().getResource("BOT-Database.db");
+    private final String pfad;
 
-    public DBModel() throws SQLException, ClassNotFoundException {
+
+
+    public DBModel(String pfad) throws SQLException, ClassNotFoundException, URISyntaxException {
+        this.pfad = pfad;
+        //Path p = Path.of(pfad.getPath(), "data", "Database");
         if (!exitsTable("Schueler")){
             createDbModel();
         }
@@ -30,12 +36,11 @@ public class DBModel implements IDatabase {
      * die eine SQLException wirft, wenn die Connection nicht aufgebaut werden konnte.
      */
     public Connection connection() throws SQLException, ClassNotFoundException {
-        assert pfad != null;
-        String dbPfad = pfad.getPath().replaceFirst("/","");
+        //String dbPfad = pfad.getPath().replaceFirst("/","");
 
         Class.forName("org.h2.Driver");
 
-        return DriverManager.getConnection("jdbc:h2:" + dbPfad, "sa", "");
+        return DriverManager.getConnection("jdbc:h2:" + pfad, "sa", "");
     }
 
     /**
@@ -186,22 +191,12 @@ public class DBModel implements IDatabase {
 
 
     //***** Check Tables in Database *****
-
-    /**
-     * Prüft, ob eine bestimmte Tabelle in der Datenbank existiert
-     * @param tableName name der Tabelle die geprüft werden soll
-     * @return ein bool wert der aussagt, ob es die Tabelle in der Datenbank existiert
-     * @throws SQLException Um prüfen zu können, ob es eine Tabelle existiert, muss eine Connection zu der Datenbank
-     * bestehen. Wenn diese Connection nicht hergestellt werden kann, wird die Exception geworfen.
-     * @throws ClassNotFoundException wird von der connection Methode weiter geworfen da in der Connection Methode nach
-     * der Driver-Klasse gesucht wird.
-     */
     private boolean exitsTable(String tableName) throws SQLException, ClassNotFoundException {
         boolean res = false;
-        Connection conn = connection();
+        connection();
 
         String existsTbl = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
-        Statement exitsTblstmt = conn.createStatement();
+        Statement exitsTblstmt = connection().createStatement();
         ResultSet resTblExists = exitsTblstmt.executeQuery(existsTbl);
 
         while (resTblExists.next()){
@@ -210,7 +205,7 @@ public class DBModel implements IDatabase {
             }
         }
 
-        conn.close();
+        connection().close();
 
         return res;
     }
