@@ -26,7 +26,11 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-// Grassmann
+/**
+ * 
+ * @author Grassmann_Dus
+ *
+ */
 
 public class GUI_Login extends MouseAdapter {
 

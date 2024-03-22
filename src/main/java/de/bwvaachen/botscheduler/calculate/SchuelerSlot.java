@@ -1,7 +1,7 @@
 package de.bwvaachen.botscheduler.calculate;
 
 /**
- * Erweiterung von Zeitslot um schülerspezifische Daten
+ * Erweiterung von Zeitslot um schuelerspezifische Daten
  * 
  * @author Max Tautenhahn
  */
@@ -21,6 +21,4 @@ public class SchuelerSlot extends Zeitslot{
 	public Wunsch getErfuellterWunsch() {
 		return erfuellterWunsch;
 	}
-
-
 }

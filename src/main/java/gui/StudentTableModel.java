@@ -5,11 +5,12 @@ import java.util.List;
 import klassenObjekte.*;
 
 /**
+ * Ein Model um ein Tabelle in der View Scrollpane Darzustellen
  * 
  * @author Wagner_Eri
  *
  */
-//Ein Model um ein Tabelle in der View Scrollpane Darzustellen
+
 @SuppressWarnings("serial")
 public class StudentTableModel extends AbstractTableModel {
 	private static final String[] COLUMN_NAMES = { "Klasse", "Vorname", "Nachname", "Wahl1", "Wahl2", "Wahl3", "Wahl4",

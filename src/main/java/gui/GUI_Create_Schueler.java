@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +13,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import klassenObjekte.Schueler;
 import klassenObjekte.Unternehmen;
 
+/**
+ * 
+ * @author Wagner_Eri
+ *
+ */
 public class GUI_Create_Schueler {
 
-	private JFrame frmSchlerHinzufgen;
+	private JFrame frmCreateSchueler;
 	private JTextField tfieldKlasse;
 	private JTextField tfieldVorname;
 	private JTextField tfieldNachname;
@@ -38,19 +47,18 @@ public class GUI_Create_Schueler {
 	private GUI_ListView gui_ListView;
 
 	/**
+	 * Konstruktor
 	 * 
-	 * @author Wagner_Eri
-	 *
+	 * @param gui_ListView    Übergabe um Methode addSchülerToList(new
+	 *                        Schueler(tfieldKlasse.getText(),
+	 *                        tfieldVorname.getText()); zu nutzen.
+	 * @param listUnternehmen Übergabe damit die Schüler eine Auswahl hat
 	 */
-
 	public GUI_Create_Schueler(GUI_ListView gui_ListView, List<Unternehmen> listUnternehmen) {
 		this.gui_ListView = gui_ListView;
 		initialize();
-		this.frmSchlerHinzufgen.setVisible(true);
-		listUnternehmen = List.of(new Unternehmen(1, "Test", "Test", 1, 2, "A"),
-				new Unternehmen(2, "ADWdwad", "Test", 1, 2, "A"), new Unternehmen(3, "Test3", "Test", 1, 2, "A"),
-				new Unternehmen(4, "Test", "Test", 1, 2, "A"), new Unternehmen(5, "Test", "Test", 1, 2, "A"),
-				new Unternehmen(6, "Test", "Test", 1, 2, "A"));
+		this.frmCreateSchueler.setVisible(true);
+		frmCreateSchueler.setLocationRelativeTo(null);
 		for (Unternehmen unt : listUnternehmen) {
 			cBoxWahl1.addItem(unt.getFirmenID() + "- " + unt.getUnternehmen().toString());
 			cBoxWahl2.addItem(unt.getFirmenID() + "- " + unt.getUnternehmen().toString());
@@ -58,7 +66,6 @@ public class GUI_Create_Schueler {
 			cBoxWahl4.addItem(unt.getFirmenID() + "- " + unt.getUnternehmen().toString());
 			cBoxWahl5.addItem(unt.getFirmenID() + "- " + unt.getUnternehmen().toString());
 			cBoxWahl6.addItem(unt.getFirmenID() + "- " + unt.getUnternehmen().toString());
-
 		}
 
 	}
@@ -67,11 +74,18 @@ public class GUI_Create_Schueler {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmSchlerHinzufgen = new JFrame();
+		frmCreateSchueler = new JFrame();
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+		}
+		Image ui_Logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("ui_logo.jpg"));
+		frmCreateSchueler.setIconImage(ui_Logo);
 
-		frmSchlerHinzufgen.setTitle("Schüler Hinzufügen");
-		frmSchlerHinzufgen.setBounds(100, 100, 255, 443);
-		frmSchlerHinzufgen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frmCreateSchueler.setTitle("Schüler Hinzufügen");
+		frmCreateSchueler.setBounds(100, 100, 255, 443);
+		frmCreateSchueler.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JLabel lblKlasse = new JLabel("Klasse:");
 
@@ -117,7 +131,7 @@ public class GUI_Create_Schueler {
 
 		JButton btnAbbrechen = new JButton("Abbrechen");
 		btnAbbrechen.addActionListener((e) -> btnPressedAbbrechen());
-		GroupLayout groupLayout = new GroupLayout(frmSchlerHinzufgen.getContentPane());
+		GroupLayout groupLayout = new GroupLayout(frmCreateSchueler.getContentPane());
 		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -210,14 +224,20 @@ public class GUI_Create_Schueler {
 						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE).addComponent(btnHinzufügen)
 								.addComponent(btnAbbrechen))
 						.addContainerGap(23, Short.MAX_VALUE)));
-		frmSchlerHinzufgen.getContentPane().setLayout(groupLayout);
+		frmCreateSchueler.getContentPane().setLayout(groupLayout);
 	}
 
+	/**
+	 * Methode damit das Frame nicht geschlossen sondern dispoxe wird.
+	 */
 	private void btnPressedAbbrechen() {
-		frmSchlerHinzufgen.dispose();
+		frmCreateSchueler.dispose();
 
 	}
 
+	/**
+	 * Beim Hinzufügen werden alle Felder geprüft und es wird der Oberfläche ein Schüler geschickt
+	 */
 	private void btnpressedHinzufügen() {
 		List<String> listofChoosedWishes = List.of(cBoxWahl1.getSelectedItem().toString(),
 				cBoxWahl2.getSelectedItem().toString(), cBoxWahl3.getSelectedItem().toString(),
@@ -228,19 +248,29 @@ public class GUI_Create_Schueler {
 			String[] splittedChoose = string.split("-");
 			listofWishes.add(splittedChoose[0]);
 		}
-		if (!gleicheZahlenPrüfen(listofWishes) && !tfieldKlasse.getText().isEmpty()
-				&& !tfieldVorname.getText().isEmpty() && !tfieldNachname.getText().isEmpty()) {
-			gui_ListView.addSchülerToList(new Schueler(tfieldKlasse.getText(), tfieldVorname.getText(),
-					tfieldNachname.getText(), listofWishes));
-			frmSchlerHinzufgen.dispose();
+		if (!tfieldKlasse.getText().isEmpty() && !tfieldVorname.getText().isEmpty()
+				&& !tfieldNachname.getText().isEmpty()) {
+
+			if (!gleicheZahlenPrüfen(listofWishes)) {
+				gui_ListView.addSchülerToList(new Schueler(tfieldKlasse.getText(), tfieldVorname.getText(),
+						tfieldNachname.getText(), listofWishes));
+				frmCreateSchueler.dispose();
+			} else {
+
+			}
 
 		} else {
-			JOptionPane.showMessageDialog(null, "Feld: Vorname oder Nachname ist leer", "Fehler Leeres Feld",
+			JOptionPane.showMessageDialog(null, "Feld: Klasse,Vorname oder Nachname ist leer", "Fehler Leeres Feld",
 					JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
 
+	/**
+	 * Es wird vergliechen ob die gewählten Wünsche doppelt vergeben sind
+	 * @param listofWishes Liste der Wünsche die geprüft werden soll
+	 * @return True: Wenn ein Wunsch doppelt vergeben ist, False: Wenn es einen Wunsch nicht doppelt gibt
+	 */
 	private boolean gleicheZahlenPrüfen(List<String> listofWishes) {
 
 		List<String> checkList = new ArrayList<>();
@@ -248,7 +278,7 @@ public class GUI_Create_Schueler {
 		for (String wish : listofWishes) {
 
 			if (checkList.contains(wish)) {
-				JOptionPane.showMessageDialog(null, "Fehler Sie haben den Wunsch " + wish + " doppelt ausgewählt",
+				JOptionPane.showMessageDialog(null, "Fehler Sie haben den Wunsch: " + wish + " mehrfach ausgewählt",
 						"Doppelte Auswahl Fehler", JOptionPane.ERROR_MESSAGE);
 				return true;
 			} else {

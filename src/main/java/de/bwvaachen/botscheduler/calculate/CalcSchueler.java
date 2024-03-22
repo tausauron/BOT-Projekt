@@ -30,6 +30,11 @@ public class CalcSchueler {
 	}
 	
 	
+	/**
+	 * initialisiert die als Strings vorhandenen Wuensche als Wunschobjekte
+	 * 
+	 * @param unternehmen
+	 */
 	private void initWuensche(List<Unternehmen> unternehmen) {
 		
 		wuensche = new ArrayList<>();
@@ -42,6 +47,15 @@ public class CalcSchueler {
 		ausweichWunsch = createWunsch(strWuensche.size(), unternehmen, strWuensche.get(strWuensche.size()-1), 1);
 	}
 	
+	/**
+	 * Wunschobjekt erzeugen
+	 * 
+	 * @param nummer Wunschnummer
+	 * @param unternehmen gewuenschter Veranstaltungstyp
+	 * @param strWunsch originaler String
+	 * @param prio kalkulierter Punktewert des Wunsches
+	 * @return erzeugter Wunsch
+	 */
 	private Wunsch createWunsch(int nummer, List<Unternehmen> unternehmen, String strWunsch, int prio) {
 		Wunsch retVal = null;		
 
@@ -56,7 +70,9 @@ public class CalcSchueler {
 	}			
 	
 	
-	
+	/**
+	 * initialisiert die Zeitslots des Schuelers
+	 */
 	private void initVeranstaltungen() {
 		slots = new ArrayList<>();
 		
@@ -66,12 +82,18 @@ public class CalcSchueler {
 	}
 	
 	
+	/**
+	 * findet passenden Veranstaltungstyp zum Wahlstring im Wunsch
+	 * 
+	 * @param wunsch betreffender Wunsch
+	 * @param unternehmen Liste der Veranstaltungstypen
+	 * @return gefundenen Veranstaltungstyp
+	 */
 	private Unternehmen findUnternehmen(String wunsch, List<Unternehmen> unternehmen) {
 		
 		Unternehmen retVal = null;
 		
-		for(Unternehmen unt :unternehmen ) {
-			
+		for(Unternehmen unt :unternehmen ) {			
 			//leerer Wunsch
 			if(wunsch.equals("")) {
 				break;
@@ -86,6 +108,7 @@ public class CalcSchueler {
 	}
 
 
+	//Getter
 	public Schueler getSchueler() {
 		return schueler;
 	}
@@ -104,6 +127,12 @@ public class CalcSchueler {
 		return slots;
 	}
 	
+	
+	/**
+	 * berechnet den individuellen maximalen Erfolgsscore
+	 *  
+	 * @return 
+	 */
 	public int calculateMaxScore() {
 		
 		int retVal = 0;
@@ -126,6 +155,11 @@ public class CalcSchueler {
 		return retVal;
 	}
 	
+	/**
+	 * berechnet den aktuellen idividuellen Erfolgsscore
+	 * 
+	 * @return
+	 */
 	public int calculateCurrScore() {
 		
 		int retVal = 0;
@@ -142,6 +176,12 @@ public class CalcSchueler {
 		return retVal;
 	}
 	
+	/**
+	 * sucht den naechsten verfuegbaren freien Zeitslot
+	 * 
+	 * @param start Zeitslot, mit dem begonnen wird
+	 * @return gefundenen Zeitslot
+	 */
 	public SchuelerSlot nextFreeSlot(Typ start) {
 		SchuelerSlot retVal = null;
 		
@@ -156,14 +196,21 @@ public class CalcSchueler {
 		return retVal;
 	}
 	
+	
+	/**
+	 * bucht einen Kursplatz fuer den Schueler. Updatet die Zeitslots aller Wuensche
+	 * dieses Typs auf "belegt". 
+	 * 
+	 * @param kurs zu belegender Kurs
+	 * @param erfWunsch erfuellter Wunsch
+	 */
 	public void bookCourse(Kurse kurs, Wunsch erfWunsch) {
 		SchuelerSlot sSlot = getSlotByType(kurs.getZeitslot().getTyp());
 		sSlot.setKurs(kurs);
 		sSlot.setErfuellterWunsch(erfWunsch);
 		List<CalcSchueler> teilnehmer = kurs.getKursTeilnehmer();
 		teilnehmer.add(this);
-		kurs.setKursTeilnehmer(teilnehmer);
-		
+		kurs.setKursTeilnehmer(teilnehmer);		
 		
 		for(Wunsch wunsch : wuensche) {
 			WunschSlot wSlot = wunsch.getSlots().get(kurs.getZeitslot().getTyp());
@@ -173,9 +220,18 @@ public class CalcSchueler {
 			if(wunsch.equals(erfWunsch)) {
 				wunsch.setState(WunschState.ERFUELLT);;
 			}
-		}		
+		}
+		if(ausweichWunsch.equals(erfWunsch)) {
+			ausweichWunsch.setState(WunschState.ERFUELLT);
+		}
 	}
 	
+	/**
+	 * der Schueler verlaesst den Kurs. Alle begleitenden Vorgaenge werden rueckabgewickelt.
+	 * 
+	 * @param kurs zu verlassender Kurs
+	 * @param erfWunsch vormals erfuellter Wunsch
+	 */
 	public void leaveCourse(Kurse kurs, Wunsch erfWunsch) {
 		SchuelerSlot sSlot = getSlotByType(kurs.getZeitslot().getTyp());
 		sSlot.setKurs(null);
@@ -192,11 +248,16 @@ public class CalcSchueler {
 			if(wunsch.equals(erfWunsch)) {
 				wunsch.setState(WunschState.UNERFUELLT);;
 			}
-		}
-		
-		
+		}		
 	}
 	
+	
+	/**
+	 * gibt den entsprechenden Zeitslot des Schuelers zurueck
+	 * 
+	 * @param typ gesuchter Zeitslottyp
+	 * @return gefundener Zeitslot
+	 */
 	public SchuelerSlot getSlotByType(Typ typ){
 		SchuelerSlot retVal = null;
 		

@@ -49,15 +49,15 @@ public class ImportFile {
 
        // Prüfen, ob die Datei mindestens eine Zeile (für Kopfzeilen) und die erwartete Anzahl von Spalten hat
         try {
-            boolean isKlasseCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Klasse");
-            boolean isNachnameCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Name");
-            boolean isVornameCorrect = headerRow.getCell(2).getStringCellValue().equalsIgnoreCase("Vorname");
-            boolean isWunsch1Correct = headerRow.getCell(3).getStringCellValue().equalsIgnoreCase("Wahl 1");
-            boolean isWunsch2Correct = headerRow.getCell(4).getStringCellValue().equalsIgnoreCase("Wahl 2");
-            boolean isWunsch3Correct = headerRow.getCell(5).getStringCellValue().equalsIgnoreCase("Wahl 3");
-            boolean isWunsch4Correct = headerRow.getCell(6).getStringCellValue().equalsIgnoreCase("Wahl 4");
-            boolean isWunsch5Correct = headerRow.getCell(7).getStringCellValue().equalsIgnoreCase("Wahl 5");
-            boolean isWunsch6Correct = headerRow.getCell(8).getStringCellValue().equalsIgnoreCase("Wahl 6");
+            boolean isKlasseCorrect = headerRow.getCell(0).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Klasse");
+            boolean isNachnameCorrect = headerRow.getCell(1).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Name");
+            boolean isVornameCorrect = headerRow.getCell(2).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Vorname");
+            boolean isWunsch1Correct = headerRow.getCell(3).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl1");
+            boolean isWunsch2Correct = headerRow.getCell(4).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl2");
+            boolean isWunsch3Correct = headerRow.getCell(5).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl3");
+            boolean isWunsch4Correct = headerRow.getCell(6).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl4");
+            boolean isWunsch5Correct = headerRow.getCell(7).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl5");
+            boolean isWunsch6Correct = headerRow.getCell(8).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Wahl6");
 
 
 
@@ -81,7 +81,9 @@ public class ImportFile {
             // Prüfen, ob die Datei mindestens eine Zeile (für Kopfzeilen) und die erwartete Anzahl von Spalten hat
             boolean isCorrectFormat = checkFormatChois(sheet);
             if (!isCorrectFormat) {
-                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.");
+                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.\n"
+                									+ "Die Spalten müssen \"Klasse\", \"Name\", \"Vorname\", \"Wahl 1\",\n"  
+                									+ "\"Wahl 2\", \"Wahl 3\", \"Wahl 4\", \"Wahl 5\", \"Wahl 6\" heißen.");
             }
 
             for ( Row row : sheet) {
@@ -125,12 +127,12 @@ public class ImportFile {
 
            //Unternehemen-Format :Nr. 	Unternehmen	Fachrichtung	Max. Teilnehmer	Max. Veranstaltungen	Frühester Zeitpunkt
         try {
-            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Nr.");
-            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Unternehmen");
-            boolean isFachrichtungCorrect = headerRow.getCell(2).getStringCellValue().equalsIgnoreCase("Fachrichtung");
-            boolean isMaxTeilnehmerCorrect = headerRow.getCell(3).getStringCellValue().equalsIgnoreCase("Max. Teilnehmer");
-            boolean isMaxVeranstaltungenCorrect = headerRow.getCell(4).getStringCellValue().equalsIgnoreCase("Max. Veranstaltungen");
-            boolean isFruehsterZeitslotCorrect = headerRow.getCell(5).getStringCellValue().equalsIgnoreCase("Frühester Zeitpunkt");
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Nr.");
+            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Unternehmen");
+            boolean isFachrichtungCorrect = headerRow.getCell(2).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Fachrichtung");
+            boolean isMaxTeilnehmerCorrect = headerRow.getCell(3).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Max.Teilnehmer");
+            boolean isMaxVeranstaltungenCorrect = headerRow.getCell(4).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Max.Veranstaltungen");
+            boolean isFruehsterZeitslotCorrect = headerRow.getCell(5).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("FrühesterZeitpunkt");
 
 
             return isFirmenIDCorrect && isUnternehmenCorrect && isFachrichtungCorrect &&
@@ -149,7 +151,9 @@ public class ImportFile {
             boolean isCorrectFormat = checkFormatCompany(sheet); // .getRow(0));
 
             if (!isCorrectFormat) {
-                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.");
+                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.\n"
+						+ "Die Spalten müssen \"Nr.\", \"Unternehmen\", \"Fachrichtung\", \"Max.Teilnehmer\",\n"  
+						+ "\"Max. Veranstaltungen\", \"Frühester Zeitpunkt\" heißen.");
             }
 
             for (Row row : sheet) {
@@ -194,8 +198,8 @@ public class ImportFile {
 
         //Raum-Format :RaumNr. 	RaumName
         try {
-            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().equalsIgnoreCase("Raum");
-            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().equalsIgnoreCase("Kapazität");
+            boolean isFirmenIDCorrect = headerRow.getCell(0).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Raum");
+            boolean isUnternehmenCorrect = headerRow.getCell(1).getStringCellValue().replaceAll("\\s+","").equalsIgnoreCase("Kapazität");
 
             return isFirmenIDCorrect && isUnternehmenCorrect ;
         } catch (NullPointerException e) {
@@ -212,7 +216,8 @@ public class ImportFile {
             boolean isCorrectFormat = checkFormatRoom(sheet); // .getRow(0));
 
             if (!isCorrectFormat) {
-                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.");
+                throw new IllegalArgumentException("Die Excel-Datei hat nicht das erwartete Format.\n"
+						+ "Die Spalten müssen \"Raum\", \"Kapazität\" heißen.");
             }
 
             for (Row row : sheet) {
