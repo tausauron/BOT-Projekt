@@ -1,54 +1,40 @@
-package de.bwvaachen.botscheduler.RaumAlgorithm;
+package de.bwvaachen.botscheduler.raumAlgorithm;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
 import klassenObjekte.Kurse;
 import klassenObjekte.Raum;
-import klassenObjekte.Unternehmen;
 
-/*
- * Der Alogrithmus sollte schauen, dass alle Räume zu einen Kurs zugeordnet werden.
- * Sollte es zwei Veranstaltungen, zur selben zeit geben, die einen großen Raum benoetigen,so ist die Polizei vorranging zu beachten.
- * 
- * Der Andere Kurs muss:
- * 
- * 3. Man kann schauen, wie viele Personen wircklich in einer veranstaltung sind und die Aufteilung anhand dessen gestalten. <--
- * 
- * Es gibt 5 zeitslots
- * Ein Raum hat eine Kapazität
- * Ich brauche ein Unternehmensobjekt/veranstaltungsobjekt
- * 
- * Rechung der effizens ist: alleVeranstaltungen - verteilteVeranstaltungen 
- * ich muss die kursliste benutzen indem ich planner.getKurse aufrufe, den die kurse besitzen die infos welche teinlehmer die 
- * haben und so. DAS brauche ich eigentlich.
- */
 
 /**
- * Diese Klasse wird vom Model aufgerufen.
+ * Diese Klasse sorgt fuer den Raumalgorithmus.
+ * Die Klasse Verwendet die Kurs und Raumliste, um einen Raum einem Kurs zuzuordnen.
+ * 
+ * Das Ergebniss des Algorithmus ist, dass jeder Kurs/Veranstaltungurs einen Raum zugeorndet hat. 
+ * Hierbei wird darauf geachtet, dass der Raum derselbe bleiben soll, wenn moeglich.
+ * 
+ * Mithilfe der "nichtZuordbareKurseMap" Map , welche durch ".getnichtZuordbareKurseMap()" 
+ * geholt werden kann, ist es moeglich zu sehen, welcher Kurs aus welchem Grund keinen Raum zugeordnet bekommen hat.
+ * 
  * 
  * @author Martin Albertz
  */
 public class RaumAlgorithmus
 {
-
 	private List<Raum> raumListe;
 	private List<Kurse> kursListe; // hier stehen die infos drinne, zu einen einzelnen Kurs
-
 	private ArrayList<ArrayList<Kurse>> eingeteilteKurseListe = new ArrayList<ArrayList<Kurse>>();
-
 	private Map<Kurse, Raum> kursRaumMap = new HashMap<>();
 	private Map<Kurse, String> nichtZuordbareKurseMap = new HashMap<>();
-
 	private List<Kurse> schonStattgefundeneKurse;
 
-	Comparator<Kurse> compareByKurse = new Comparator<Kurse>() {
+	private Comparator<Kurse> compareByKurse = new Comparator<Kurse>()
+	{
 		@Override
 		public int compare(Kurse o1, Kurse o2)
 		{
@@ -56,7 +42,8 @@ public class RaumAlgorithmus
 		}
 	};
 
-	Comparator<Kurse> compareByStattgefunden = new Comparator<Kurse>() {
+	private Comparator<Kurse> compareByStattgefunden = new Comparator<Kurse>()
+	{
 		@Override
 		public int compare(Kurse o1, Kurse o2)
 		{
@@ -83,11 +70,20 @@ public class RaumAlgorithmus
 
 	/**
 	 * Diese Methode ist der eigentliche Algorithmus und verteilt die Veranstaltung
-	 * anhand ihrer zeitslots auf die noch freien Raeume. 1. packe die
-	 * unternehmen/veranstaltungen in ein zweidimensionales array anhand ihrer
-	 * Zeitslots. 2. Suche die veranstaltung mit den meisten personen. 3. ordne
-	 * freien raum zu, wenn dieser frei ist und genug personen hat.
+	 * anhand ihrer Zeitslots auf die noch freien Raeume. 
+	 * Der Algorithmus geht dabei wie folgt vor:
+	 * 1. Erkenne wann welcher kurs stadttfindet und Speichere diese in einer
+	 *  zweidimensionalen Liste.
+	 * 2. Die Kurse/Veranstaltungen, die in einem Zeitslot stadttfinden
+	 * werden zuerst nach der Groesse der Teilnehmerzahlen sortiert.
+	 * Anschliessend werden die Kurse/Veranstaltungen, welche schon an dem
+	 * Zeitslot davor stattgefunden haben, an den Anfang der Liste geschoben.
+	 * 3. Ordnet den Kursen/Veranstaltungen eine freien Raum zu.
+	 * Wenn moeglich soll der gleiche Raum zugeordnet werden, der dem Kurs/Veranstaltung
+	 * im Vorherigem Zeitslot zugeordnet wurde. 
 	 * 
+	 * @param kursListe, die Liste mit den Einzelnen kursen.
+	 * @param raumListe, die Liste mit den Raeumen.
 	 */
 	public void verteileVeranstaltungenAufRaeume(List<Kurse> kursListe, List<Raum> raumListe)
 	{
@@ -97,10 +93,10 @@ public class RaumAlgorithmus
 	}
 
 	/**
-	 * Diese Methode fuegt 5 ArrayListen, zu dem zweidimensionalen Array hinzu Es
-	 * wird der KursTyp aller Kurse in der KursListe erkannt und diese werden
-	 * dementsprechend in die 5 Arraylisten gespeichert. Mithilfe der nun
-	 * eingeteiltenKurse wird die Raum zu Veranstaltung zuordnung erstellt.
+	 * Diese Methode fuegt 5 ArrayListen, zu dem zweidimensionalen Array hinzu.
+	 * Es wird der KursTyp aller Kurse in der KursListe erkannt und diese werden
+	 * dementsprechend in die 5 Arraylisten gespeichert. 
+	 * Durch die nun festgelegten Kurse wird die Zuordnung von Raeumen zu Veranstaltungen erstellt.
 	 */
 	private void verteileRaeume()
 	{
@@ -133,12 +129,8 @@ public class RaumAlgorithmus
 	{
 		for (ArrayList<Kurse> einzelKursListe : eingeteilteKurseListe) // eines der 5 dinger
 		{
-			System.out.println("-----------Naechster Zeitslot----------- \n ");
-
 			zuordnungErstellen(einzelKursListe, raumListe);
 		}
-		System.out.println(
-				"----------------------------------------------------------------Zuordnung ende-------------------------------------------");
 	}
 
 	/**
@@ -159,29 +151,22 @@ public class RaumAlgorithmus
 	private void zuordnungErstellen(ArrayList<Kurse> slotKursListe, List<Raum> raumListe2)
 	{
 		sortierKurseNachTeilnehmerZahl(slotKursListe);
-		System.out.println("Sortiert nach Teilnehmerzahl");
 		sortierKurseNachObSchonmalPassiert(slotKursListe);
-		System.out.println("Sortiert nach Stadttgefunden");
 
 		List<Raum> bereitsZugeordneteRaeume = new ArrayList<>();
 		int erfolgreichZugeordnet = 0;
 
 		for (Kurse aktBetrachteterKurs : slotKursListe)
 		{
-			System.out.println("Betrachteter Kurs: " + aktBetrachteterKurs.getUnternehmen());
 			Raum passenderRaum = null;
 			Raum vorherigerRaum = null;
 
 			if (bereitsZugeordneteRaeume.size() >= raumListe2.size())
 			{
-				System.out.println("Kurs wird anders gespeichert");
 				kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs, "Es ist kein freier Raum mehr verfuegbar", true);
 			} else
 			{
 				vorherigerRaum = versucheGleichenRaumZuzuordnen(aktBetrachteterKurs, slotKursListe); // gibt mir ein
-				// raum zurück
-				/////////////////////////////////////////
-
 				Kurse dieserKursHatDenBenoetigtenRaum = null;
 				Raum freierRaum = null;
 
@@ -220,38 +205,29 @@ public class RaumAlgorithmus
 							{
 								aktBetrachteterKurs.setRaum(dieserKursHatDenBenoetigtenRaum.getRaum());
 								kursRaumMap.put(aktBetrachteterKurs, dieserKursHatDenBenoetigtenRaum.getRaum());
-
 								dieserKursHatDenBenoetigtenRaum.setRaum(freierRaum);
 								kursRaumMap.replace(dieserKursHatDenBenoetigtenRaum, freierRaum);
-
 								bereitsZugeordneteRaeume.add(freierRaum);
-
 								erfolgreichZugeordnet++;
-
 								kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs, "", false);
-
 							}
 						}
 					}
-					
 				
-					if(dieserKursHatDenBenoetigtenRaum == null) {
+					if(dieserKursHatDenBenoetigtenRaum == null)
+					{
 						aktBetrachteterKurs.setRaum(vorherigerRaum);
 						bereitsZugeordneteRaeume.add(vorherigerRaum);
 						kursRaumMap.put(aktBetrachteterKurs, vorherigerRaum);
 						erfolgreichZugeordnet++;
 					}
-
 					vorherigerRaum = null;
 				}
 
-				/////////////////////////////////////////
-
 				for (int i = 0; i < raumListe2.size(); i++)
 				{
-					if(aktBetrachteterKurs.getRaum()!=null) {
-						break;
-					}
+					if(aktBetrachteterKurs.getRaum()!=null)
+					{break;}
 					
 					Raum aktBetrachteteRaum = raumListe2.get(i);
 
@@ -260,13 +236,11 @@ public class RaumAlgorithmus
 					if(vorherigerRaum!=null)
 					{
 						i=i-1;
-						/////
 						aktBetrachteteRaum= vorherigerRaum;
 						vorherigerRaum= null;
 					}
 					if (!bereitsZugeordneteRaeume.contains(aktBetrachteteRaum)) // wenn raum nicht schon zugeteilt
 					{
-						System.out.println("\n Betrachteter Raum ist:" + aktBetrachteteRaum.getName());
 						if (aktBetrachteteRaum.getKapazitaet() >= aktBetrachteterKurs.getKursTeilnehmer().size())
 						{
 							passenderRaum = aktBetrachteteRaum;
@@ -275,40 +249,31 @@ public class RaumAlgorithmus
 							aktBetrachteterKurs.setRaum(passenderRaum);
 							kursRaumMap.put(aktBetrachteterKurs, passenderRaum);
 							kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs, "", false);
-							System.out.println("Raum: " + aktBetrachteteRaum.getName() + " zugeteilt!!");
 							break;
 						} else // else Raum hat nicht passende Kapazitaet
 						{
 							kursGehoertInNichtZuOrdbareListe(aktBetrachteterKurs,
 									"Fuer diesen Kurs, gibt es keinen Raum mit passender Kapazitaet", true);
-							System.out.println("Raum: " + aktBetrachteteRaum.getName() + " keine Kapazitaet!! "
-									+ aktBetrachteteRaum.getKapazitaet() + " VS "
-									+ aktBetrachteterKurs.getKursTeilnehmer().size());
 						}
-					} else // else Raum ist schon Zugeteilt worden
-					{
-						System.out.println("Raum: " + aktBetrachteteRaum.getName() + " schon zugeteilt!!");
-					}
+					} // else ist der Raum schon zugeteilt worden.
 				}
 			}
-
-			System.out.println("-------------------------- \n");
 		}
 
-		int maxZugeordnet = Math.min(slotKursListe.size(), raumListe2.size()); // Maximal mögliche Anzahl der
+		int maxZugeordnet = Math.min(slotKursListe.size(), raumListe2.size()); // Maximal moegliche Anzahl der
 		// Zuteilungen
 
 		// Berechne den Prozentsatz der erfolgreich zugeordneten Kurse
 		double score = (double) erfolgreichZugeordnet / maxZugeordnet * 100;
 
-		System.out.println("Es wurden " + erfolgreichZugeordnet + " von max " + maxZugeordnet + " Kurse zugeordnet.");
-		System.out.println("Effizienz: " + score + "%");
+		//System.out.println("Es wurden " + erfolgreichZugeordnet + " von max " + maxZugeordnet + " Kurse zugeordnet.");
+		//System.out.println("Effizienz: " + score + "%");
 	}
 
 	/**
-	 * Diese Methode schaut, ob der Aktuelle kursveranstalter also das Unternhemen,
-	 * schon einen Zeitslot frueher einen Kurs/ veranstaltung hat. wenn dies der
-	 * Fall ist so wird sich gemerkt in welchem Raum diese Stattfindet
+	 * Diese Methode schaut, ob der Aktuelle Kursveranstalter also das Unternehmen,
+	 * schon einen Zeitslot frueher einen Kurs/Veranstaltung hat.
+	 * ist das der Fall, so wird sich gemerkt in welchem Raum dieser stattfindet.
 	 * 
 	 * @param kurs
 	 * @param slotKursListe
@@ -329,13 +294,7 @@ public class RaumAlgorithmus
 			{
 				if (element.getUnternehmen() == kurs.getUnternehmen())
 				{
-					if (element.getRaum() == null)
-					{
-						System.out.println("djd");
-					}
 					alterRaum = element.getRaum();
-					System.out.println(" Fuer aktuellen Kurs: " + kurs.getUnternehmen() + " gibt es vorherigen Raum: "
-							+ alterRaum.getName());
 				}
 			}
 		}
@@ -343,8 +302,9 @@ public class RaumAlgorithmus
 	}
 
 	/**
-	 * Sortiert eine Kursliste anhand der Teilnehmerzahl. Standart ist eine
-	 * Aufsteigende Sortierung, deshalb wird die liste reversed.
+	 * Sortiert eine Kursliste anhand der Teilnehmerzahl. 
+	 * Standartmaessig ist die Sortierung Aufsteigend, 
+	 * weshalb die Kursliste noch zusaetzlich invertiert wird.
 	 * 
 	 * @param slotKursListe
 	 */
@@ -354,10 +314,18 @@ public class RaumAlgorithmus
 		Collections.reverse(slotKursListe);
 	}
 
+	/**
+	 * Sortiert die Kursliste so, dass Kurse, 
+	 * die bereits stattgefunden haben, in der Liste zuerst auftauchen.
+	 * 
+	 * Die Sortierung erfolgt aus dem Grund, dass dadurch diese Kurse/Veranstaltungen 
+	 * priorisiert werden, um eine bessere Chance zu haben, 
+	 * den gleichen Raum wie im vorherigen Zeitfenster zu erhalten.
+	 * 
+	 * @param slotKursListe
+	 */
 	private void sortierKurseNachObSchonmalPassiert(ArrayList<Kurse> slotKursListe)
 	{
-		// wenn schonmal passiert
-
 		int indexVonAktuellenZeitslot = 0;
 		List<Kurse> vorherigerZeitslot;
 		schonStattgefundeneKurse = new ArrayList<Kurse>();
@@ -385,7 +353,12 @@ public class RaumAlgorithmus
 
 	/**
 	 * Hier werden Kurse, die keinen Raum bekommen konnten gespeichert.
+	 * Anfangs wird ein kurs als nicht zuordbar betrachet bis dieser zugeorndet werden kann.
 	 * 
+	 * Die Map, in welcher ein nicht zuordbarer kurs gespeichert wird, enthaelt Informationen darueber 
+	 * welche Kurse/veranstaltungen keinen Raum zugeordnet bekommen hat Inklusive des Grundes.
+	 * 
+	 * die Map kann durch .getNichtZuordbareKurseMap() geholt werden.
 	 * 
 	 * @param kurs
 	 * @param grund
@@ -407,52 +380,40 @@ public class RaumAlgorithmus
 	 * Diese Methode bekommt einen Kurs uebergeben und Ordnet diesen in die
 	 * zweidimensionale Arraylist ein
 	 * 
-	 * Beispiel: Ist der Kurstyp "A" so wird der Kurs in die erste Arraylist
-	 * gepackt. Ist der Kurstyp "B" so wird der Kurs in die zweite Arraylist
-	 * gepackt.
+	 * Beispiel: 
+	 * Ist der Kurstyp "A" so wird der Kurs in die erste Arraylist gepackt. 
+	 * Ist der Kurstyp "B" so wird der Kurs in die zweite Arraylist gepackt.
 	 * 
-	 * Notiz: Hier muss die modKursListe benutzt werden, da ich waehrend ich ueber
-	 * die kursListeiteriere diese liste nicht veraendern kann. Stadttdessen wird im
-	 * modKursListe das entsprechende objekt geloescht.
 	 * 
-	 * @param kurs
-	 * @param eingeteilteKurseListe
+	 * @param kurs, der Kurs fuer den der Zeitslot ermittelt werden soll.
+	 * @param eingeteilteKurseListe, die zweidimensionale Liste welche die Zeitslots darstellt
 	 */
 	private void erkenneKurstyp(Kurse kurs, ArrayList<ArrayList<Kurse>> eingeteilteKurseListe)
 	{
 		if (kurs.getZeitslot().getTyp() == Typ.A)
 		{
-			// Füge zu Array pos 0 hinzu
+			// Fuege zu Array pos 0 hinzu
 			eingeteilteKurseListe.get(0).add(kurs);
 		}
 		if (kurs.getZeitslot().getTyp() == Typ.B)
 		{
-			// Füge zu Array pos 1 hinzu
+			// Fuege zu Array pos 1 hinzu
 			eingeteilteKurseListe.get(1).add(kurs);
 		}
 		if (kurs.getZeitslot().getTyp() == Typ.C)
 		{
-			// Füge zu Array pos 2 hinzu
+			// Fuege zu Array pos 2 hinzu
 			eingeteilteKurseListe.get(2).add(kurs);
 		}
 		if (kurs.getZeitslot().getTyp() == Typ.D)
 		{
-			// Füge zu Array pos 3 hinzu
+			// Fuege zu Array pos 3 hinzu
 			eingeteilteKurseListe.get(3).add(kurs);
 		}
 		if (kurs.getZeitslot().getTyp() == Typ.E)
 		{
-			// Füge zu Array pos 4 hinzu
+			// Fuege zu Array pos 4 hinzu
 			eingeteilteKurseListe.get(4).add(kurs);
-		}
-	}
-
-	private void pruefeObMehrKurseAlsRaeumeGibt(ArrayList<ArrayList<Kurse>> eingeteilteKurseListe2,
-			List<Raum> raumListe2) throws Exception
-	{
-		if (eingeteilteKurseListe2.size() >= raumListe2.size())
-		{
-			throw new Exception("Es gibt mehr Kurse in einem Zeitslot als es Raeume gibt!");
 		}
 	}
 

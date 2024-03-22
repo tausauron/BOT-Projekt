@@ -12,11 +12,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import de.bwvaachen.botscheduler.RaumAlgorithm.RaumAlgorithmus;
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.Zeitslot;
 import de.bwvaachen.botscheduler.calculate.Zeitslot.Typ;
+import de.bwvaachen.botscheduler.raumAlgorithm.RaumAlgorithmus;
 import execlLoad.ImportFile;
 import junit.framework.Assert;
 
@@ -27,11 +27,6 @@ import klassenObjekte.Unternehmen;
 
 class TestRaumAlgorithmus
 {
-
-	/*
-	 * Meine Klasse braucht eine Raum und Veranstaltungsliste
-	 * 
-	 */
 
 	private static List<Schueler> schueler;
 	private static List<Unternehmen> unternehmen;
@@ -83,7 +78,7 @@ class TestRaumAlgorithmus
 	}
 
 	@Test
-	@Disabled
+	//@Disabled
 	void testeObFehlendeRaumKapazitaetErfasstWird() throws URISyntaxException
 	{
 		System.out.println("\n #################testeObFehlendeRaumKapazitaetErfasstWird################# \n");
