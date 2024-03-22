@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.bwvaachen.botscheduler.RaumAlgorithm.RaumAlgorithmus;
+import de.bwvaachen.botscheduler.raumAlgorithm.RaumAlgorithmus;
 import de.bwvaachen.botscheduler.calculate.CalcSchueler;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import de.bwvaachen.botscheduler.calculate.Zeitslot;
