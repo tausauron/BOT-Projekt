@@ -63,7 +63,8 @@ public class ExportFile implements IExport {
 
 				List<String> wunschliste = schueler.getAllWuensche();
 				for (int i = 0; i < wunschliste.size(); i++) {
-					dataRow.createCell(3 + i).setCellValue(wunschliste.get(i));
+					if (!wunschliste.get(i).equals(""))
+						dataRow.createCell(3 + i).setCellValue(Integer.valueOf(wunschliste.get(i)));
 				}
 			}
 
