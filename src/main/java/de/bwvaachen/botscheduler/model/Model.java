@@ -1,5 +1,6 @@
 package de.bwvaachen.botscheduler.model;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -34,6 +35,7 @@ public class Model implements ModelInterface {
 	private static final String LAUFZETTEL = "Laufzettel.xlsx";
 	private static final String RAUMPLAN = "Raumplan.xlsx";
 	private static final String ANWESENHEIT = "Anwesenheitsliste.xlsx";	
+	private static final String DIRECTORYRESULTS = "BOT-Ergebnis";	
 
 	private List<Schueler> schuelerInput = new ArrayList<>();
 	private List<Kurse> kurse = new ArrayList<>();
@@ -168,6 +170,15 @@ public class Model implements ModelInterface {
 	@Override
 	public void exportLoesung(String path) throws FileNotFoundException, IOException {
 		IExport exporter = new ExportFile();
+		
+		Path targetDirPath = Path.of(path, DIRECTORYRESULTS);		
+		File targetDir = new File(targetDirPath.toString());
+		if (!targetDir.exists()){
+	        targetDir.mkdir();
+	    }
+		
+		path = targetDirPath.toString();
+		
 		String schuelerSchedulePath = Path.of(path, LAUFZETTEL).toString();
 		String roomPlanPath = Path.of(path, RAUMPLAN).toString();
 		String attendencePath = Path.of(path, ANWESENHEIT).toString();

@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -468,6 +470,8 @@ public class GUI_ListView {
 
 		schülerList.add(newSchüler);
 
+		Collections.sort(schülerList, Comparator.comparing(Schueler::getKlasse));
+
 		refreshSchüler();
 	}
 
@@ -478,6 +482,7 @@ public class GUI_ListView {
 	 */
 	protected void addUnternehmenToList(Unternehmen newUnternehmen) {
 		unternehmenList.add(newUnternehmen);
+		Collections.sort(unternehmenList, Comparator.comparing(Unternehmen::getFirmenID));
 
 		refreshUnternehmen();
 	}

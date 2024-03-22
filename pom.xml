@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.bwvaachen</groupId>
-	<artifactId>botscheduler</artifactId>
+	<artifactId>BOT</artifactId>
 	<version>1.0.0</version>
 
 
@@ -98,6 +98,24 @@
 									<directory>${basedir}</directory>
 									<includes>
 										<include>start.bat</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-manual</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/${artifactId}-${version}/docs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}</directory>
+									<includes>
+										<include>Handbuch.pdf</include>
 									</includes>
 								</resource>
 							</resources>
