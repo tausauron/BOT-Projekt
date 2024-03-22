@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import de.bwvaachen.botscheduler.RaumAlgorithm.RaumAlgorithmus;
+import de.bwvaachen.botscheduler.raumAlgorithm.RaumAlgorithmus;
 import de.bwvaachen.botscheduler.calculate.KursPlaner;
 import execlLoad.ExportFile;
 import execlLoad.ImportFile;
